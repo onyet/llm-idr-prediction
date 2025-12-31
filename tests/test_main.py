@@ -1,0 +1,44 @@
+from fastapi.testclient import TestClient
+from app.main import app
+
+client = TestClient(app)
+
+
+def test_root():
+    rv = client.get("/")
+    assert rv.status_code == 200
+    assert "Hello" in rv.json()["message"]
+
+
+def test_rag_idr_usd_default():
+    rv = client.get("/rag/idr-usd")
+    assert rv.status_code == 200
+    body = rv.json()
+    assert body["pair"] == "idr-usd"
+    assert body["method"] == "prophet"
+    assert "predicted" in body
+
+
+def test_rag_amount():
+    rv = client.get("/rag/idr-usd?days=0&amount=1000")
+    assert rv.status_code == 200
+    body = rv.json()
+    assert body["pair"] == "idr-usd"
+    assert "predicted" in body
+    assert "predicted_for_amount" in body
+    assert abs(body["predicted_for_amount"] - body["predicted"] * 1000) < 1e-8
+
+
+def test_rag_too_far():
+    rv = client.get("/rag/idr-usd?days=10")
+    assert rv.status_code == 400
+    assert "too long" in rv.json()["detail"] or "too long" in rv.json()["detail"].lower()
+
+
+def test_rag_idr_sar_days_3():
+    rv = client.get("/rag/idr-sar?days=3")
+    assert rv.status_code == 200
+    body = rv.json()
+    assert body["pair"] == "idr-sar"
+    assert "date" in body
+    assert "predicted" in body
