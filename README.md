@@ -122,3 +122,15 @@ Notes:
 
 If you'd like, I can also add a script that installs and enables the systemd service automatically (requires editing the unit file to set correct `WorkingDirectory` and `User`), or create an Ansible playbook for repeatable deployments.
 
+---
+
+## Author 📝
+
+- **Name**: Dian Mukti Wibowo
+- **GitHub**: [@onyet](https://github.com/onyet)
+- **Email**: onyetcorp@gmail.com
+
+## License 📄
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
