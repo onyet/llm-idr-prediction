@@ -97,4 +97,28 @@ docker run -p 8000:8000 llm-exchange:latest
 
 ---
 
-If you want, I can also add example curl commands to the README, or a small CI workflow to run tests on push — tell me which you'd prefer next. 💡
+## Server initialization on Ubuntu (easy setup) 🖥️
+
+If you have a fresh Ubuntu VPS and cloned this repo, you can run the provided init script to prepare the machine, install system and Python dependencies, run tests, and create easy run/stop scripts.
+
+Example:
+
+```bash
+# from the repository root
+sudo bash init_server.sh
+```
+
+After the script finishes:
+
+- Start the server: `./run.sh` (runs uvicorn in background and writes pid to `uvicorn.pid` and logs to `uvicorn.log`)
+- Stop the server: `./stop.sh`
+- A sample systemd unit is available at `systemd/llm-exchange.service` — edit it (WorkingDirectory/ExecStart/User) before copying to `/etc/systemd/system/` and enabling it with systemd.
+
+Notes:
+- The init script installs system packages with `apt` (python3, pip, build tools, BLAS/LAPACK libs, etc). It may take several minutes depending on the machine and network.
+- Prophet may take extra time to build; check `uvicorn.log` or the pip output if installation fails and install additional OS libs as needed.
+
+---
+
+If you'd like, I can also add a script that installs and enables the systemd service automatically (requires editing the unit file to set correct `WorkingDirectory` and `User`), or create an Ansible playbook for repeatable deployments.
+

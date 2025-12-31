@@ -1,0 +1,15 @@
+[Unit]
+Description=LLM-EXHANGE FastAPI app (uvicorn)
+After=network.target
+
+[Service]
+# Adjust User and Group to match deployment environment
+User=www-data
+Group=www-data
+WorkingDirectory=/path/to/repo  # <- change this to the repository path
+ExecStart=/path/to/repo/.venv/bin/uvicorn app.main:app --host 0.0.0.0 --port 8000
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
