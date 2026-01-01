@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 from datetime import datetime, timedelta
-from typing import Dict, Any
+from typing import Dict, Any, List
 
 import pandas as pd
 from prophet import Prophet
@@ -202,4 +202,208 @@ async def _predict(pair: str, days: int = 0, amount: float = 1.0):
         "predicted_for_amount_lower": yhat_lower * amount,
         "predicted_for_amount_upper": yhat_upper * amount,
         "trained_until": str(last_date.date()),
+    }
+
+
+def _get_trend_analysis(pair: str, days: int = 7) -> Dict[str, Any]:
+    """
+    Analyze trend for a pair over the specified number of days.
+    Returns trend direction, percentage change, and volatility.
+    """
+    df = load_data(pair)
+    model = get_model(pair)
+    
+    last_date = df["ds"].max().normalize()
+    
+    # Get recent historical data (last 30 days for trend analysis)
+    recent_df = df[df["ds"] >= (last_date - timedelta(days=30))]
+    
+    if len(recent_df) < 5:
+        recent_df = df.tail(30)
+    
+    # Current value (last observed)
+    current_value = float(recent_df.iloc[-1]["y"])
+    
+    # Value from 7 days ago (or earliest in recent)
+    if len(recent_df) >= 7:
+        past_value = float(recent_df.iloc[-7]["y"])
+    else:
+        past_value = float(recent_df.iloc[0]["y"])
+    
+    # Calculate percentage change
+    pct_change_7d = ((current_value - past_value) / past_value) * 100
+    
+    # Calculate 30-day moving average
+    ma_30 = float(recent_df["y"].mean())
+    
+    # Volatility (standard deviation)
+    volatility = float(recent_df["y"].std() / recent_df["y"].mean() * 100)
+    
+    # Forecast for tomorrow
+    target_date = datetime.utcnow().date() + timedelta(days=1)
+    horizon_days = (target_date - last_date.date()).days
+    
+    if horizon_days > 0:
+        future = model.make_future_dataframe(periods=horizon_days + 1, freq="D")
+        forecast = model.predict(future)
+        target_row = forecast[forecast["ds"].dt.date == target_date]
+        if not target_row.empty:
+            predicted_tomorrow = float(target_row.iloc[0]["yhat"])
+        else:
+            predicted_tomorrow = current_value
+    else:
+        predicted_tomorrow = current_value
+    
+    # Determine trend direction
+    pct_change_predicted = ((predicted_tomorrow - current_value) / current_value) * 100
+    
+    if pct_change_predicted > 0.5:
+        trend = "UP"
+        trend_id = "NAIK"
+    elif pct_change_predicted < -0.5:
+        trend = "DOWN"
+        trend_id = "TURUN"
+    else:
+        trend = "STABLE"
+        trend_id = "STABIL"
+    
+    return {
+        "current_value": current_value,
+        "past_value_7d": past_value,
+        "predicted_tomorrow": predicted_tomorrow,
+        "pct_change_7d": round(pct_change_7d, 2),
+        "pct_change_predicted": round(pct_change_predicted, 2),
+        "ma_30": ma_30,
+        "volatility_pct": round(volatility, 2),
+        "trend": trend,
+        "trend_id": trend_id,
+    }
+
+
+def _generate_recommendation(analyses: Dict[str, Dict]) -> Dict[str, Any]:
+    """
+    Generate investment recommendation based on all analyses.
+    """
+    usd = analyses.get("idr-usd", {})
+    sar = analyses.get("idr-sar", {})
+    gold = analyses.get("idr-gold-gram", {})
+    
+    recommendations = []
+    scores = {
+        "USD": 0,
+        "SAR": 0,
+        "GOLD": 0,
+        "IDR": 0,
+    }
+
+    # Analyze USD trend (value is USD per IDR, so UP means IDR weakening)
+    if usd:
+        if usd["trend"] == "DOWN":  # IDR strengthening against USD
+            scores["IDR"] += 2
+            recommendations.append("IDR menguat terhadap USD, pertimbangkan untuk hold IDR.")
+        elif usd["trend"] == "UP":  # IDR weakening
+            scores["USD"] += 2
+            recommendations.append("IDR melemah terhadap USD, pertimbangkan diversifikasi ke USD.")
+        
+        if usd["volatility_pct"] > 2:
+            recommendations.append(f"Volatilitas USD/IDR tinggi ({usd['volatility_pct']}%), pasar sedang tidak stabil.")
+    
+    # Analyze SAR trend (value is SAR per IDR)
+    if sar:
+        if sar["trend"] == "DOWN":  # IDR strengthening against SAR
+            scores["IDR"] += 1
+            recommendations.append("IDR menguat terhadap SAR.")
+        elif sar["trend"] == "UP":  # IDR weakening
+            scores["SAR"] += 1
+            recommendations.append("IDR melemah terhadap SAR, pertimbangkan SAR untuk kebutuhan Timur Tengah.")
+    
+    # Analyze Gold trend (value is IDR per gram, UP means gold more expensive in IDR)
+    if gold:
+        if gold["trend"] == "UP":  # Gold price increasing
+            scores["GOLD"] += 3
+            recommendations.append(f"Harga emas naik {gold['pct_change_predicted']}%, emas masih menjadi safe haven yang baik.")
+        elif gold["trend"] == "DOWN":
+            scores["IDR"] += 1
+            recommendations.append("Harga emas turun, mungkin saat yang baik untuk membeli emas.")
+        else:
+            recommendations.append("Harga emas cenderung stabil.")
+        
+        if gold["volatility_pct"] < 1:
+            recommendations.append("Volatilitas emas rendah, cocok untuk investasi jangka panjang.")
+    
+    # Determine best recommendation
+    best_option = max(scores, key=scores.get)
+    
+    if best_option == "IDR":
+        main_recommendation = "HOLD IDR - Rupiah dalam kondisi cukup kuat, simpan dalam deposito IDR."
+    elif best_option == "USD":
+        main_recommendation = "DIVERSIFIKASI USD - Pertimbangkan menyimpan sebagian dana dalam USD sebagai lindung nilai."
+    elif best_option == "SAR":
+        main_recommendation = "DIVERSIFIKASI SAR - Untuk kebutuhan Timur Tengah atau haji/umrah, SAR bisa dipertimbangkan."
+    elif best_option == "GOLD":
+        main_recommendation = "INVESTASI EMAS - Emas menunjukkan tren positif, cocok untuk diversifikasi dan lindung nilai."
+    else:
+        main_recommendation = "DIVERSIFIKASI - Sebaiknya sebarkan investasi ke berbagai instrumen."
+    
+    return {
+        "main_recommendation": main_recommendation,
+        "best_option": best_option,
+        "scores": scores,
+        "details": recommendations,
+    }
+
+
+@router.get("/idr-summary")
+async def get_idr_summary():
+    """
+    Get comprehensive IDR analysis summary comparing against USD, SAR, and Gold.
+    Provides trend analysis, predictions, and investment recommendations.
+    """
+    analyses = {}
+    errors = []
+    
+    # Analyze each pair
+    pairs = ["idr-usd", "idr-sar", "idr-gold-gram"]
+    pair_labels = {
+        "idr-usd": {"label": "IDR vs USD", "unit": "USD per IDR"},
+        "idr-sar": {"label": "IDR vs SAR", "unit": "SAR per IDR"},
+        "idr-gold-gram": {"label": "Harga Emas (IDR/gram)", "unit": "IDR per gram"},
+    }
+    
+    for pair in pairs:
+        try:
+            analysis = _get_trend_analysis(pair)
+            analyses[pair] = {
+                **pair_labels[pair],
+                **analysis,
+            }
+        except HTTPException as e:
+            errors.append(f"{pair}: {e.detail}")
+        except Exception as e:
+            errors.append(f"{pair}: {str(e)}")
+    
+    if not analyses:
+        raise HTTPException(status_code=503, detail=f"Tidak dapat menganalisis data. Errors: {errors}")
+    
+    # Generate recommendation
+    recommendation = _generate_recommendation(analyses)
+    
+    # Build summary
+    summary_parts = []
+    
+    for pair, data in analyses.items():
+        label = data["label"]
+        trend_id = data["trend_id"]
+        pct = data["pct_change_predicted"]
+        summary_parts.append(f"{label}: {trend_id} ({pct:+.2f}%)")
+    
+    summary_text = " | ".join(summary_parts)
+    
+    return {
+        "date": datetime.utcnow().date().isoformat(),
+        "summary": summary_text,
+        "analyses": analyses,
+        "recommendation": recommendation,
+        "errors": errors if errors else None,
+        "note": "Analisis ini berdasarkan data historis dan model prediksi. Bukan saran investasi finansial.",
     }

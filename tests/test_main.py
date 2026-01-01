@@ -87,3 +87,14 @@ def test_rag_idr_gold_gram():
     assert body["pair"] == "idr-gold-gram"
     assert "predicted" in body
     assert "predicted_for_amount" in body
+
+
+def test_rag_idr_summary():
+    rv = client.get("/rag/idr-summary")
+    assert rv.status_code == 200
+    body = rv.json()
+    assert "summary" in body
+    assert "analyses" in body
+    assert "recommendation" in body
+    assert "main_recommendation" in body["recommendation"]
+    assert "best_option" in body["recommendation"]
