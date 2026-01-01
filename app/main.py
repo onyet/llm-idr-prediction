@@ -18,7 +18,7 @@ app.add_middleware(
 
 @app.get("/")
 async def root():
-    return {"message": "Hello, FastAPI from LLM-EXHANGE"}
+    return {"message": "Hello, My name is LLM Exchange API"}
 
 
 @app.get("/healthz")

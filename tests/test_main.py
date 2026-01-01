@@ -58,3 +58,23 @@ def test_tradingview_save_param():
     if rv.status_code == 200:
         body = rv.json()
         assert "saved_to" in body or "Failed to save" in str(body)
+
+
+def test_mock_tradingview_get():
+    rv = client.get("/tradingview/mock/XAUIDRG")
+    assert rv.status_code == 200
+    body = rv.json()
+    assert body["symbol"] == "XAUIDRG"
+    assert body["period"] == "1y"
+    assert body["source"] == "mock_tradingview"
+    assert "data" in body
+    assert isinstance(body["data"], list)
+    assert len(body["data"]) > 0
+    # Check data structure
+    data_point = body["data"][0]
+    assert "Date" in data_point
+    assert "Open" in data_point
+    assert "High" in data_point
+    assert "Low" in data_point
+    assert "Close" in data_point
+    assert "Volume" in data_point

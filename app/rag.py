@@ -16,27 +16,90 @@ _cache: Dict[str, Any] = {"models": {}, "data": {}}
 
 
 def load_data(pair: str) -> pd.DataFrame:
+    """
+    Load time series for a logical pair.
+    - 'idr-usd' reads USDIDR_X.json (IDR per USD) and uses the Close price.
+    - 'idr-sar' is derived as (USDIDR_Close / SAR_Close) -> IDR per SAR.
+    Raises HTTPException(status_code=503) with an Indonesian message if source files are missing or malformed.
+    """
     if pair in _cache["data"]:
         return _cache["data"][pair]
-    file_map = {"idr-sar": "idr-sar.json", "idr-usd": "idr-usd.json"}
-    if pair not in file_map:
-        raise FileNotFoundError("Unknown pair")
-    p = DATA_DIR / file_map[pair]
-    if not p.exists():
-        raise FileNotFoundError(p)
-    raw = json.loads(p.read_text())
-    # convert to DataFrame with ds,y
-    df = pd.DataFrame(raw)
-    df["ds"] = pd.to_datetime(df["time"], unit="ms")
-    df = df.sort_values("ds").rename(columns={"value": "y"})[["ds", "y"]]
-    _cache["data"][pair] = df
-    return df
+
+    # Helper to load yfinance-like JSON file and return DataFrame with ds and close
+    def _load_yf_file(path: Path, name: str) -> pd.DataFrame:
+        if not path.exists():
+            raise HTTPException(status_code=503, detail=f"Model data belum disiapkan: {name}")
+        raw = json.loads(path.read_text())
+        data = raw.get("data") or raw.get("prices") or raw
+        df = pd.DataFrame(data)
+        if df.empty:
+            raise HTTPException(status_code=503, detail=f"Model data belum disiapkan: {name} (empty)")
+        # Normalize column names to lowercase for robustness
+        df.columns = [c.lower() for c in df.columns]
+        # Date parsing
+        if "date" in df.columns:
+            df["ds"] = pd.to_datetime(df["date"], utc=True).dt.tz_convert('UTC').dt.tz_localize(None)
+        else:
+            # try to infer index or other date-like columns
+            possible = [c for c in df.columns if "time" in c or "date" in c or "ds" in c]
+            if possible:
+                df["ds"] = pd.to_datetime(df[possible[0]], utc=True).dt.tz_convert('UTC').dt.tz_localize(None)
+            else:
+                # As a last resort, try the index
+                try:
+                    df["ds"] = pd.to_datetime(df.index, utc=True).tz_convert('UTC').tz_localize(None)
+                except Exception:
+                    raise HTTPException(status_code=503, detail=f"Model data belum disiapkan: {name} (no date column)")
+        # Close price
+        if "close" in df.columns:
+            df["close"] = pd.to_numeric(df["close"], errors="coerce")
+        else:
+            raise HTTPException(status_code=503, detail=f"Model data belum disiapkan: {name} (no close column)")
+        df = df[["ds", "close"]].dropna().sort_values("ds")
+        return df
+
+    if pair == "idr-usd":
+        p = DATA_DIR / "USDIDR_X.json"
+        df = _load_yf_file(p, "USDIDR")
+        # use Close as y
+        out = df.rename(columns={"close": "y"})[["ds", "y"]]
+        _cache["data"][pair] = out
+        return out
+
+    if pair == "idr-sar":
+        p_usd = DATA_DIR / "USDIDR_X.json"
+        p_sar = DATA_DIR / "SAR_X.json"
+        df_usd = _load_yf_file(p_usd, "USDIDR")
+        df_sar = _load_yf_file(p_sar, "SAR")
+        # merge on date (inner join) to ensure aligned observations
+        merged = pd.merge(df_usd, df_sar, on="ds", how="inner", suffixes=("_usd", "_sar"))
+        if merged.empty:
+            raise HTTPException(status_code=503, detail="Model data belum disiapkan: idr-sar (no overlapping dates)")
+        # avoid division by zero
+        merged = merged[merged["close_sar"] != 0]
+        merged["y"] = merged["close_usd"] / merged["close_sar"]  # IDR per SAR
+        out = merged[["ds", "y"]].dropna().sort_values("ds")
+        if out.empty:
+            raise HTTPException(status_code=503, detail="Model data belum disiapkan: idr-sar (no valid values)")
+        _cache["data"][pair] = out
+        return out
+
+    raise FileNotFoundError("Unknown pair")
 
 
 def get_model(pair: str) -> Prophet:
     if pair in _cache["models"]:
         return _cache["models"][pair]
-    df = load_data(pair)
+    try:
+        df = load_data(pair)
+    except HTTPException:
+        # propagate the HTTPException (e.g., 503 model not ready)
+        raise
+    except FileNotFoundError:
+        raise HTTPException(status_code=503, detail="Model data belum disiapkan")
+    # sanity check
+    if df.empty:
+        raise HTTPException(status_code=503, detail="Model data belum disiapkan (empty)")
     # train Prophet
     model = Prophet(daily_seasonality=True)
     model.fit(df)
