@@ -47,13 +47,13 @@ def test_rag_idr_sar_days_3():
 def test_tradingview_get():
     # Note: this test may fail if yfinance requires internet or has rate limits
     # In real tests, mock the yfinance
-    rv = client.get("/tradingview/get/USDIDR")
+    rv = client.get("/tradingview/get/AAPL")
     # Assuming it returns 200 or 500 depending on yfinance
     assert rv.status_code in [200, 500]  # 500 if yfinance fails in test env
 
 
 def test_tradingview_save_param():
-    rv = client.get("/tradingview/get/USDIDR?save=1")
+    rv = client.get("/tradingview/get/AAPL?save=1")
     assert rv.status_code in [200, 500]
     if rv.status_code == 200:
         body = rv.json()
@@ -78,3 +78,12 @@ def test_mock_tradingview_get():
     assert "Low" in data_point
     assert "Close" in data_point
     assert "Volume" in data_point
+
+
+def test_rag_idr_gold_gram():
+    rv = client.get("/rag/idr-gold-gram?amount_gram=1")
+    assert rv.status_code == 200
+    body = rv.json()
+    assert body["pair"] == "idr-gold-gram"
+    assert "predicted" in body
+    assert "predicted_for_amount" in body

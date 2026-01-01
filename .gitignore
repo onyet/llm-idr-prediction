@@ -11,6 +11,7 @@ build/
 dist/
 .eggs/
 *.egg-info/
+backups/
 
 # Virtual env
 # (already covered above)

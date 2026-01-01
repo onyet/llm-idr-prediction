@@ -38,16 +38,16 @@ def load_data(pair: str) -> pd.DataFrame:
         df.columns = [c.lower() for c in df.columns]
         # Date parsing
         if "date" in df.columns:
-            df["ds"] = pd.to_datetime(df["date"], utc=True).dt.tz_convert('UTC').dt.tz_localize(None)
+            df["ds"] = pd.to_datetime(df["date"], utc=True).dt.tz_convert('UTC').dt.tz_localize(None).dt.normalize()
         else:
             # try to infer index or other date-like columns
             possible = [c for c in df.columns if "time" in c or "date" in c or "ds" in c]
             if possible:
-                df["ds"] = pd.to_datetime(df[possible[0]], utc=True).dt.tz_convert('UTC').dt.tz_localize(None)
+                df["ds"] = pd.to_datetime(df[possible[0]], utc=True).dt.tz_convert('UTC').dt.tz_localize(None).dt.normalize()
             else:
                 # As a last resort, try the index
                 try:
-                    df["ds"] = pd.to_datetime(df.index, utc=True).tz_convert('UTC').tz_localize(None)
+                    df["ds"] = pd.to_datetime(df.index, utc=True).tz_convert('UTC').tz_localize(None).dt.normalize()
                 except Exception:
                     raise HTTPException(status_code=503, detail=f"Model data belum disiapkan: {name} (no date column)")
         # Close price
@@ -61,8 +61,9 @@ def load_data(pair: str) -> pd.DataFrame:
     if pair == "idr-usd":
         p = DATA_DIR / "USDIDR_X.json"
         df = _load_yf_file(p, "USDIDR")
-        # use Close as y
-        out = df.rename(columns={"close": "y"})[["ds", "y"]]
+        # use 1/Close as y (USD per IDR)
+        df["y"] = 1 / df["close"]
+        out = df[["ds", "y"]].dropna()
         _cache["data"][pair] = out
         return out
 
@@ -76,11 +77,35 @@ def load_data(pair: str) -> pd.DataFrame:
         if merged.empty:
             raise HTTPException(status_code=503, detail="Model data belum disiapkan: idr-sar (no overlapping dates)")
         # avoid division by zero
-        merged = merged[merged["close_sar"] != 0]
-        merged["y"] = merged["close_usd"] / merged["close_sar"]  # IDR per SAR
+        merged = merged[(merged["close_sar"] != 0) & (merged["close_usd"] != 0)]
+        merged["y"] = merged["close_sar"] / merged["close_usd"]  # SAR per IDR
         out = merged[["ds", "y"]].dropna().sort_values("ds")
         if out.empty:
             raise HTTPException(status_code=503, detail="Model data belum disiapkan: idr-sar (no valid values)")
+        _cache["data"][pair] = out
+        return out
+
+    if pair == "idr-gold-gram":
+        p_usd = DATA_DIR / "USDIDR_X.json"
+        p_gold = DATA_DIR / "GC_F.json"
+        df_usd = _load_yf_file(p_usd, "USDIDR")
+        df_gold = _load_yf_file(p_gold, "GC=F")
+        
+        # merge on date (inner join)
+        merged = pd.merge(df_usd, df_gold, on="ds", how="inner", suffixes=("_usd", "_gold"))
+        if merged.empty:
+            raise HTTPException(status_code=503, detail="Model data belum disiapkan: idr-gold-gram (no overlapping dates)")
+            
+        # 1 Troy Ounce = 31.1034768 grams
+        # Gold price in USD/gram = Gold price in USD/oz t / 31.1034768
+        # Gold price in IDR/gram = (Gold price in USD/gram) * (IDR/USD)
+        
+        troy_oz_to_gram = 31.1034768
+        merged["y"] = (merged["close_gold"] / troy_oz_to_gram) * merged["close_usd"]
+        
+        out = merged[["ds", "y"]].dropna().sort_values("ds")
+        if out.empty:
+            raise HTTPException(status_code=503, detail="Model data belum disiapkan: idr-gold-gram (no valid values)")
         _cache["data"][pair] = out
         return out
 
@@ -115,6 +140,11 @@ async def predict_idr_sar(days: int = 0, amount: float = 1.0):
 @router.get("/idr-usd")
 async def predict_idr_usd(days: int = 0, amount: float = 1.0):
     return await _predict("idr-usd", days, amount)
+
+
+@router.get("/idr-gold-gram")
+async def predict_idr_gold_gram(days: int = 0, amount_gram: float = 1.0):
+    return await _predict("idr-gold-gram", days, amount_gram)
 
 
 async def _predict(pair: str, days: int = 0, amount: float = 1.0):

@@ -49,6 +49,9 @@ fi
 # Activate virtual environment
 . .venv/bin/activate
 
+# Setup cronjob for data updates
+./setup_cron.sh
+
 # Start server
 echo "Starting server on port $PORT..."
 nohup uvicorn app.main:app --host 0.0.0.0 --port $PORT > uvicorn.log 2>&1 &

@@ -28,11 +28,7 @@ async def get_tradingview_data(kode: str, range: str = "1y", save: int = 0):
     if save not in [0, 1]:
         raise HTTPException(status_code=400, detail="save must be 0 or 1")
 
-    # For forex-like symbols (letters only), append '=X' if not present
-    if not kode.endswith("=X") and re.fullmatch(r"[A-Za-z]+", kode):
-        symbol = f"{kode}=X"
-    else:
-        symbol = kode
+    symbol = kode
 
     cache_key = f"{symbol}_{range}"
     if cache_key in _cache:
