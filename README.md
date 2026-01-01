@@ -112,6 +112,7 @@ After the script finishes:
 
 - Start the server: `./run.sh` (runs uvicorn in background and writes pid to `uvicorn.pid` and logs to `uvicorn.log`)
 - Stop the server: `./stop.sh`
+- Restart the server: `./restart.sh` (stops if running, then starts)
 - A sample systemd unit is available at `systemd/llm-exchange.service` — edit it (WorkingDirectory/ExecStart/User) before copying to `/etc/systemd/system/` and enabling it with systemd.
 
 Notes:
