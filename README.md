@@ -58,6 +58,21 @@ If the requested date is inside the historical range, the service will return th
 
 ---
 
+## TradingView data endpoints 📊
+
+Fetch historical data for symbols using yfinance (Yahoo Finance API, similar to TradingView):
+
+- `GET /tradingview/get/{kode}?range=R&save=S` — get historical data for symbol {kode} (e.g., USDIDR, automatically adds =X for forex)
+
+Query parameter:
+
+- `range` (str): '1y' or '5y' (default '1y')
+- `save` (int): 1 to save data to `data/{kode}_{range}.json` (filename sanitized), 0 otherwise (default 0)
+
+Returns JSON with historical price data (Open, High, Low, Close, Volume, etc.) for the specified period. If saved, includes "saved_to" field.
+
+---
+
 ## Implementation notes ⚠️
 
 - Model: uses `prophet` (FB Prophet) and `pandas` to train on the `data/*.json` files. Models and data are cached in-memory for faster responses.

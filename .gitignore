@@ -13,7 +13,7 @@ dist/
 *.egg-info/
 
 # Virtual env
-.venv/
+# (already covered above)
 
 # Pytest cache
 .pytest_cache/
@@ -24,3 +24,23 @@ dist/
 
 # OS
 .DS_Store
+
+# Logs
+*.log
+uvicorn.log
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Data files (uncomment if you don't want to commit data/*.json)
+# data/
+
+# Systemd (uncomment if you don't want to commit systemd config)
+# systemd/
+
+# Temporary files
+*.tmp
+*.swp
+*~

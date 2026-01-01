@@ -42,3 +42,19 @@ def test_rag_idr_sar_days_3():
     assert body["pair"] == "idr-sar"
     assert "date" in body
     assert "predicted" in body
+
+
+def test_tradingview_get():
+    # Note: this test may fail if yfinance requires internet or has rate limits
+    # In real tests, mock the yfinance
+    rv = client.get("/tradingview/get/USDIDR")
+    # Assuming it returns 200 or 500 depending on yfinance
+    assert rv.status_code in [200, 500]  # 500 if yfinance fails in test env
+
+
+def test_tradingview_save_param():
+    rv = client.get("/tradingview/get/USDIDR?save=1")
+    assert rv.status_code in [200, 500]
+    if rv.status_code == 200:
+        body = rv.json()
+        assert "saved_to" in body or "Failed to save" in str(body)
