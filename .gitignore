@@ -29,6 +29,7 @@ backups/
 # Logs
 *.log
 uvicorn.log
+uvicorn.pid
 
 # Environment variables
 .env
