@@ -1,15 +1,14 @@
 """
-LLM Agent Module for Advanced Financial Analysis
-Provides AI-powered analysis using various LLM providers.
+Modul LLM Agent untuk Analisis Keuangan Lanjutan
+Menyediakan analisis berbasis AI menggunakan berbagai penyedia LLM.
 
-Supports:
+Mendukung:
 - OpenAI API
-- Ollama (local)
+- Ollama (lokal)
 - Anthropic Claude
-- Custom providers
+- Penyedia kustom
 
-Based on multi-agent architecture similar to:
-https://github.com/imanoop7/Financial-Analysis--Multi-Agent-Open-Source-LLM
+Berdasarkan arsitektur multi-agent serupa dengan proyek open-source.
 """
 
 import os
@@ -19,6 +18,14 @@ from abc import ABC, abstractmethod
 from typing import Dict, Any, List, Optional
 from dataclasses import dataclass
 from enum import Enum
+
+# Muat variabel lingkungan dari file .env jika python-dotenv terpasang
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except Exception:
+    # Jika dotenv tidak tersedia, lanjutkan tanpa error
+    pass
 
 
 class LLMProvider(Enum):
@@ -32,7 +39,7 @@ class LLMProvider(Enum):
 
 @dataclass
 class AnalysisContext:
-    """Context data for LLM analysis."""
+    """Data konteks untuk analisis LLM yang akan diberikan ke agent."""
     pair: str
     current_price: float
     technical_indicators: Dict[str, Any]
@@ -44,27 +51,27 @@ class AnalysisContext:
 
 
 class BaseLLMAgent(ABC):
-    """Base class for LLM agents."""
+    """Kelas dasar untuk semua agent LLM."""
     
     @abstractmethod
     async def analyze(self, context: AnalysisContext) -> Dict[str, Any]:
-        """Perform analysis using LLM."""
+        """Lakukan analisis berdasarkan konteks yang diberikan oleh LLM."""
         pass
     
     @abstractmethod
     async def is_available(self) -> bool:
-        """Check if the LLM provider is available."""
+        """Periksa apakah penyedia LLM tersedia untuk digunakan."""
         pass
 
 
 class MockLLMAgent(BaseLLMAgent):
-    """Mock LLM agent for testing and fallback."""
+    """Agent mock untuk pengujian dan sebagai fallback bila LLM nyata tidak tersedia."""
     
     async def is_available(self) -> bool:
         return True
     
     async def analyze(self, context: AnalysisContext) -> Dict[str, Any]:
-        """Generate rule-based analysis as fallback."""
+        """Menghasilkan analisis berbasis aturan sebagai fallback."""
         
         tech = context.technical_indicators
         signal = tech.get("signal", "hold")
@@ -72,10 +79,10 @@ class MockLLMAgent(BaseLLMAgent):
         rsi = tech.get("rsi", {}).get("value", 50)
         volatility = tech.get("volatility", 0)
         
-        # Generate insights based on indicators
+        # Buat insight berdasarkan indikator teknikal
         insights = []
         
-        # Trend insight
+        # Insight trend
         if trend == "bullish":
             insights.append(self._get_insight("bullish_trend", context.language))
         elif trend == "bearish":
@@ -83,22 +90,22 @@ class MockLLMAgent(BaseLLMAgent):
         else:
             insights.append(self._get_insight("sideways_trend", context.language))
         
-        # RSI insight
+        # Insight RSI
         if rsi > 70:
             insights.append(self._get_insight("rsi_high", context.language))
         elif rsi < 30:
             insights.append(self._get_insight("rsi_low", context.language))
         
-        # Volatility insight
+        # Insight volatilitas
         if volatility > 30:
             insights.append(self._get_insight("high_volatility", context.language))
         elif volatility < 10:
             insights.append(self._get_insight("low_volatility", context.language))
         
-        # Generate recommendation
+        # Buat rekomendasi singkat berdasarkan sinyal
         recommendation = self._generate_recommendation(signal, trend, context.language)
         
-        # Risk assessment
+        # Penilaian risiko sederhana
         risk_level = "high" if volatility > 25 or abs(rsi - 50) > 25 else "medium" if volatility > 15 else "low"
         
         return {
@@ -193,11 +200,13 @@ class MockLLMAgent(BaseLLMAgent):
 
 
 class OllamaAgent(BaseLLMAgent):
-    """LLM agent using Ollama for local inference."""
+    """Agent LLM yang menggunakan Ollama untuk inferensi lokal."""
     
-    def __init__(self, model: str = "llama3.2", base_url: str = "http://localhost:11434"):
+    def __init__(self, model: str = "llama3.2", base_url: Optional[str] = None):
         self.model = model
-        self.base_url = base_url
+        import os
+        # Jika OLLAMA_BASE_URL diset di .env, gunakan itu; jika tidak gunakan default localhost
+        self.base_url = base_url or os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
     
     async def is_available(self) -> bool:
         try:
@@ -206,6 +215,7 @@ class OllamaAgent(BaseLLMAgent):
                 response = await client.get(f"{self.base_url}/api/tags")
                 return response.status_code == 200
         except Exception:
+            # Jika tidak dapat mengakses Ollama di base_url, anggap tidak tersedia
             return False
     
     async def analyze(self, context: AnalysisContext) -> Dict[str, Any]:
@@ -293,13 +303,15 @@ Provide your analysis in the following JSON format:
 
 
 class OpenAIAgent(BaseLLMAgent):
-    """LLM agent using OpenAI API."""
+    """Agent LLM menggunakan OpenAI API."""
     
     def __init__(self, api_key: str = None, model: str = "gpt-4o-mini"):
+        # API key akan diambil dari environment jika tersedia (dari .env atau sistem)
         self.api_key = api_key or os.getenv("OPENAI_API_KEY")
         self.model = model
     
     async def is_available(self) -> bool:
+        # Tersedia jika API key ada
         return bool(self.api_key)
     
     async def analyze(self, context: AnalysisContext) -> Dict[str, Any]:
@@ -379,14 +391,16 @@ Respond with JSON containing: insights (array), recommendation (string), risk_le
 
 
 class HuggingFaceAgent(BaseLLMAgent):
-    """LLM agent using HuggingFace Inference API."""
+    """Agent LLM menggunakan HuggingFace Inference API."""
     
     def __init__(self, api_key: str = None, model: str = "mistralai/Mixtral-8x7B-Instruct-v0.1"):
+        # API key dapat berasal dari HUGGINGFACE_API_KEY atau HF_TOKEN
         self.api_key = api_key or os.getenv("HUGGINGFACE_API_KEY") or os.getenv("HF_TOKEN")
         self.model = model
         self.base_url = "https://api-inference.huggingface.co/models"
     
     async def is_available(self) -> bool:
+        # Tersedia jika API key ada
         return bool(self.api_key)
     
     async def analyze(self, context: AnalysisContext) -> Dict[str, Any]:
@@ -487,13 +501,15 @@ Respond with JSON: {{"insights": [...], "recommendation": "...", "risk_level": "
 
 
 class GroqAgent(BaseLLMAgent):
-    """LLM agent using Groq API (fast inference)."""
+    """Agent LLM menggunakan Groq API (inference cepat)."""
     
     def __init__(self, api_key: str = None, model: str = "llama-3.3-70b-versatile"):
+        # API key diambil dari environment jika tersedia
         self.api_key = api_key or os.getenv("GROQ_API_KEY")
         self.model = model
     
     async def is_available(self) -> bool:
+        # Tersedia jika API key ada
         return bool(self.api_key)
     
     async def analyze(self, context: AnalysisContext) -> Dict[str, Any]:
@@ -574,7 +590,7 @@ Respond with JSON containing: insights (array), recommendation (string), risk_le
 
 class LLMAnalyzer:
     """
-    Main LLM analyzer that manages multiple agents and provides fallback.
+    Anlizer LLM utama yang mengelola beberapa agent dan menyediakan mekanisme fallback.
     """
     
     def __init__(self):
@@ -582,9 +598,8 @@ class LLMAnalyzer:
         self._initialize_agents()
     
     def _initialize_agents(self):
-        """Initialize available agents in priority order."""
-        # Try Groq first (fast, free tier available)
-        groq_key = os.getenv("GROQ_API_KEY")
+        """Inisialisasi agent yang tersedia dalam urutan prioritas."""
+        # Coba Groq dulu (cepat, dan ada free tier jika disediakan)        groq_key = os.getenv("GROQ_API_KEY")
         if groq_key:
             self.agents.append(GroqAgent(api_key=groq_key))
         

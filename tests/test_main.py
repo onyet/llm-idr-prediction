@@ -7,7 +7,8 @@ client = TestClient(app)
 def test_root():
     rv = client.get("/")
     assert rv.status_code == 200
-    assert "Hello" in rv.json()["message"]
+    # Terima kedua kemungkinan: Bahasa default bisa 'id' (Halo) atau 'en' (Hello)
+    assert "Hello" in rv.json()["message"] or "Halo" in rv.json()["message"]
 
 
 def test_rag_idr_usd_default():
@@ -32,7 +33,9 @@ def test_rag_amount():
 def test_rag_too_far():
     rv = client.get("/rag/idr-usd?days=10")
     assert rv.status_code == 400
-    assert "too long" in rv.json()["detail"] or "too long" in rv.json()["detail"].lower()
+    # Accept English or Indonesian error messages
+    detail = rv.json()["detail"]
+    assert ("too long" in detail.lower()) or ("terlalu panjang" in detail.lower())
 
 
 def test_rag_idr_sar_days_3():

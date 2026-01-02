@@ -1,11 +1,11 @@
 """
-Internationalization (i18n) module for multi-language support.
-Supports: Indonesian (id), English (en), Arabic (ar)
+Modul Internasionalisasi (i18n) untuk dukungan multi-bahasa.
+Mendukung: Indonesian (id), English (en), Arabic (ar)
 
-Translations are loaded from JSON files in the i18n folder:
+Terjemahan dimuat dari file JSON di folder i18n:
   app/i18n/{lang}/{module}.json
 
-Example:
+Contoh:
   app/i18n/id/main.json
   app/i18n/en/rag.json
   app/i18n/ar/tradingview.json
@@ -18,35 +18,35 @@ from contextvars import ContextVar
 
 from fastapi import Request
 
-# Default language
+# Bahasa default
 DEFAULT_LANG = "id"
 
-# Supported languages
+# Bahasa yang didukung
 SUPPORTED_LANGS = ["id", "en", "ar"]
 
-# i18n directory path
+# Path direktori i18n
 I18N_DIR = Path(__file__).resolve().parent / "i18n"
 
-# Cache for loaded translations: {lang: {module: {key: value}}}
+# Cache untuk terjemahan yang sudah dimuat: {lang: {module: {key: value}}}
 _translations_cache: Dict[str, Dict[str, Dict[str, str]]] = {}
 
 
 def _load_translations(lang: str, module: str) -> Dict[str, str]:
     """
-    Load translations from JSON file for a specific language and module.
-    Returns empty dict if file not found.
+    Memuat terjemahan dari file JSON untuk bahasa dan modul tertentu.
+    Mengembalikan dict kosong jika file tidak ditemukan.
     """
     cache_key = f"{lang}:{module}"
     
-    # Check cache first
+    # Cek cache terlebih dahulu
     if lang in _translations_cache and module in _translations_cache[lang]:
         return _translations_cache[lang][module]
     
-    # Initialize cache structure
+    # Inisialisasi struktur cache
     if lang not in _translations_cache:
         _translations_cache[lang] = {}
     
-    # Load from file
+    # Muat dari file
     file_path = I18N_DIR / lang / f"{module}.json"
     if file_path.exists():
         try:
@@ -64,7 +64,7 @@ def _load_translations(lang: str, module: str) -> Dict[str, str]:
 
 def _get_all_translations(lang: str) -> Dict[str, str]:
     """
-    Load and merge all translations for a language from all module files.
+    Memuat dan menggabungkan semua terjemahan untuk suatu bahasa dari semua file modul.
     """
     all_translations = {}
     
@@ -80,15 +80,15 @@ def _get_all_translations(lang: str) -> Dict[str, str]:
 
 def get_lang_from_request(request: Request) -> str:
     """
-    Extract language code from Accept-Language header.
-    Returns the first supported language found, or default language.
+    Mengekstrak kode bahasa dari header Accept-Language.
+    Mengembalikan bahasa pertama yang didukung, atau bahasa default.
     """
     accept_language = request.headers.get("accept-language", "")
     
     if not accept_language:
         return DEFAULT_LANG
     
-    # Parse Accept-Language header (e.g., "en-US,en;q=0.9,id;q=0.8")
+    # Parse header Accept-Language (contoh: "en-US,en;q=0.9,id;q=0.8")
     languages = []
     for part in accept_language.split(","):
         part = part.strip()
@@ -97,11 +97,11 @@ def get_lang_from_request(request: Request) -> str:
         else:
             lang = part
         
-        # Get base language code (e.g., "en-US" -> "en")
+        # Ambil kode bahasa dasar (contoh: "en-US" -> "en")
         base_lang = lang.split("-")[0].lower()
         languages.append(base_lang)
     
-    # Return first supported language
+    # Kembalikan bahasa pertama yang didukung
     for lang in languages:
         if lang in SUPPORTED_LANGS:
             return lang
@@ -111,44 +111,44 @@ def get_lang_from_request(request: Request) -> str:
 
 def t(key: str, lang: str = DEFAULT_LANG, module: str = None, **kwargs) -> str:
     """
-    Get translation for a key in the specified language.
+    Mendapatkan terjemahan untuk sebuah key dalam bahasa yang ditentukan.
     
     Args:
-        key: Translation key
-        lang: Language code (id, en, ar)
-        module: Optional module name to search in specific file first
-        **kwargs: Format parameters for string interpolation
+        key: Kunci terjemahan
+        lang: Kode bahasa (id, en, ar)
+        module: Nama modul opsional untuk mencari di file spesifik terlebih dahulu
+        **kwargs: Parameter format untuk interpolasi string
     
     Returns:
-        Translated string or the key if not found
+        String yang diterjemahkan atau key jika tidak ditemukan
     """
     translation = None
     
-    # If module specified, search there first
+    # Jika modul ditentukan, cari di sana terlebih dahulu
     if module:
         translations = _load_translations(lang, module)
         translation = translations.get(key)
         
-        # Fallback to default language if not found
+        # Fallback ke bahasa default jika tidak ditemukan
         if translation is None and lang != DEFAULT_LANG:
             translations = _load_translations(DEFAULT_LANG, module)
             translation = translations.get(key)
     
-    # If not found in specific module, search all modules
+    # Jika tidak ditemukan di modul spesifik, cari di semua modul
     if translation is None:
         all_translations = _get_all_translations(lang)
         translation = all_translations.get(key)
         
-        # Fallback to default language
+        # Fallback ke bahasa default
         if translation is None and lang != DEFAULT_LANG:
             all_translations = _get_all_translations(DEFAULT_LANG)
             translation = all_translations.get(key)
     
-    # Return key if still not found
+    # Kembalikan key jika masih tidak ditemukan
     if translation is None:
         return key
     
-    # Apply string formatting if kwargs provided
+    # Terapkan format string jika kwargs diberikan
     if kwargs:
         try:
             return translation.format(**kwargs)
@@ -160,30 +160,30 @@ def t(key: str, lang: str = DEFAULT_LANG, module: str = None, **kwargs) -> str:
 
 def reload_translations():
     """
-    Clear the translation cache to force reload from files.
-    Useful during development or when translations are updated.
+    Menghapus cache terjemahan untuk memaksa reload dari file.
+    Berguna saat development atau ketika terjemahan diperbarui.
     """
     global _translations_cache
     _translations_cache = {}
 
 
-# Context variable to store current language (for use in async contexts)
+# Variabel context untuk menyimpan bahasa saat ini (untuk digunakan dalam context async)
 current_lang: ContextVar[str] = ContextVar("current_lang", default=DEFAULT_LANG)
 
 
 def set_current_lang(lang: str):
-    """Set the current language in context."""
+    """Mengatur bahasa saat ini dalam context."""
     current_lang.set(lang)
 
 
 def get_current_lang() -> str:
-    """Get the current language from context."""
+    """Mendapatkan bahasa saat ini dari context."""
     return current_lang.get()
 
 
 def tr(key: str, module: str = None, **kwargs) -> str:
     """
-    Get translation using the current context language.
-    Shorthand for t(key, get_current_lang(), module, **kwargs)
+    Mendapatkan terjemahan menggunakan bahasa context saat ini.
+    Singkatan untuk t(key, get_current_lang(), module, **kwargs)
     """
     return t(key, get_current_lang(), module, **kwargs)

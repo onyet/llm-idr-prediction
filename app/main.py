@@ -9,7 +9,7 @@ app = FastAPI(title="LLM Exchange API", version="0.1.0")
 
 
 class LanguageMiddleware(BaseHTTPMiddleware):
-    """Middleware to set language from Accept-Language header."""
+    """Middleware untuk mengatur bahasa berdasarkan header Accept-Language."""
     async def dispatch(self, request: Request, call_next):
         lang = get_lang_from_request(request)
         set_current_lang(lang)
@@ -17,14 +17,14 @@ class LanguageMiddleware(BaseHTTPMiddleware):
         return response
 
 
-# Add language middleware first
+# Tambahkan middleware bahasa terlebih dahulu
 app.add_middleware(LanguageMiddleware)
 
 app.include_router(rag.router)
 app.include_router(tradingview.router)
 app.include_router(analyze.router)
 
-# allow CORS for quick testing in browser (adjust origins in production)
+# Izinkan CORS untuk pengujian cepat di browser (sesuaikan origin di produksi)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],

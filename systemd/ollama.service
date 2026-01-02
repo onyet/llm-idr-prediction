@@ -1,0 +1,16 @@
+[Unit]
+Description=Ollama daemon (template)
+After=network.target
+
+[Service]
+Type=simple
+# Ubah 'User' jika ingin menjalankan sebagai user khusus
+User=ollama
+# Jika Ollama terinstal sebagai binary, ubah ExecStart menjadi path ke binary
+# Contoh: ExecStart=/usr/local/bin/ollama daemon
+ExecStart=/usr/bin/ollama daemon
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

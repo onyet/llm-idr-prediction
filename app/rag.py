@@ -19,15 +19,15 @@ _cache: Dict[str, Any] = {"models": {}, "data": {}}
 
 def load_data(pair: str, lang: str = "en") -> pd.DataFrame:
     """
-    Load time series for a logical pair.
-    - 'idr-usd' reads USDIDR_X.json (IDR per USD) and uses the Close price.
-    - 'idr-sar' is derived as (USDIDR_Close / SAR_Close) -> IDR per SAR.
-    Raises HTTPException(status_code=503) with a localized message if source files are missing or malformed.
+    Memuat deret waktu untuk pasangan logis.
+    - 'idr-usd' membaca USDIDR_X.json (IDR per USD) dan memakai harga Close.
+    - 'idr-sar' dihitung dari (USDIDR_Close / SAR_Close) -> IDR per SAR.
+    Mengeluarkan HTTPException(status_code=503) dengan pesan terlokalisasi jika file sumber hilang atau rusak.
     """
     if pair in _cache["data"]:
         return _cache["data"][pair]
 
-    # Helper to load yfinance-like JSON file and return DataFrame with ds and close
+    # Helper untuk memuat file JSON bergaya yfinance dan mengembalikannya sebagai DataFrame dengan kolom ds dan close
     def _load_yf_file(path: Path, name: str) -> pd.DataFrame:
         if not path.exists():
             raise HTTPException(status_code=503, detail=t("model_data_not_ready_named", lang, name=name))
@@ -36,23 +36,23 @@ def load_data(pair: str, lang: str = "en") -> pd.DataFrame:
         df = pd.DataFrame(data)
         if df.empty:
             raise HTTPException(status_code=503, detail=t("model_data_empty", lang, name=name))
-        # Normalize column names to lowercase for robustness
+        # Normalisasi nama kolom menjadi lowercase untuk ketahanan
         df.columns = [c.lower() for c in df.columns]
-        # Date parsing
+        # Parsing tanggal
         if "date" in df.columns:
             df["ds"] = pd.to_datetime(df["date"], utc=True).dt.tz_convert('UTC').dt.tz_localize(None).dt.normalize()
         else:
-            # try to infer index or other date-like columns
+            # coba infer dari index atau kolom lain yang mirip tanggal
             possible = [c for c in df.columns if "time" in c or "date" in c or "ds" in c]
             if possible:
                 df["ds"] = pd.to_datetime(df[possible[0]], utc=True).dt.tz_convert('UTC').dt.tz_localize(None).dt.normalize()
             else:
-                # As a last resort, try the index
+                # Jika semua gagal, coba gunakan index
                 try:
-                    df["ds"] = pd.to_datetime(df.index, utc=True).tz_convert('UTC').tz_localize(None).dt.normalize()
+                    df["ds"] = pd.to_datetime(df.index, utc=True).dt.tz_convert('UTC').dt.tz_localize(None).dt.normalize()
                 except Exception:
                     raise HTTPException(status_code=503, detail=t("model_data_no_date", lang, name=name))
-        # Close price
+        # Harga penutupan (close)
         if "close" in df.columns:
             df["close"] = pd.to_numeric(df["close"], errors="coerce")
         else:
@@ -92,15 +92,15 @@ def load_data(pair: str, lang: str = "en") -> pd.DataFrame:
         p_gold = DATA_DIR / "GC_F.json"
         df_usd = _load_yf_file(p_usd, "USDIDR")
         df_gold = _load_yf_file(p_gold, "GC=F")
-        
-        # merge on date (inner join)
+
+        # Merge berdasarkan tanggal (inner join)
         merged = pd.merge(df_usd, df_gold, on="ds", how="inner", suffixes=("_usd", "_gold"))
         if merged.empty:
             raise HTTPException(status_code=503, detail=t("no_overlapping_dates", lang, pair="idr-gold-gram"))
             
-        # 1 Troy Ounce = 31.1034768 grams
-        # Gold price in USD/gram = Gold price in USD/oz t / 31.1034768
-        # Gold price in IDR/gram = (Gold price in USD/gram) * (IDR/USD)
+        # 1 Troy Ounce = 31.1034768 gram
+        # Harga emas (USD/gram) = Harga emas (USD/oz) / 31.1034768
+        # Harga emas (IDR/gram) = (Harga emas USD/gram) * (IDR/USD)
         
         troy_oz_to_gram = 31.1034768
         merged["y"] = (merged["close_gold"] / troy_oz_to_gram) * merged["close_usd"]
@@ -124,10 +124,10 @@ def get_model(pair: str, lang: str = "en") -> Prophet:
         raise
     except FileNotFoundError:
         raise HTTPException(status_code=503, detail=t("model_data_not_ready", lang))
-    # sanity check
+    # pemeriksaan sanity
     if df.empty:
         raise HTTPException(status_code=503, detail=t("model_data_empty", lang, name=pair))
-    # train Prophet
+    # latih model Prophet
     model = Prophet(daily_seasonality=True)
     model.fit(df)
     _cache["models"][pair] = model
@@ -153,7 +153,7 @@ async def predict_idr_gold_gram(request: Request, days: int = 0, amount_gram: fl
 
 
 async def _predict(pair: str, days: int = 0, amount: float = 1.0, lang: str = "en"):
-    # validation
+    # validasi input
     if days < 0:
         raise HTTPException(status_code=400, detail=t("days_must_be_positive", lang))
     if days > 7:
@@ -212,21 +212,21 @@ async def _predict(pair: str, days: int = 0, amount: float = 1.0, lang: str = "e
 
 def _get_trend_analysis(pair: str, days: int = 7, lang: str = "en") -> Dict[str, Any]:
     """
-    Analyze trend for a pair over the specified number of days.
-    Returns trend direction, percentage change, and volatility.
+    Menganalisis trend untuk pasangan selama jumlah hari yang ditentukan.
+    Mengembalikan arah trend, perubahan persentase, dan volatilitas.
     """
     df = load_data(pair, lang)
     model = get_model(pair, lang)
     
     last_date = df["ds"].max().normalize()
     
-    # Get recent historical data (last 30 days for trend analysis)
+    # Ambil data historis terbaru (30 hari terakhir untuk analisis trend)
     recent_df = df[df["ds"] >= (last_date - timedelta(days=30))]
     
     if len(recent_df) < 5:
         recent_df = df.tail(30)
     
-    # Current value (last observed)
+    # Nilai saat ini (pengamatan terakhir)
     current_value = float(recent_df.iloc[-1]["y"])
     
     # Value from 7 days ago (or earliest in recent)

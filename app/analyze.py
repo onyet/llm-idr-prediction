@@ -1,6 +1,6 @@
 """
-Advanced Analysis Module for IDR
-Provides comprehensive fundamental, technical, and AI-powered analysis.
+Modul Analisis Lanjutan untuk IDR
+Menyediakan analisis fundamental, teknikal, dan berbasis AI yang komprehensif.
 """
 
 import json
@@ -21,12 +21,12 @@ router = APIRouter(prefix="/rag", tags=["rag"])
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 
-# Cache for models and data
+# Cache untuk model dan data
 _analyze_cache: Dict[str, Any] = {"models": {}, "data": {}}
 
 
 def _load_json_data(file_path: Path, name: str, lang: str) -> pd.DataFrame:
-    """Load data from JSON file and return as DataFrame."""
+    """Memuat data dari file JSON dan mengembalikannya sebagai DataFrame."""
     if not file_path.exists():
         raise HTTPException(
             status_code=503,
@@ -43,10 +43,10 @@ def _load_json_data(file_path: Path, name: str, lang: str) -> pd.DataFrame:
             detail=t("model_data_empty", lang, module="rag", name=name)
         )
 
-    # Normalize columns
+    # Normalisasi kolom
     df.columns = [c.lower() for c in df.columns]
 
-    # Parse date
+    # Parse tanggal
     if "date" in df.columns:
         df["ds"] = pd.to_datetime(df["date"], utc=True).dt.tz_convert('UTC').dt.tz_localize(None).dt.normalize()
     elif "timestamp" in df.columns:
@@ -57,7 +57,7 @@ def _load_json_data(file_path: Path, name: str, lang: str) -> pd.DataFrame:
             detail=t("model_data_no_date", lang, module="rag", name=name)
         )
 
-    # Get price columns
+    # Ambil kolom harga
     for col in ["close", "price", "value", "y"]:
         if col in df.columns:
             df["close"] = pd.to_numeric(df[col], errors="coerce")
@@ -69,7 +69,7 @@ def _load_json_data(file_path: Path, name: str, lang: str) -> pd.DataFrame:
             detail=t("model_data_no_close", lang, module="rag", name=name)
         )
 
-    # Get OHLC if available
+    # Ambil OHLC jika tersedia
     for col in ["open", "high", "low"]:
         if col in df.columns:
             df[col] = pd.to_numeric(df[col], errors="coerce")
@@ -78,7 +78,7 @@ def _load_json_data(file_path: Path, name: str, lang: str) -> pd.DataFrame:
 
 
 def _get_analysis_methods(lang: str) -> Dict[str, Any]:
-    """Return the analysis methods used with explanations."""
+    """Mengembalikan metode analisis yang digunakan beserta penjelasannya."""
     return {
         "fundamental": {
             "title": t("method_fundamental_title", lang, module="analyze"),
@@ -129,44 +129,44 @@ def _get_analysis_methods(lang: str) -> Dict[str, Any]:
 
 def _analyze_trend(df: pd.DataFrame, lang: str) -> Dict[str, Any]:
     """
-    Perform comprehensive trend analysis.
+    Melakukan analisis trend yang komprehensif.
     """
     data = df["y"].copy()
     
-    # Short, medium, long term trends
+    # Trend jangka pendek, menengah, dan panjang
     sma_5 = calculate_sma(data, 5)
     sma_10 = calculate_sma(data, 10)
     sma_20 = calculate_sma(data, 20)
     sma_50 = calculate_sma(data, 50) if len(data) >= 50 else calculate_sma(data, len(data) // 2)
     
-    # Current values
+    # Nilai saat ini
     current = float(data.iloc[-1])
     sma_5_val = float(sma_5.iloc[-1])
     sma_10_val = float(sma_10.iloc[-1])
     sma_20_val = float(sma_20.iloc[-1])
     sma_50_val = float(sma_50.iloc[-1])
     
-    # Determine short-term trend (5-day)
+    # Tentukan trend jangka pendek (5 hari)
     short_trend = _classify_trend(data, 5)
     
-    # Medium-term trend (10-20 days)
+    # Trend jangka menengah (10-20 hari)
     medium_trend = _classify_trend(data, 20)
     
-    # Long-term trend (30-50 days)
+    # Trend jangka panjang (30-50 hari)
     long_trend = _classify_trend(data, min(50, len(data) - 1))
     
-    # Trend strength based on MA alignment
+    # Kekuatan trend berdasarkan alignment MA
     trend_strength = _calculate_trend_strength(current, sma_5_val, sma_10_val, sma_20_val, sma_50_val)
     
-    # Price momentum
+    # Momentum harga
     momentum_5d = ((current - float(data.iloc[-6])) / float(data.iloc[-6]) * 100) if len(data) > 5 else 0
     momentum_10d = ((current - float(data.iloc[-11])) / float(data.iloc[-11]) * 100) if len(data) > 10 else 0
     momentum_20d = ((current - float(data.iloc[-21])) / float(data.iloc[-21]) * 100) if len(data) > 20 else 0
     
-    # Determine overall trend
+    # Tentukan trend keseluruhan
     overall_trend = _determine_overall_trend(short_trend, medium_trend, long_trend)
     
-    # Trend reversal detection
+    # Deteksi pembalikan trend
     reversal_signal = _detect_trend_reversal(data, sma_5, sma_20)
     
     return {
@@ -204,7 +204,7 @@ def _analyze_trend(df: pd.DataFrame, lang: str) -> Dict[str, Any]:
 
 
 def _classify_trend(data: pd.Series, period: int) -> str:
-    """Classify trend direction based on period."""
+    """Klasifikasi arah trend berdasarkan periode."""
     if len(data) < period + 1:
         return "sideways"
     
@@ -221,9 +221,9 @@ def _classify_trend(data: pd.Series, period: int) -> str:
 
 
 def _calculate_trend_strength(current: float, sma5: float, sma10: float, sma20: float, sma50: float) -> str:
-    """Calculate trend strength based on MA alignment."""
-    # Perfect bullish alignment: price > sma5 > sma10 > sma20 > sma50
-    # Perfect bearish alignment: price < sma5 < sma10 < sma20 < sma50
+    """Menghitung kekuatan trend berdasarkan alignment MA."""
+    # Alignment bullish sempurna: price > sma5 > sma10 > sma20 > sma50
+    # Alignment bearish sempurna: price < sma5 < sma10 < sma20 < sma50
     
     bullish_score = 0
     bearish_score = 0
@@ -259,7 +259,7 @@ def _calculate_trend_strength(current: float, sma5: float, sma10: float, sma20: 
 
 
 def _determine_overall_trend(short: str, medium: str, long: str) -> str:
-    """Determine overall trend from multiple timeframes."""
+    """Menentukan trend keseluruhan dari berbagai timeframe."""
     trends = [short, medium, long]
     bullish_count = trends.count("bullish")
     bearish_count = trends.count("bearish")
@@ -273,11 +273,11 @@ def _determine_overall_trend(short: str, medium: str, long: str) -> str:
 
 
 def _detect_trend_reversal(data: pd.Series, sma_short: pd.Series, sma_long: pd.Series) -> Optional[str]:
-    """Detect potential trend reversal signals."""
+    """Mendeteksi sinyal pembalikan trend potensial."""
     if len(data) < 3:
         return None
     
-    # Check for MA crossover
+    # Cek crossover MA
     curr_short = float(sma_short.iloc[-1])
     curr_long = float(sma_long.iloc[-1])
     prev_short = float(sma_short.iloc[-2])
@@ -288,7 +288,7 @@ def _detect_trend_reversal(data: pd.Series, sma_short: pd.Series, sma_long: pd.S
     elif curr_short < curr_long and prev_short >= prev_long:
         return "bearish_crossover"
     
-    # Check for price divergence
+    # Cek divergence harga
     recent = data.tail(5)
     if recent.is_monotonic_increasing and curr_short < curr_long:
         return "potential_bullish_reversal"
@@ -303,19 +303,19 @@ def _generate_human_explanation(
     trend_analysis: Dict[str, Any],
     lang: str
 ) -> Dict[str, Any]:
-    """Generate human-readable explanation of the analysis."""
+    """Menghasilkan penjelasan analisis yang mudah dipahami manusia."""
     
-    # Get primary analysis (IDR/USD)
+    # Ambil analisis utama (IDR/USD)
     primary = analyses.get("idr-usd", list(analyses.values())[0])
     
-    # Build situation explanation
+    # Bangun penjelasan situasi
     trend_dir = trend_analysis.get("overall", {}).get("direction", "sideways")
     trend_strength = trend_analysis.get("overall", {}).get("strength", "moderate")
 
-    # Current situation
+    # Situasi saat ini
     situation = t(f"explanation_situation_{trend_dir}_{trend_strength}", lang, module="analyze")
     
-    # Technical condition
+    # Kondisi teknikal
     tech = primary.get("technical", {})
     rsi_condition = tech.get("rsi", {}).get("condition", "neutral")
     macd_trend = tech.get("macd", {}).get("trend", "neutral")
@@ -325,7 +325,7 @@ def _generate_human_explanation(
                          macd=macd_trend,
                          volatility=round(tech.get("volatility", 0), 1))
     
-    # Fundamental condition
+    # Kondisi fundamental
     fund = primary.get("fundamental", {})
     fund_strength = fund.get("strength", "neutral")
     pct_7d = fund.get("pct_change_7d", 0)
@@ -336,7 +336,7 @@ def _generate_human_explanation(
                          pct_7d=pct_7d,
                          pct_30d=pct_30d)
     
-    # Market outlook
+    # Outlook pasar
     if trend_dir == "bullish":
         outlook_key = "explanation_outlook_bullish"
     elif trend_dir == "bearish":
@@ -346,7 +346,7 @@ def _generate_human_explanation(
     
     market_outlook = t(outlook_key, lang, module="analyze")
     
-    # Risk warning based on volatility
+    # Peringatan risiko berdasarkan volatilitas
     volatility = tech.get("volatility", 0)
     if volatility > 25:
         risk_warning = t("explanation_risk_high", lang, module="analyze")
@@ -370,7 +370,7 @@ def _generate_recommendations(
     trend_analysis: Dict[str, Any],
     lang: str
 ) -> Dict[str, Any]:
-    """Generate actionable recommendations based on analysis."""
+    """Menghasilkan rekomendasi actionable berdasarkan analisis."""
     
     primary = analyses.get("idr-usd", list(analyses.values())[0])
     tech = primary.get("technical", {})
@@ -382,11 +382,11 @@ def _generate_recommendations(
     volatility = tech.get("volatility", 0)
     rsi = tech.get("rsi", {}).get("value", 50)
     
-    # Primary recommendation based on trend and signals
+    # Rekomendasi utama berdasarkan trend dan sinyal
     recommendations = []
     actions = []
     
-    # Trend-based recommendation
+    # Rekomendasi berdasarkan trend
     if trend_dir == "bullish" and trend_strength in ["strong", "moderate"]:
         if signal in ["strong_buy", "buy"]:
             recommendations.append(t("rec_bullish_trend_buy", lang, module="analyze"))
@@ -407,7 +407,7 @@ def _generate_recommendations(
         recommendations.append(t("rec_sideways_trend", lang, module="analyze"))
         actions.append(t("action_wait_breakout", lang, module="analyze"))
     
-    # RSI-based caution
+    # Peringatan berdasarkan RSI
     if rsi > 70:
         recommendations.append(t("rec_rsi_overbought", lang, module="analyze"))
         actions.append(t("action_avoid_buying", lang, module="analyze"))
@@ -415,12 +415,12 @@ def _generate_recommendations(
         recommendations.append(t("rec_rsi_oversold", lang, module="analyze"))
         actions.append(t("action_look_for_entry", lang, module="analyze"))
     
-    # Volatility-based risk management
+    # Manajemen risiko berdasarkan volatilitas
     if volatility > 25:
         recommendations.append(t("rec_high_volatility", lang, module="analyze"))
         actions.append(t("action_use_stop_loss", lang, module="analyze"))
     
-    # Reversal signal
+    # Sinyal pembalikan
     reversal = trend_analysis.get("reversal_signal")
     if reversal:
         if "bullish" in reversal:
@@ -428,7 +428,7 @@ def _generate_recommendations(
         elif "bearish" in reversal:
             recommendations.append(t("rec_bearish_reversal", lang, module="analyze"))
     
-    # Determine primary action
+    # Tentukan aksi utama
     if signal == "strong_buy":
         primary_action = t("primary_action_strong_buy", lang, module="analyze")
     elif signal == "buy":
@@ -440,7 +440,7 @@ def _generate_recommendations(
     else:
         primary_action = t("primary_action_hold", lang, module="analyze")
     
-    # Confidence level
+    # Level kepercayaan
     confidence = _calculate_recommendation_confidence(trend_dir, trend_strength, signal, volatility, rsi)
     
     return {
@@ -464,10 +464,10 @@ def _calculate_recommendation_confidence(
     volatility: float, 
     rsi: float
 ) -> str:
-    """Calculate confidence level for recommendations."""
+    """Menghitung level kepercayaan untuk rekomendasi."""
     score = 0
     
-    # Trend alignment
+    # Alignment trend
     if trend_dir != "sideways":
         score += 1
         if trend_strength == "strong":
@@ -475,19 +475,19 @@ def _calculate_recommendation_confidence(
         elif trend_strength == "moderate":
             score += 1
     
-    # Signal strength
+    # Kekuatan sinyal
     if signal in ["strong_buy", "strong_sell"]:
         score += 2
     elif signal in ["buy", "sell"]:
         score += 1
     
-    # Volatility penalty
+    # Penalti volatilitas
     if volatility > 30:
         score -= 2
     elif volatility > 20:
         score -= 1
     
-    # RSI extremes
+    # Ekstrem RSI
     if 30 <= rsi <= 70:
         score += 1
     
@@ -500,7 +500,7 @@ def _calculate_recommendation_confidence(
 
 
 def _get_pair_data(pair: str, lang: str) -> pd.DataFrame:
-    """Get processed data for a currency pair."""
+    """Mendapatkan data yang telah diproses untuk pasangan mata uang."""
     cache_key = f"analyze_{pair}"
     if cache_key in _analyze_cache["data"]:
         return _analyze_cache["data"][cache_key]
@@ -535,11 +535,11 @@ def _get_pair_data(pair: str, lang: str) -> pd.DataFrame:
 
 
 def _get_target_tracer_data(symbol: str, lang: str) -> Optional[pd.DataFrame]:
-    """Load data for target tracer symbol. Fetches from yfinance if not cached locally or data is outdated."""
+    """Memuat data untuk symbol target tracer. Fetch dari yfinance jika belum di-cache lokal atau data sudah outdated."""
     import yfinance as yf
     import re
     
-    # Try multiple file naming conventions
+    # Coba berbagai konvensi penamaan file
     possible_files = [
         DATA_DIR / f"{symbol}.json",
         DATA_DIR / f"{symbol.upper()}.json",
@@ -553,28 +553,28 @@ def _get_target_tracer_data(symbol: str, lang: str) -> Optional[pd.DataFrame]:
             existing_file = file_path
             break
     
-    # Check if existing data needs update
+    # Cek apakah data existing perlu diupdate
     should_fetch = True
     if existing_file:
         try:
-            # Load existing data to check last date
+            # Load data existing untuk cek tanggal terakhir
             existing_df = _load_json_data(existing_file, symbol, lang)
             last_date = existing_df["ds"].max().date()
             today = datetime.utcnow().date()
             
-            # If last date is today, data is fresh
+            # Jika tanggal terakhir adalah hari ini, data masih fresh
             if last_date >= today:
                 return existing_df
             
-            # If last date is yesterday or older, need to fetch new data
+            # Jika tanggal terakhir kemarin atau lebih lama, perlu fetch data baru
             print(f"Data for {symbol} is outdated (last: {last_date}, today: {today}). Fetching new data...", file=__import__('sys').stderr)
             should_fetch = True
             
         except HTTPException:
-            # If loading fails, fetch new data
+            # Jika loading gagal, fetch data baru
             should_fetch = True
     
-    # Fetch from yfinance if needed
+    # Fetch dari yfinance jika diperlukan
     if should_fetch:
         try:
             # For Indonesian stocks, add .JK suffix if not present
@@ -583,7 +583,7 @@ def _get_target_tracer_data(symbol: str, lang: str) -> Optional[pd.DataFrame]:
         
         # Determine ticker to use
             if not any(ticker_symbol.endswith(suffix) for suffix in suffixes):
-                # Try Indonesian stock exchange first
+                # Coba bursa saham Indonesia dulu
                 test_ticker_jk = yf.Ticker(f"{ticker_symbol}.JK")
                 hist_test = test_ticker_jk.history(period="5d")
                 
@@ -591,22 +591,22 @@ def _get_target_tracer_data(symbol: str, lang: str) -> Optional[pd.DataFrame]:
                     ticker_symbol = f"{ticker_symbol}.JK"
                     ticker = test_ticker_jk
                 else:
-                    # Try without suffix (US stocks or forex)
+                    # Coba tanpa suffix (saham US atau forex)
                     ticker = yf.Ticker(ticker_symbol)
             else:
                 ticker = yf.Ticker(ticker_symbol)
             
-            # Fetch 5 years of data
+            # Fetch data 5 tahun
             hist = ticker.history(period="5y")
             
             if hist.empty:
                 return None
             
-            # Convert to expected format
+            # Konversi ke format yang diharapkan
             hist = hist.reset_index()
             hist.columns = [c.lower() for c in hist.columns]
             
-            # Prepare data for saving
+            # Siapkan data untuk disimpan
             save_data = {
                 "symbol": ticker_symbol,
                 "period": "5y",
@@ -619,7 +619,7 @@ def _get_target_tracer_data(symbol: str, lang: str) -> Optional[pd.DataFrame]:
                 if pd.isna(date_val):
                     continue
                 
-                # Convert to string format
+                # Konversi ke format string
                 if hasattr(date_val, 'strftime'):
                     date_str = date_val.strftime('%Y-%m-%d')
                 else:
@@ -634,7 +634,7 @@ def _get_target_tracer_data(symbol: str, lang: str) -> Optional[pd.DataFrame]:
                     "Volume": int(row.get("volume", 0))
                 })
             
-            # Save to file with sanitized filename
+            # Simpan ke file dengan nama file yang sudah disanitasi
             safe_symbol = re.sub(r'[^a-zA-Z0-9]', '_', ticker_symbol)
             save_path = DATA_DIR / f"{safe_symbol}.json"
             
@@ -643,15 +643,15 @@ def _get_target_tracer_data(symbol: str, lang: str) -> Optional[pd.DataFrame]:
             
             print(f"Successfully fetched and saved {len(save_data['data'])} records for {ticker_symbol}", file=__import__('sys').stderr)
             
-            # Now load it using our standard function
+            # Sekarang load menggunakan fungsi standar kita
             return _load_json_data(save_path, ticker_symbol, lang)
             
         except Exception as e:
-            # Log error for debugging but don't crash
+            # Log error untuk debugging tapi jangan crash
             import sys
             print(f"Failed to fetch {symbol} from yfinance: {e}", file=sys.stderr)
             
-            # If fetch failed but we have existing data, return that
+            # Jika fetch gagal tapi kita punya data existing, return itu
             if existing_file:
                 try:
                     return _load_json_data(existing_file, symbol, lang)
@@ -661,7 +661,7 @@ def _get_target_tracer_data(symbol: str, lang: str) -> Optional[pd.DataFrame]:
             return None
 
 def _get_prophet_model(pair: str, df: pd.DataFrame) -> Prophet:
-    """Get or create Prophet model for prediction."""
+    """Dapatkan atau buat model Prophet untuk prediksi."""
     cache_key = f"prophet_{pair}"
     if cache_key in _analyze_cache["models"]:
         return _analyze_cache["models"][cache_key]
@@ -673,7 +673,7 @@ def _get_prophet_model(pair: str, df: pd.DataFrame) -> Prophet:
 
 
 def _perform_fundamental_analysis(df: pd.DataFrame, pair: str, lang: str) -> Dict[str, Any]:
-    """Perform fundamental analysis on the data."""
+    """Melakukan analisis fundamental pada data."""
     recent_30d = df.tail(30)
     recent_7d = df.tail(7)
     recent_14d = df.tail(14)
@@ -682,27 +682,27 @@ def _perform_fundamental_analysis(df: pd.DataFrame, pair: str, lang: str) -> Dic
     avg_30d = float(recent_30d["y"].mean())
     avg_7d = float(recent_7d["y"].mean())
     
-    # High/Low analysis
+    # Analisis High/Low
     high_30d = float(recent_30d["y"].max())
     low_30d = float(recent_30d["y"].min())
     high_7d = float(recent_7d["y"].max())
     low_7d = float(recent_7d["y"].min())
     
-    # Price momentum
+    # Momentum harga
     pct_change_30d = ((current_price - float(df["y"].iloc[-30])) / float(df["y"].iloc[-30]) * 100) if len(df) >= 30 else 0
     pct_change_7d = ((current_price - float(df["y"].iloc[-7])) / float(df["y"].iloc[-7]) * 100) if len(df) >= 7 else 0
     pct_change_1d = ((current_price - float(df["y"].iloc[-2])) / float(df["y"].iloc[-2]) * 100) if len(df) >= 2 else 0
     
-    # Trend consistency (how many days price moved in same direction)
+    # Konsistensi trend (berapa hari harga bergerak ke arah yang sama)
     price_changes = df["y"].diff().tail(14)
     positive_days = int((price_changes > 0).sum())
     negative_days = int((price_changes < 0).sum())
     
-    # Distance from 30-day high/low
+    # Jarak dari high/low 30 hari
     pct_from_high = ((current_price - high_30d) / high_30d) * 100
     pct_from_low = ((current_price - low_30d) / low_30d) * 100
     
-    # Determine fundamental strength
+    # Tentukan kekuatan fundamental
     if positive_days >= 10:
         strength = "strong_bullish"
         strength_text = t("fundamental_strong", lang, module="analyze")
@@ -719,7 +719,7 @@ def _perform_fundamental_analysis(df: pd.DataFrame, pair: str, lang: str) -> Dic
         strength = "neutral"
         strength_text = t("fundamental_neutral", lang, module="analyze")
     
-    # Generate fundamental insights
+    # Generate insight fundamental
     insights = []
     if pct_change_7d > 5:
         insights.append(t("fund_insight_strong_gain_7d", lang, module="analyze", pct=round(pct_change_7d, 2)))
@@ -767,10 +767,10 @@ def _perform_fundamental_analysis(df: pd.DataFrame, pair: str, lang: str) -> Dic
 
 
 def _generate_technical_insights(tech: Dict[str, Any], lang: str) -> List[str]:
-    """Generate human-readable insights from technical analysis."""
+    """Menghasilkan insight yang mudah dipahami dari analisis teknikal."""
     insights = []
     
-    # RSI insight
+    # Insight RSI
     rsi = tech.get("rsi", {})
     rsi_value = rsi.get("value", 50)
     if rsi.get("condition") == "overbought":
@@ -780,14 +780,14 @@ def _generate_technical_insights(tech: Dict[str, Any], lang: str) -> List[str]:
     else:
         insights.append(t("rsi_neutral", lang, module="analyze", value=rsi_value))
     
-    # MACD insight
+    # Insight MACD
     macd = tech.get("macd", {})
     if macd.get("trend") == "bullish":
         insights.append(t("macd_bullish", lang, module="analyze"))
     else:
         insights.append(t("macd_bearish", lang, module="analyze"))
     
-    # Bollinger Band insight
+    # Insight Bollinger Band
     bb = tech.get("bollinger_bands", {})
     bb_pos = bb.get("position", "middle")
     if bb_pos == "upper":
@@ -797,14 +797,14 @@ def _generate_technical_insights(tech: Dict[str, Any], lang: str) -> List[str]:
     else:
         insights.append(t("bollinger_middle", lang, module="analyze"))
     
-    # MA crossover
+    # Crossover MA
     ma_cross = tech.get("ma_crossover")
     if ma_cross == "golden_cross":
         insights.append(t("ma_cross_bullish", lang, module="analyze", short=10, long=20))
     elif ma_cross == "death_cross":
         insights.append(t("ma_cross_bearish", lang, module="analyze", short=10, long=20))
     
-    # Volatility
+    # Volatilitas
     vol = tech.get("volatility", 0)
     if vol > 25:
         insights.append(t("volatility_high", lang, module="analyze", value=vol))
@@ -817,7 +817,7 @@ def _generate_technical_insights(tech: Dict[str, Any], lang: str) -> List[str]:
 
 
 def _get_signal_text(signal: str, lang: str) -> str:
-    """Get localized signal text."""
+    """Dapatkan teks sinyal yang sudah dilokalisasi."""
     signal_map = {
         "strong_buy": "signal_strong_buy",
         "buy": "signal_buy",
@@ -834,8 +834,8 @@ def _compare_with_target(
     target_symbol: str,
     lang: str
 ) -> Dict[str, Any]:
-    """Compare base pair performance with target tracer."""
-    # Merge on date
+    """Bandingkan performa pasangan base dengan target tracer."""
+    # Merge berdasarkan tanggal
     merged = pd.merge(
         base_df[["ds", "y"]], 
         target_df[["ds", "close"]], 
@@ -849,14 +849,14 @@ def _compare_with_target(
     
     recent = merged.tail(30)
     
-    # Calculate returns
+    # Hitung returns
     base_return = (float(recent["y"].iloc[-1]) / float(recent["y"].iloc[0]) - 1) * 100
     target_return = (float(recent["close"].iloc[-1]) / float(recent["close"].iloc[0]) - 1) * 100
     
-    # Correlation
+    # Korelasi
     correlation = float(recent["y"].corr(recent["close"]))
     
-    # Comparison text
+    # Teks perbandingan
     if target_return > base_return + 2:
         comparison = t("comparison_better", lang, module="analyze", symbol=target_symbol)
     elif target_return < base_return - 2:

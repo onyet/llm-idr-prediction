@@ -1,6 +1,6 @@
 """
-Technical Analysis Module
-Provides technical indicators for financial analysis.
+Modul Analisis Teknikal
+Menyediakan indikator teknikal untuk analisis keuangan.
 """
 
 import numpy as np
@@ -10,20 +10,20 @@ from datetime import datetime, timedelta
 
 
 def calculate_sma(data: pd.Series, period: int) -> pd.Series:
-    """Calculate Simple Moving Average."""
+    """Hitung Simple Moving Average (SMA)."""
     return data.rolling(window=period, min_periods=1).mean()
 
 
 def calculate_ema(data: pd.Series, period: int) -> pd.Series:
-    """Calculate Exponential Moving Average."""
+    """Hitung Exponential Moving Average (EMA)."""
     return data.ewm(span=period, adjust=False).mean()
 
 
 def calculate_rsi(data: pd.Series, period: int = 14) -> pd.Series:
     """
-    Calculate Relative Strength Index (RSI).
+    Hitung Relative Strength Index (RSI).
     RSI = 100 - (100 / (1 + RS))
-    RS = Average Gain / Average Loss
+    RS = Rata-rata Gain / Rata-rata Loss
     """
     delta = data.diff()
     gain = (delta.where(delta > 0, 0)).rolling(window=period, min_periods=1).mean()
@@ -36,7 +36,7 @@ def calculate_rsi(data: pd.Series, period: int = 14) -> pd.Series:
 
 def calculate_macd(data: pd.Series, fast: int = 12, slow: int = 26, signal: int = 9) -> Dict[str, pd.Series]:
     """
-    Calculate MACD (Moving Average Convergence Divergence).
+    Hitung MACD (Moving Average Convergence Divergence).
     """
     ema_fast = calculate_ema(data, fast)
     ema_slow = calculate_ema(data, slow)
@@ -53,7 +53,7 @@ def calculate_macd(data: pd.Series, fast: int = 12, slow: int = 26, signal: int 
 
 def calculate_bollinger_bands(data: pd.Series, period: int = 20, std_dev: float = 2.0) -> Dict[str, pd.Series]:
     """
-    Calculate Bollinger Bands.
+    Hitung Bollinger Bands.
     """
     sma = calculate_sma(data, period)
     std = data.rolling(window=period, min_periods=1).std()
@@ -67,7 +67,7 @@ def calculate_bollinger_bands(data: pd.Series, period: int = 20, std_dev: float 
 
 def calculate_atr(high: pd.Series, low: pd.Series, close: pd.Series, period: int = 14) -> pd.Series:
     """
-    Calculate Average True Range (ATR).
+    Hitung Average True Range (ATR).
     """
     prev_close = close.shift(1)
     tr1 = high - low
@@ -98,20 +98,20 @@ def calculate_stochastic(high: pd.Series, low: pd.Series, close: pd.Series,
 
 def find_support_resistance(data: pd.Series, window: int = 20) -> Dict[str, List[float]]:
     """
-    Find support and resistance levels using local minima/maxima.
+    Temukan level support dan resistance menggunakan minima/maksima lokal.
     """
     supports = []
     resistances = []
     
     for i in range(window, len(data) - window):
-        # Check for local minimum (support)
+        # Cek minima lokal (support)
         if data.iloc[i] == data.iloc[i-window:i+window+1].min():
             supports.append(float(data.iloc[i]))
-        # Check for local maximum (resistance)
+        # Cek maksimum lokal (resistance)
         if data.iloc[i] == data.iloc[i-window:i+window+1].max():
             resistances.append(float(data.iloc[i]))
     
-    # Get unique levels (cluster nearby values)
+    # Dapatkan level unik (kelompokkan nilai yang berdekatan)
     def cluster_levels(levels: List[float], threshold: float = 0.02) -> List[float]:
         if not levels:
             return []
@@ -129,7 +129,7 @@ def find_support_resistance(data: pd.Series, window: int = 20) -> Dict[str, List
 
 
 def calculate_volatility(data: pd.Series, period: int = 30) -> float:
-    """Calculate annualized volatility."""
+    """Hitung volatilitas yang dianualisasi (annualized volatility)."""
     returns = data.pct_change().dropna()
     if len(returns) < 2:
         return 0.0
@@ -139,8 +139,8 @@ def calculate_volatility(data: pd.Series, period: int = 30) -> float:
 
 def detect_trend(data: pd.Series, short_period: int = 10, long_period: int = 30) -> str:
     """
-    Detect trend using moving average crossover.
-    Returns: 'bullish', 'bearish', or 'sideways'
+    Deteksi trend menggunakan crossover moving average.
+    Mengembalikan: 'bullish', 'bearish', atau 'sideways'
     """
     if len(data) < long_period:
         return "sideways"
@@ -176,8 +176,8 @@ def calculate_momentum(data: pd.Series, period: int = 10) -> float:
 
 def generate_signal(rsi: float, macd_hist: float, bb_position: str, trend: str) -> Tuple[str, int]:
     """
-    Generate trading signal based on multiple indicators.
-    Returns: (signal_name, score from -2 to 2)
+    Hasilkan sinyal trading berdasarkan beberapa indikator.
+    Mengembalikan: (nama_sinyal, score dari -2 sampai 2)
     """
     score = 0
     
@@ -220,18 +220,18 @@ def generate_signal(rsi: float, macd_hist: float, bb_position: str, trend: str) 
 
 def full_technical_analysis(df: pd.DataFrame, value_column: str = "y") -> Dict[str, Any]:
     """
-    Perform full technical analysis on a dataframe.
+    Lakukan analisis teknikal lengkap pada sebuah DataFrame.
     
     Args:
-        df: DataFrame with 'ds' (date) and value_column
-        value_column: Column name containing the price/value data
+        df: DataFrame dengan kolom 'ds' (tanggal) dan kolom nilai
+        value_column: Nama kolom yang mengandung harga/nilai
     
     Returns:
-        Dictionary with all technical indicators and analysis
+        Dictionary berisi semua indikator teknikal dan hasil analisis
     """
     data = df[value_column].copy()
     
-    # Calculate all indicators
+    # Hitung semua indikator
     sma_10 = calculate_sma(data, 10)
     sma_20 = calculate_sma(data, 20)
     sma_50 = calculate_sma(data, 50)
