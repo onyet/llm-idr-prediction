@@ -1,0 +1,168 @@
+{
+  "analyze_title": "Comprehensive IDR Analysis",
+  "fundamental_analysis": "Fundamental Analysis",
+  "technical_analysis": "Technical Analysis",
+  "trend_analysis_title": "Trend Analysis",
+  "prediction_analysis": "Prediction Analysis",
+  "historical_analysis": "Historical Data Analysis",
+  
+  "analysis_type_historical": "historical",
+  "analysis_type_prediction": "prediction",
+  
+  "date_must_be_valid": "Invalid date format. Use YYYY-MM-DD format",
+  "target_tracer_not_found": "Data for target tracer '{symbol}' not found",
+  "no_data_available": "No data available for analysis",
+  
+  "days": "days",
+  
+  "trend_bullish": "BULLISH (Uptrend)",
+  "trend_bearish": "BEARISH (Downtrend)",
+  "trend_sideways": "SIDEWAYS (Ranging)",
+  
+  "strength_strong": "Strong",
+  "strength_moderate": "Moderate",
+  "strength_weak": "Weak",
+  
+  "reversal_bullish_crossover": "Golden Cross detected - potential bullish reversal",
+  "reversal_bearish_crossover": "Death Cross detected - potential bearish reversal",
+  "reversal_potential_bullish_reversal": "Potential bullish reversal forming",
+  "reversal_potential_bearish_reversal": "Potential bearish reversal forming",
+  
+  "signal_strong_buy": "STRONG BUY",
+  "signal_buy": "BUY",
+  "signal_hold": "HOLD",
+  "signal_sell": "SELL",
+  "signal_strong_sell": "STRONG SELL",
+  
+  "support_level": "Support Level",
+  "resistance_level": "Resistance Level",
+  
+  "ma_cross_bullish": "Golden Cross detected (MA{short} crossing above MA{long}) - bullish signal",
+  "ma_cross_bearish": "Death Cross detected (MA{short} crossing below MA{long}) - bearish signal",
+  
+  "rsi_overbought": "RSI shows overbought condition ({value}), potential downward correction",
+  "rsi_oversold": "RSI shows oversold condition ({value}), potential upward rebound",
+  "rsi_neutral": "RSI in neutral zone ({value})",
+  
+  "macd_bullish": "MACD shows bullish momentum",
+  "macd_bearish": "MACD shows bearish momentum",
+  
+  "bollinger_upper": "Price approaching upper Bollinger Band, potential overbought",
+  "bollinger_lower": "Price approaching lower Bollinger Band, potential oversold",
+  "bollinger_middle": "Price within normal Bollinger Band range",
+  
+  "volatility_high": "High volatility ({value}%), high risk",
+  "volatility_medium": "Medium volatility ({value}%)",
+  "volatility_low": "Low volatility ({value}%), relatively stable",
+  
+  "fundamental_strong": "Strong fundamentals - consistent uptrend",
+  "fundamental_weak": "Weak fundamentals - consistent downtrend",
+  "fundamental_neutral": "Neutral fundamentals",
+  "fundamental_bullish": "Fundamentals lean positive",
+  "fundamental_bearish": "Fundamentals lean negative",
+  
+  "fund_insight_strong_gain_7d": "Significant gain of {pct}% in the last 7 days",
+  "fund_insight_strong_loss_7d": "Significant loss of {pct}% in the last 7 days",
+  "fund_insight_above_avg": "Current price is above the 30-day average",
+  "fund_insight_below_avg": "Current price is below the 30-day average",
+  "fund_insight_near_high": "Price is near the 30-day high",
+  "fund_insight_near_low": "Price is near the 30-day low",
+  
+  "comparison_better": "{symbol} shows better performance compared to IDR",
+  "comparison_worse": "{symbol} shows worse performance compared to IDR",
+  "comparison_similar": "{symbol} shows similar performance to IDR",
+  
+  "llm_analysis_title": "AI Analysis",
+  "llm_analysis_unavailable": "AI analysis not available at this time",
+  
+  "target_tracer_analysis": "Target Tracer Analysis",
+  "target_tracer_comparison": "Comparison with {symbol}",
+  
+  "recommendations_title": "Recommendations & Advice",
+  "risk_assessment": "Risk Assessment",
+  "risk_high": "HIGH",
+  "risk_medium": "MEDIUM",
+  "risk_low": "LOW",
+  
+  "outlook_positive": "Positive outlook for selected period",
+  "outlook_negative": "Negative outlook for selected period",
+  "outlook_neutral": "Neutral outlook for selected period",
+  
+  "data_source_historical": "Source: Actual historical data",
+  "data_source_prediction": "Source: Prophet prediction model",
+  
+  "method_fundamental_title": "Fundamental Analysis",
+  "method_fundamental_desc": "Analysis based on historical price movements, averages, and trend consistency to assess asset fundamental strength.",
+  "method_price_momentum": "Price Momentum",
+  "method_price_momentum_desc": "Measures price changes over 1-day, 7-day, and 30-day periods to identify direction and strength of movement.",
+  "method_avg_comparison": "Average Comparison",
+  "method_avg_comparison_desc": "Compares current price with 7 and 30-day averages to determine relative price position.",
+  "method_trend_consistency": "Trend Consistency",
+  "method_trend_consistency_desc": "Counts up vs down days in the last 14 days to measure trend consistency.",
+  
+  "method_technical_title": "Technical Analysis",
+  "method_technical_desc": "Analysis using industry-standard technical indicators to identify trading opportunities and key levels.",
+  "method_rsi_desc": "Measures speed and change of price movements. RSI > 70 = overbought, RSI < 30 = oversold.",
+  "method_macd_desc": "Shows relationship between two moving averages to identify momentum and trend direction.",
+  "method_bollinger_desc": "Uses standard deviation to determine overbought/oversold levels and market volatility.",
+  "method_ma_desc": "Simple and Exponential Moving Averages for identifying trends and dynamic support/resistance levels.",
+  "method_support_resistance": "Support & Resistance",
+  "method_support_resistance_desc": "Identifies key price levels where price tends to reverse or stall.",
+  
+  "explanation_title": "Analysis Explanation",
+  "explanation_situation_bullish_strong": "The market is currently in a strong bullish condition. Uptrend is consistent across multiple timeframes with solid momentum.",
+  "explanation_situation_bullish_moderate": "The market shows moderate bullish trend. Positive indications present but needs further confirmation.",
+  "explanation_situation_bullish_weak": "Weak bullish indication detected. Positive trend exists but not particularly strong.",
+  "explanation_situation_bearish_strong": "The market is in a strong bearish condition. Consistent downtrend with significant selling pressure.",
+  "explanation_situation_bearish_moderate": "The market shows moderate bearish trend. Selling pressure present but not extreme.",
+  "explanation_situation_bearish_weak": "Weak bearish indication detected. Light selling pressure but market remains relatively stable.",
+  "explanation_situation_sideways_strong": "Market is in tight consolidation phase.",
+  "explanation_situation_sideways_moderate": "Market moving sideways without clear direction.",
+  "explanation_situation_sideways_weak": "Market in uncertain condition, waiting for catalyst to determine direction.",
+  
+  "explanation_technical_summary": "From a technical perspective, RSI shows {rsi} condition, MACD is {macd}, with volatility at {volatility}%.",
+  "explanation_fundamental_summary": "Fundamentally, condition is {strength} with 7-day change of {pct_7d}% and 30-day change of {pct_30d}%.",
+  
+  "explanation_outlook_bullish": "Market outlook leans positive. Upward momentum maintained with supportive indicators.",
+  "explanation_outlook_bearish": "Market outlook leans negative. Selling pressure remains dominant, caution advised.",
+  "explanation_outlook_sideways": "Market outlook is neutral. Recommended to wait for clearer directional confirmation.",
+  
+  "explanation_risk_high": "⚠️ WARNING: High volatility indicates greater risk. Use strict risk management.",
+  "explanation_risk_medium": "📊 Medium volatility. Make sure to set reasonable stop losses.",
+  "explanation_risk_low": "✅ Low volatility indicates relatively stable market conditions.",
+  
+  "rec_bullish_trend_buy": "Bullish trend confirmed with buy signal. Opportunity to enter long position.",
+  "rec_bullish_trend_hold": "Bullish trend but signal not yet confirmed. Hold existing position or wait for pullback.",
+  "rec_bearish_trend_sell": "Bearish trend with sell signal. Consider taking profit or exiting position.",
+  "rec_bearish_trend_caution": "Bearish trend. Be cautious with long positions, consider reducing exposure.",
+  "rec_sideways_trend": "Sideways market. Avoid large positions, wait for clear breakout.",
+  "rec_rsi_overbought": "RSI overbought - avoid buying at current price, wait for correction.",
+  "rec_rsi_oversold": "RSI oversold - potential accumulation area for entry point.",
+  "rec_high_volatility": "High volatility - use smaller position sizing.",
+  "rec_bullish_reversal": "Bullish reversal signal detected - watch for confirmation to enter.",
+  "rec_bearish_reversal": "Bearish reversal signal detected - consider securing profits.",
+  
+  "action_consider_buy": "Consider opening buy position with clear stop loss",
+  "action_wait_confirmation": "Wait for signal confirmation before taking action",
+  "action_consider_sell": "Consider closing position or taking profit",
+  "action_reduce_exposure": "Reduce exposure and tighten stop losses",
+  "action_wait_breakout": "Wait for breakout from current range before entry",
+  "action_avoid_buying": "Avoid buying, wait for pullback or correction",
+  "action_look_for_entry": "Look for entry opportunity at oversold levels",
+  "action_use_stop_loss": "Must use stop loss, more conservative position sizing",
+  
+  "primary_action_strong_buy": "PRIMARY ACTION: Buy with high confidence. All indicators support bullish position.",
+  "primary_action_buy": "PRIMARY ACTION: Consider buying with proper risk management.",
+  "primary_action_hold": "PRIMARY ACTION: Hold current position. Market has not given clear signal.",
+  "primary_action_sell": "PRIMARY ACTION: Consider selling or taking profit.",
+  "primary_action_strong_sell": "PRIMARY ACTION: Sell or exit position. Strong bearish signal.",
+  
+  "confidence_high": "High",
+  "confidence_medium": "Medium",
+  "confidence_low": "Low",
+  
+  "stop_loss_suggestion": "Suggested stop loss: {pct}% from entry price",
+  "position_sizing_high": "Position sizing: Normal (1-2% risk per trade)",
+  "position_sizing_medium": "Position sizing: Moderate (0.5-1% risk per trade)",
+  "position_sizing_low": "Position sizing: Conservative (0.25-0.5% risk per trade)"
+}

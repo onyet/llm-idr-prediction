@@ -1,0 +1,168 @@
+{
+  "analyze_title": "Analisis Komprehensif IDR",
+  "fundamental_analysis": "Analisis Fundamental",
+  "technical_analysis": "Analisis Teknikal",
+  "trend_analysis_title": "Analisis Tren",
+  "prediction_analysis": "Analisis Prediksi",
+  "historical_analysis": "Analisis Data Historis",
+  
+  "analysis_type_historical": "historis",
+  "analysis_type_prediction": "prediksi",
+  
+  "date_must_be_valid": "Format tanggal tidak valid. Gunakan format YYYY-MM-DD",
+  "target_tracer_not_found": "Data untuk target tracer '{symbol}' tidak ditemukan",
+  "no_data_available": "Tidak ada data yang tersedia untuk analisis",
+  
+  "days": "hari",
+  
+  "trend_bullish": "BULLISH (Naik)",
+  "trend_bearish": "BEARISH (Turun)",
+  "trend_sideways": "SIDEWAYS (Mendatar)",
+  
+  "strength_strong": "Kuat",
+  "strength_moderate": "Sedang",
+  "strength_weak": "Lemah",
+  
+  "reversal_bullish_crossover": "Golden Cross terdeteksi - potensi pembalikan bullish",
+  "reversal_bearish_crossover": "Death Cross terdeteksi - potensi pembalikan bearish",
+  "reversal_potential_bullish_reversal": "Potensi pembalikan ke arah bullish",
+  "reversal_potential_bearish_reversal": "Potensi pembalikan ke arah bearish",
+  
+  "signal_strong_buy": "STRONG BUY (Sangat Disarankan Beli)",
+  "signal_buy": "BUY (Disarankan Beli)",
+  "signal_hold": "HOLD (Tahan/Tunggu)",
+  "signal_sell": "SELL (Disarankan Jual)",
+  "signal_strong_sell": "STRONG SELL (Sangat Disarankan Jual)",
+  
+  "support_level": "Level Support",
+  "resistance_level": "Level Resistance",
+  
+  "ma_cross_bullish": "Golden Cross terdeteksi (MA{short} memotong MA{long} ke atas) - sinyal bullish",
+  "ma_cross_bearish": "Death Cross terdeteksi (MA{short} memotong MA{long} ke bawah) - sinyal bearish",
+  
+  "rsi_overbought": "RSI menunjukkan kondisi overbought ({value}), potensi koreksi turun",
+  "rsi_oversold": "RSI menunjukkan kondisi oversold ({value}), potensi rebound naik",
+  "rsi_neutral": "RSI dalam zona netral ({value})",
+  
+  "macd_bullish": "MACD menunjukkan momentum bullish",
+  "macd_bearish": "MACD menunjukkan momentum bearish",
+  
+  "bollinger_upper": "Harga mendekati upper Bollinger Band, potensi overbought",
+  "bollinger_lower": "Harga mendekati lower Bollinger Band, potensi oversold",
+  "bollinger_middle": "Harga dalam rentang normal Bollinger Band",
+  
+  "volatility_high": "Volatilitas tinggi ({value}%), risiko tinggi",
+  "volatility_medium": "Volatilitas sedang ({value}%)",
+  "volatility_low": "Volatilitas rendah ({value}%), relatif stabil",
+  
+  "fundamental_strong": "Fundamental kuat - tren konsisten naik",
+  "fundamental_weak": "Fundamental lemah - tren konsisten turun",
+  "fundamental_neutral": "Fundamental netral",
+  "fundamental_bullish": "Fundamental cenderung positif",
+  "fundamental_bearish": "Fundamental cenderung negatif",
+  
+  "fund_insight_strong_gain_7d": "Kenaikan signifikan {pct}% dalam 7 hari terakhir",
+  "fund_insight_strong_loss_7d": "Penurunan signifikan {pct}% dalam 7 hari terakhir",
+  "fund_insight_above_avg": "Harga saat ini berada di atas rata-rata 30 hari",
+  "fund_insight_below_avg": "Harga saat ini berada di bawah rata-rata 30 hari",
+  "fund_insight_near_high": "Harga mendekati titik tertinggi 30 hari",
+  "fund_insight_near_low": "Harga mendekati titik terendah 30 hari",
+  
+  "comparison_better": "{symbol} menunjukkan performa lebih baik dibanding IDR",
+  "comparison_worse": "{symbol} menunjukkan performa lebih buruk dibanding IDR",
+  "comparison_similar": "{symbol} menunjukkan performa serupa dengan IDR",
+  
+  "llm_analysis_title": "Analisis AI",
+  "llm_analysis_unavailable": "Analisis AI tidak tersedia saat ini",
+  
+  "target_tracer_analysis": "Analisis Target Tracer",
+  "target_tracer_comparison": "Perbandingan dengan {symbol}",
+  
+  "recommendations_title": "Rekomendasi & Saran",
+  "risk_assessment": "Penilaian Risiko",
+  "risk_high": "TINGGI",
+  "risk_medium": "SEDANG", 
+  "risk_low": "RENDAH",
+  
+  "outlook_positive": "Outlook positif untuk periode yang dipilih",
+  "outlook_negative": "Outlook negatif untuk periode yang dipilih",
+  "outlook_neutral": "Outlook netral untuk periode yang dipilih",
+  
+  "data_source_historical": "Sumber: Data historis aktual",
+  "data_source_prediction": "Sumber: Model prediksi Prophet",
+  
+  "method_fundamental_title": "Analisis Fundamental",
+  "method_fundamental_desc": "Analisis berdasarkan pergerakan harga historis, rata-rata, dan konsistensi tren untuk menilai kekuatan fundamental aset.",
+  "method_price_momentum": "Momentum Harga",
+  "method_price_momentum_desc": "Mengukur perubahan harga dalam periode 1 hari, 7 hari, dan 30 hari untuk melihat arah dan kekuatan pergerakan.",
+  "method_avg_comparison": "Perbandingan Rata-rata",
+  "method_avg_comparison_desc": "Membandingkan harga saat ini dengan rata-rata 7 dan 30 hari untuk menentukan posisi relatif harga.",
+  "method_trend_consistency": "Konsistensi Tren",
+  "method_trend_consistency_desc": "Menghitung jumlah hari naik vs turun dalam 14 hari terakhir untuk mengukur konsistensi tren.",
+  
+  "method_technical_title": "Analisis Teknikal",
+  "method_technical_desc": "Analisis menggunakan indikator teknikal standar industri untuk mengidentifikasi peluang trading dan level penting.",
+  "method_rsi_desc": "Mengukur kecepatan dan perubahan pergerakan harga. RSI > 70 = overbought, RSI < 30 = oversold.",
+  "method_macd_desc": "Menunjukkan hubungan antara dua moving average untuk mengidentifikasi momentum dan arah tren.",
+  "method_bollinger_desc": "Menggunakan deviasi standar untuk menentukan level overbought/oversold dan volatilitas pasar.",
+  "method_ma_desc": "Simple dan Exponential Moving Average untuk mengidentifikasi tren dan level support/resistance dinamis.",
+  "method_support_resistance": "Support & Resistance",
+  "method_support_resistance_desc": "Mengidentifikasi level harga penting dimana harga cenderung berbalik atau tertahan.",
+  
+  "explanation_title": "Penjelasan Analisis",
+  "explanation_situation_bullish_strong": "Pasar saat ini dalam kondisi bullish yang kuat. Tren naik terlihat konsisten di berbagai timeframe dengan momentum yang solid.",
+  "explanation_situation_bullish_moderate": "Pasar menunjukkan tren bullish moderat. Ada indikasi positif namun perlu konfirmasi lebih lanjut.",
+  "explanation_situation_bullish_weak": "Terdapat indikasi bullish lemah. Tren positif ada namun tidak terlalu kuat.",
+  "explanation_situation_bearish_strong": "Pasar dalam kondisi bearish yang kuat. Tren turun konsisten dengan tekanan jual yang signifikan.",
+  "explanation_situation_bearish_moderate": "Pasar menunjukkan tren bearish moderat. Ada tekanan jual namun belum terlalu ekstrem.",
+  "explanation_situation_bearish_weak": "Terdapat indikasi bearish lemah. Ada tekanan jual ringan namun pasar masih relatif stabil.",
+  "explanation_situation_sideways_strong": "Pasar dalam fase konsolidasi dengan range yang ketat.",
+  "explanation_situation_sideways_moderate": "Pasar bergerak sideways tanpa arah yang jelas.",
+  "explanation_situation_sideways_weak": "Pasar dalam kondisi tidak menentu, menunggu katalis untuk menentukan arah.",
+  
+  "explanation_technical_summary": "Dari sisi teknikal, RSI menunjukkan kondisi {rsi}, MACD {macd}, dengan volatilitas {volatility}%.",
+  "explanation_fundamental_summary": "Secara fundamental, kondisi {strength} dengan perubahan 7 hari {pct_7d}% dan 30 hari {pct_30d}%.",
+  
+  "explanation_outlook_bullish": "Outlook pasar cenderung positif. Momentum naik masih terjaga dengan indikator yang mendukung.",
+  "explanation_outlook_bearish": "Outlook pasar cenderung negatif. Tekanan jual masih dominan dan perlu kehati-hatian.",
+  "explanation_outlook_sideways": "Outlook pasar netral. Disarankan untuk menunggu konfirmasi arah yang lebih jelas.",
+  
+  "explanation_risk_high": "⚠️ PERINGATAN: Volatilitas tinggi menunjukkan risiko yang lebih besar. Gunakan manajemen risiko yang ketat.",
+  "explanation_risk_medium": "📊 Volatilitas sedang. Pastikan untuk menetapkan stop loss yang wajar.",
+  "explanation_risk_low": "✅ Volatilitas rendah menunjukkan kondisi pasar yang relatif stabil.",
+  
+  "rec_bullish_trend_buy": "Tren bullish dikonfirmasi dengan sinyal beli. Peluang untuk masuk posisi long.",
+  "rec_bullish_trend_hold": "Tren bullish namun sinyal belum konfirmasi. Pertahankan posisi yang ada atau tunggu pullback.",
+  "rec_bearish_trend_sell": "Tren bearish dengan sinyal jual. Pertimbangkan untuk mengambil profit atau keluar posisi.",
+  "rec_bearish_trend_caution": "Tren bearish. Berhati-hati dengan posisi long, pertimbangkan untuk mengurangi eksposur.",
+  "rec_sideways_trend": "Pasar sideways. Hindari posisi besar, tunggu breakout yang jelas.",
+  "rec_rsi_overbought": "RSI overbought - hindari membeli di harga saat ini, tunggu koreksi.",
+  "rec_rsi_oversold": "RSI oversold - potensial area akumulasi untuk entry point.",
+  "rec_high_volatility": "Volatilitas tinggi - gunakan position sizing yang lebih kecil.",
+  "rec_bullish_reversal": "Sinyal pembalikan bullish terdeteksi - perhatikan konfirmasi untuk entry.",
+  "rec_bearish_reversal": "Sinyal pembalikan bearish terdeteksi - pertimbangkan untuk mengamankan profit.",
+  
+  "action_consider_buy": "Pertimbangkan untuk membuka posisi beli dengan stop loss yang jelas",
+  "action_wait_confirmation": "Tunggu konfirmasi sinyal sebelum mengambil aksi",
+  "action_consider_sell": "Pertimbangkan untuk menutup posisi atau take profit",
+  "action_reduce_exposure": "Kurangi eksposur dan perketat stop loss",
+  "action_wait_breakout": "Tunggu breakout dari range saat ini sebelum entry",
+  "action_avoid_buying": "Hindari membeli, tunggu pullback atau koreksi",
+  "action_look_for_entry": "Cari peluang entry pada level oversold",
+  "action_use_stop_loss": "Wajib gunakan stop loss, posisi sizing lebih konservatif",
+  
+  "primary_action_strong_buy": "AKSI UTAMA: Beli dengan keyakinan tinggi. Semua indikator mendukung posisi bullish.",
+  "primary_action_buy": "AKSI UTAMA: Pertimbangkan untuk membeli dengan manajemen risiko yang baik.",
+  "primary_action_hold": "AKSI UTAMA: Tahan posisi saat ini. Pasar belum memberikan sinyal yang jelas.",
+  "primary_action_sell": "AKSI UTAMA: Pertimbangkan untuk menjual atau mengambil profit.",
+  "primary_action_strong_sell": "AKSI UTAMA: Jual atau keluar dari posisi. Sinyal bearish kuat.",
+  
+  "confidence_high": "Tinggi",
+  "confidence_medium": "Sedang",
+  "confidence_low": "Rendah",
+  
+  "stop_loss_suggestion": "Saran stop loss: {pct}% dari harga entry",
+  "position_sizing_high": "Position sizing: Normal (1-2% risiko per trade)",
+  "position_sizing_medium": "Position sizing: Moderat (0.5-1% risiko per trade)",
+  "position_sizing_low": "Position sizing: Konservatif (0.25-0.5% risiko per trade)"
+}

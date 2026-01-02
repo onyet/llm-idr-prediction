@@ -19,7 +19,7 @@ from contextvars import ContextVar
 from fastapi import Request
 
 # Default language
-DEFAULT_LANG = "en"
+DEFAULT_LANG = "id"
 
 # Supported languages
 SUPPORTED_LANGS = ["id", "en", "ar"]

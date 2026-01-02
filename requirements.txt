@@ -4,5 +4,6 @@ pytest
 httpx
 python-dotenv
 pandas
+numpy
 prophet
 yfinance
