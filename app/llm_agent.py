@@ -546,10 +546,11 @@ class LLMAnalyzer:
     
     def _initialize_agents(self):
         """Inisialisasi agent yang tersedia dalam urutan prioritas."""
-        # Coba Groq dulu (cepat, dan ada free tier jika disediakan)        groq_key = os.getenv("GROQ_API_KEY")
+        # Coba Groq dulu (cepat, dan ada free tier jika disediakan)
+        groq_key = os.getenv("GROQ_API_KEY")
         if groq_key:
             self.agents.append(GroqAgent(api_key=groq_key))
-        
+
         # Try Ollama (local, free)
         self.agents.append(OllamaAgent())
         
