@@ -3,8 +3,10 @@ import re
 from pathlib import Path
 from typing import Dict, Any
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 import yfinance as yf
+
+from .i18n import get_lang_from_request, t
 
 router = APIRouter(prefix="/tradingview", tags=["tradingview"])
 
@@ -16,17 +18,19 @@ _cache: Dict[str, Any] = {}
 
 
 @router.get("/get/{kode}")
-async def get_tradingview_data(kode: str, range: str = "1y", save: int = 0):
+async def get_tradingview_data(request: Request, kode: str, range: str = "1y", save: int = 0):
     """
     Get historical data for a symbol using yfinance (similar to TradingView).
     - kode: symbol like USDIDR (will be converted to USDIDR=X for forex)
     - range: '1y' or '5y' (default 1y)
     - save: 1 to save data to data/{kode}.json, 0 otherwise (default 0)
     """
+    lang = get_lang_from_request(request)
+    
     if range not in ["1y", "5y"]:
-        raise HTTPException(status_code=400, detail="range must be '1y' or '5y'")
+        raise HTTPException(status_code=400, detail=t("range_must_be", lang))
     if save not in [0, 1]:
-        raise HTTPException(status_code=400, detail="save must be 0 or 1")
+        raise HTTPException(status_code=400, detail=t("save_must_be", lang))
 
     symbol = kode
 
@@ -43,10 +47,10 @@ async def get_tradingview_data(kode: str, range: str = "1y", save: int = 0):
                 try:
                     info = ticker.info
                     if not info or 'symbol' not in info:
-                        raise HTTPException(status_code=404, detail=f"Symbol '{symbol}' not found. Try a valid forex pair like 'USDIDR=X'.")
+                        raise HTTPException(status_code=404, detail=t("symbol_not_found", lang, symbol=symbol))
                 except:
                     pass  # info might fail, continue
-                raise HTTPException(status_code=404, detail=f"No historical data available for '{symbol}' in the last {period}.")
+                raise HTTPException(status_code=404, detail=t("no_historical_data", lang, symbol=symbol, period=period))
             # Convert to dict for JSON response
             result = {
                 "symbol": symbol,
@@ -59,9 +63,9 @@ async def get_tradingview_data(kode: str, range: str = "1y", save: int = 0):
         except Exception as e:
             error_str = str(e).lower()
             if "no data" in error_str or "not found" in error_str or "invalid" in error_str:
-                raise HTTPException(status_code=404, detail=f"Symbol '{symbol}' not found or invalid. Check the symbol (e.g., 'USDIDR=X' for USD/IDR).")
+                raise HTTPException(status_code=404, detail=t("symbol_invalid", lang, symbol=symbol))
             else:
-                raise HTTPException(status_code=500, detail=f"Error fetching data for '{symbol}': {str(e)}")
+                raise HTTPException(status_code=500, detail=t("error_fetching_data", lang, symbol=symbol, error=str(e)))
 
     # If save=1, save to file
     if save == 1:
@@ -73,23 +77,25 @@ async def get_tradingview_data(kode: str, range: str = "1y", save: int = 0):
                 json.dump(result, f, indent=2, default=str)  # default=str for datetime
             result["saved_to"] = str(file_path)
         except Exception as e:
-            raise HTTPException(status_code=500, detail=f"Failed to save data: {str(e)}")
+            raise HTTPException(status_code=500, detail=t("failed_to_save", lang, error=str(e)))
 
     return result
 
 
 @router.get("/mock/{kode}")
-async def get_mock_tradingview_data(kode: str, period: str = "1y", save: int = 0):
+async def get_mock_tradingview_data(request: Request, kode: str, period: str = "1y", save: int = 0):
     """
     Generate mock historical data for testing (simulates TradingView data format).
     - kode: symbol like XAUIDRG
     - period: '1y' or '5y' (default 1y)
     - save: 1 to save data to data/{kode}_mock.json, 0 otherwise (default 0)
     """
+    lang = get_lang_from_request(request)
+    
     if period not in ["1y", "5y"]:
-        raise HTTPException(status_code=400, detail="period must be '1y' or '5y'")
+        raise HTTPException(status_code=400, detail=t("period_must_be", lang))
     if save not in [0, 1]:
-        raise HTTPException(status_code=400, detail="save must be 0 or 1")
+        raise HTTPException(status_code=400, detail=t("save_must_be", lang))
 
     import pandas as pd
     from datetime import datetime, timedelta
@@ -137,7 +143,7 @@ async def get_mock_tradingview_data(kode: str, period: str = "1y", save: int = 0
         "symbol": kode,
         "period": period,
         "source": "mock_tradingview",
-        "note": "This is mock data for testing purposes. Real TradingView data requires premium API access.",
+        "note": t("mock_data_note", lang),
         "data": df.reset_index().to_dict(orient="records")
     }
 
@@ -149,6 +155,6 @@ async def get_mock_tradingview_data(kode: str, period: str = "1y", save: int = 0
                 json.dump(result, f, indent=2, default=str)
             result["saved_to"] = str(file_path)
         except Exception as e:
-            raise HTTPException(status_code=500, detail=f"Failed to save data: {str(e)}")
+            raise HTTPException(status_code=500, detail=t("failed_to_save", lang, error=str(e)))
 
     return result

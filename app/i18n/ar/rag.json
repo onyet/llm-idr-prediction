@@ -1,0 +1,47 @@
+{
+  "model_data_not_ready": "بيانات النموذج غير جاهزة بعد",
+  "model_data_not_ready_named": "بيانات النموذج غير جاهزة بعد: {name}",
+  "model_data_empty": "بيانات النموذج غير جاهزة بعد: {name} (فارغ)",
+  "model_data_no_date": "بيانات النموذج غير جاهزة بعد: {name} (لا يوجد عمود التاريخ)",
+  "model_data_no_close": "بيانات النموذج غير جاهزة بعد: {name} (لا يوجد عمود الإغلاق)",
+  "no_overlapping_dates": "بيانات النموذج غير جاهزة بعد: {pair} (لا توجد تواريخ متداخلة)",
+  "no_valid_values": "بيانات النموذج غير جاهزة بعد: {pair} (لا توجد قيم صالحة)",
+  
+  "days_must_be_positive": "يجب أن تكون الأيام >= 0",
+  "forecast_too_long": "أفق التوقع المطلوب طويل جدًا (الحد الأقصى 7 أيام)",
+  "amount_must_be_positive": "يجب أن يكون المبلغ > 0",
+  "no_data_for_date": "لا توجد بيانات للتاريخ المطلوب في النطاق التاريخي",
+  "prediction_not_available": "التوقع غير متاح",
+  
+  "note_historical_value": "تم إرجاع القيمة التاريخية المرصودة",
+  "note_analysis_disclaimer": "يستند هذا التحليل إلى البيانات التاريخية ونماذج التنبؤ. ليست نصيحة استثمارية مالية.",
+  
+  "trend_up": "صعود",
+  "trend_down": "هبوط",
+  "trend_stable": "مستقر",
+  
+  "pair_idr_usd_label": "IDR مقابل USD",
+  "pair_idr_usd_unit": "USD لكل IDR",
+  "pair_idr_sar_label": "IDR مقابل SAR",
+  "pair_idr_sar_unit": "SAR لكل IDR",
+  "pair_gold_label": "سعر الذهب (IDR/جرام)",
+  "pair_gold_unit": "IDR لكل جرام",
+  
+  "idr_strengthening_usd": "IDR يقوى مقابل USD، فكر في الاحتفاظ بـ IDR.",
+  "idr_weakening_usd": "IDR يضعف مقابل USD، فكر في التنويع إلى USD.",
+  "high_volatility_usd": "تقلبات USD/IDR مرتفعة ({pct}%)، السوق غير مستقر.",
+  "idr_strengthening_sar": "IDR يقوى مقابل SAR.",
+  "idr_weakening_sar": "IDR يضعف مقابل SAR، فكر في SAR لاحتياجات الشرق الأوسط.",
+  "gold_price_rising": "سعر الذهب يرتفع {pct}%، الذهب لا يزال ملاذًا آمنًا جيدًا.",
+  "gold_price_falling": "سعر الذهب ينخفض، قد يكون وقتًا جيدًا لشراء الذهب.",
+  "gold_price_stable": "سعر الذهب يميل إلى الاستقرار.",
+  "gold_low_volatility": "تقلبات الذهب منخفضة، مناسبة للاستثمار طويل الأجل.",
+  
+  "rec_hold_idr": "احتفظ بـ IDR - الروبية في حالة قوية إلى حد ما، احتفظ بها في ودائع IDR.",
+  "rec_diversify_usd": "تنويع USD - فكر في الاحتفاظ ببعض الأموال بالدولار الأمريكي كتحوط.",
+  "rec_diversify_sar": "تنويع SAR - لاحتياجات الشرق الأوسط أو الحج/العمرة، يمكن النظر في SAR.",
+  "rec_invest_gold": "استثمر في الذهب - يُظهر الذهب اتجاهًا إيجابيًا، مناسب للتنويع والتحوط.",
+  "rec_diversify_general": "تنويع - يُنصح بتوزيع الاستثمارات على أدوات مختلفة.",
+  
+  "cannot_analyze_data": "غير قادر على تحليل البيانات. الأخطاء: {errors}"
+}

@@ -5,7 +5,9 @@ from typing import Dict, Any, List
 
 import pandas as pd
 from prophet import Prophet
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
+
+from .i18n import get_lang_from_request, t, get_current_lang, tr
 
 router = APIRouter(prefix="/rag", tags=["rag"])
 
@@ -15,12 +17,12 @@ DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 _cache: Dict[str, Any] = {"models": {}, "data": {}}
 
 
-def load_data(pair: str) -> pd.DataFrame:
+def load_data(pair: str, lang: str = "en") -> pd.DataFrame:
     """
     Load time series for a logical pair.
     - 'idr-usd' reads USDIDR_X.json (IDR per USD) and uses the Close price.
     - 'idr-sar' is derived as (USDIDR_Close / SAR_Close) -> IDR per SAR.
-    Raises HTTPException(status_code=503) with an Indonesian message if source files are missing or malformed.
+    Raises HTTPException(status_code=503) with a localized message if source files are missing or malformed.
     """
     if pair in _cache["data"]:
         return _cache["data"][pair]
@@ -28,12 +30,12 @@ def load_data(pair: str) -> pd.DataFrame:
     # Helper to load yfinance-like JSON file and return DataFrame with ds and close
     def _load_yf_file(path: Path, name: str) -> pd.DataFrame:
         if not path.exists():
-            raise HTTPException(status_code=503, detail=f"Model data belum disiapkan: {name}")
+            raise HTTPException(status_code=503, detail=t("model_data_not_ready_named", lang, name=name))
         raw = json.loads(path.read_text())
         data = raw.get("data") or raw.get("prices") or raw
         df = pd.DataFrame(data)
         if df.empty:
-            raise HTTPException(status_code=503, detail=f"Model data belum disiapkan: {name} (empty)")
+            raise HTTPException(status_code=503, detail=t("model_data_empty", lang, name=name))
         # Normalize column names to lowercase for robustness
         df.columns = [c.lower() for c in df.columns]
         # Date parsing
@@ -49,12 +51,12 @@ def load_data(pair: str) -> pd.DataFrame:
                 try:
                     df["ds"] = pd.to_datetime(df.index, utc=True).tz_convert('UTC').tz_localize(None).dt.normalize()
                 except Exception:
-                    raise HTTPException(status_code=503, detail=f"Model data belum disiapkan: {name} (no date column)")
+                    raise HTTPException(status_code=503, detail=t("model_data_no_date", lang, name=name))
         # Close price
         if "close" in df.columns:
             df["close"] = pd.to_numeric(df["close"], errors="coerce")
         else:
-            raise HTTPException(status_code=503, detail=f"Model data belum disiapkan: {name} (no close column)")
+            raise HTTPException(status_code=503, detail=t("model_data_no_close", lang, name=name))
         df = df[["ds", "close"]].dropna().sort_values("ds")
         return df
 
@@ -75,13 +77,13 @@ def load_data(pair: str) -> pd.DataFrame:
         # merge on date (inner join) to ensure aligned observations
         merged = pd.merge(df_usd, df_sar, on="ds", how="inner", suffixes=("_usd", "_sar"))
         if merged.empty:
-            raise HTTPException(status_code=503, detail="Model data belum disiapkan: idr-sar (no overlapping dates)")
+            raise HTTPException(status_code=503, detail=t("no_overlapping_dates", lang, pair="idr-sar"))
         # avoid division by zero
         merged = merged[(merged["close_sar"] != 0) & (merged["close_usd"] != 0)]
         merged["y"] = merged["close_sar"] / merged["close_usd"]  # SAR per IDR
         out = merged[["ds", "y"]].dropna().sort_values("ds")
         if out.empty:
-            raise HTTPException(status_code=503, detail="Model data belum disiapkan: idr-sar (no valid values)")
+            raise HTTPException(status_code=503, detail=t("no_valid_values", lang, pair="idr-sar"))
         _cache["data"][pair] = out
         return out
 
@@ -94,7 +96,7 @@ def load_data(pair: str) -> pd.DataFrame:
         # merge on date (inner join)
         merged = pd.merge(df_usd, df_gold, on="ds", how="inner", suffixes=("_usd", "_gold"))
         if merged.empty:
-            raise HTTPException(status_code=503, detail="Model data belum disiapkan: idr-gold-gram (no overlapping dates)")
+            raise HTTPException(status_code=503, detail=t("no_overlapping_dates", lang, pair="idr-gold-gram"))
             
         # 1 Troy Ounce = 31.1034768 grams
         # Gold price in USD/gram = Gold price in USD/oz t / 31.1034768
@@ -105,26 +107,26 @@ def load_data(pair: str) -> pd.DataFrame:
         
         out = merged[["ds", "y"]].dropna().sort_values("ds")
         if out.empty:
-            raise HTTPException(status_code=503, detail="Model data belum disiapkan: idr-gold-gram (no valid values)")
+            raise HTTPException(status_code=503, detail=t("no_valid_values", lang, pair="idr-gold-gram"))
         _cache["data"][pair] = out
         return out
 
     raise FileNotFoundError("Unknown pair")
 
 
-def get_model(pair: str) -> Prophet:
+def get_model(pair: str, lang: str = "en") -> Prophet:
     if pair in _cache["models"]:
         return _cache["models"][pair]
     try:
-        df = load_data(pair)
+        df = load_data(pair, lang)
     except HTTPException:
         # propagate the HTTPException (e.g., 503 model not ready)
         raise
     except FileNotFoundError:
-        raise HTTPException(status_code=503, detail="Model data belum disiapkan")
+        raise HTTPException(status_code=503, detail=t("model_data_not_ready", lang))
     # sanity check
     if df.empty:
-        raise HTTPException(status_code=503, detail="Model data belum disiapkan (empty)")
+        raise HTTPException(status_code=503, detail=t("model_data_empty", lang, name=pair))
     # train Prophet
     model = Prophet(daily_seasonality=True)
     model.fit(df)
@@ -133,31 +135,34 @@ def get_model(pair: str) -> Prophet:
 
 
 @router.get("/idr-sar")
-async def predict_idr_sar(days: int = 0, amount: float = 1.0):
-    return await _predict("idr-sar", days, amount)
+async def predict_idr_sar(request: Request, days: int = 0, amount: float = 1.0):
+    lang = get_lang_from_request(request)
+    return await _predict("idr-sar", days, amount, lang)
 
 
 @router.get("/idr-usd")
-async def predict_idr_usd(days: int = 0, amount: float = 1.0):
-    return await _predict("idr-usd", days, amount)
+async def predict_idr_usd(request: Request, days: int = 0, amount: float = 1.0):
+    lang = get_lang_from_request(request)
+    return await _predict("idr-usd", days, amount, lang)
 
 
 @router.get("/idr-gold-gram")
-async def predict_idr_gold_gram(days: int = 0, amount_gram: float = 1.0):
-    return await _predict("idr-gold-gram", days, amount_gram)
+async def predict_idr_gold_gram(request: Request, days: int = 0, amount_gram: float = 1.0):
+    lang = get_lang_from_request(request)
+    return await _predict("idr-gold-gram", days, amount_gram, lang)
 
 
-async def _predict(pair: str, days: int = 0, amount: float = 1.0):
+async def _predict(pair: str, days: int = 0, amount: float = 1.0, lang: str = "en"):
     # validation
     if days < 0:
-        raise HTTPException(status_code=400, detail="days must be >= 0")
+        raise HTTPException(status_code=400, detail=t("days_must_be_positive", lang))
     if days > 7:
-        raise HTTPException(status_code=400, detail="requested forecast horizon too long (max 7 days)")
+        raise HTTPException(status_code=400, detail=t("forecast_too_long", lang))
     if amount <= 0:
-        raise HTTPException(status_code=400, detail="amount must be > 0")
+        raise HTTPException(status_code=400, detail=t("amount_must_be_positive", lang))
 
-    df = load_data(pair)
-    model = get_model(pair)
+    df = load_data(pair, lang)
+    model = get_model(pair, lang)
 
     # forecast up to requested day (0=today)
     last_date = df["ds"].max().normalize()
@@ -167,7 +172,7 @@ async def _predict(pair: str, days: int = 0, amount: float = 1.0):
         # if target within historical data, just return observed
         observed = df[df["ds"].dt.date == target_date]
         if observed.empty:
-            raise HTTPException(status_code=404, detail="no data for requested date in historical range")
+            raise HTTPException(status_code=404, detail=t("no_data_for_date", lang))
         val = float(observed.iloc[-1]["y"])
         return {
             "pair": pair,
@@ -176,7 +181,7 @@ async def _predict(pair: str, days: int = 0, amount: float = 1.0):
             "predicted": val,
             "amount": amount,
             "predicted_for_amount": val * amount,
-            "note": "returned historical observed value",
+            "note": t("note_historical_value", lang),
         }
 
     # build dates to forecast from last_date +1 .. target_date
@@ -185,7 +190,7 @@ async def _predict(pair: str, days: int = 0, amount: float = 1.0):
     # select the target row
     target_row = forecast[forecast["ds"].dt.date == target_date]
     if target_row.empty:
-        raise HTTPException(status_code=500, detail="prediction not available")
+        raise HTTPException(status_code=500, detail=t("prediction_not_available", lang))
     yhat = float(target_row.iloc[0]["yhat"])
     yhat_lower = float(target_row.iloc[0]["yhat_lower"])
     yhat_upper = float(target_row.iloc[0]["yhat_upper"])
@@ -205,13 +210,13 @@ async def _predict(pair: str, days: int = 0, amount: float = 1.0):
     }
 
 
-def _get_trend_analysis(pair: str, days: int = 7) -> Dict[str, Any]:
+def _get_trend_analysis(pair: str, days: int = 7, lang: str = "en") -> Dict[str, Any]:
     """
     Analyze trend for a pair over the specified number of days.
     Returns trend direction, percentage change, and volatility.
     """
-    df = load_data(pair)
-    model = get_model(pair)
+    df = load_data(pair, lang)
+    model = get_model(pair, lang)
     
     last_date = df["ds"].max().normalize()
     
@@ -259,13 +264,13 @@ def _get_trend_analysis(pair: str, days: int = 7) -> Dict[str, Any]:
     
     if pct_change_predicted > 0.5:
         trend = "UP"
-        trend_id = "NAIK"
+        trend_id = t("trend_up", lang)
     elif pct_change_predicted < -0.5:
         trend = "DOWN"
-        trend_id = "TURUN"
+        trend_id = t("trend_down", lang)
     else:
         trend = "STABLE"
-        trend_id = "STABIL"
+        trend_id = t("trend_stable", lang)
     
     return {
         "current_value": current_value,
@@ -276,11 +281,11 @@ def _get_trend_analysis(pair: str, days: int = 7) -> Dict[str, Any]:
         "ma_30": ma_30,
         "volatility_pct": round(volatility, 2),
         "trend": trend,
-        "trend_id": trend_id,
+        "trend_localized": trend_id,
     }
 
 
-def _generate_recommendation(analyses: Dict[str, Dict]) -> Dict[str, Any]:
+def _generate_recommendation(analyses: Dict[str, Dict], lang: str = "en") -> Dict[str, Any]:
     """
     Generate investment recommendation based on all analyses.
     """
@@ -300,50 +305,50 @@ def _generate_recommendation(analyses: Dict[str, Dict]) -> Dict[str, Any]:
     if usd:
         if usd["trend"] == "DOWN":  # IDR strengthening against USD
             scores["IDR"] += 2
-            recommendations.append("IDR menguat terhadap USD, pertimbangkan untuk hold IDR.")
+            recommendations.append(t("idr_strengthening_usd", lang))
         elif usd["trend"] == "UP":  # IDR weakening
             scores["USD"] += 2
-            recommendations.append("IDR melemah terhadap USD, pertimbangkan diversifikasi ke USD.")
+            recommendations.append(t("idr_weakening_usd", lang))
         
         if usd["volatility_pct"] > 2:
-            recommendations.append(f"Volatilitas USD/IDR tinggi ({usd['volatility_pct']}%), pasar sedang tidak stabil.")
+            recommendations.append(t("high_volatility_usd", lang, pct=usd['volatility_pct']))
     
     # Analyze SAR trend (value is SAR per IDR)
     if sar:
         if sar["trend"] == "DOWN":  # IDR strengthening against SAR
             scores["IDR"] += 1
-            recommendations.append("IDR menguat terhadap SAR.")
+            recommendations.append(t("idr_strengthening_sar", lang))
         elif sar["trend"] == "UP":  # IDR weakening
             scores["SAR"] += 1
-            recommendations.append("IDR melemah terhadap SAR, pertimbangkan SAR untuk kebutuhan Timur Tengah.")
+            recommendations.append(t("idr_weakening_sar", lang))
     
     # Analyze Gold trend (value is IDR per gram, UP means gold more expensive in IDR)
     if gold:
         if gold["trend"] == "UP":  # Gold price increasing
             scores["GOLD"] += 3
-            recommendations.append(f"Harga emas naik {gold['pct_change_predicted']}%, emas masih menjadi safe haven yang baik.")
+            recommendations.append(t("gold_price_rising", lang, pct=gold['pct_change_predicted']))
         elif gold["trend"] == "DOWN":
             scores["IDR"] += 1
-            recommendations.append("Harga emas turun, mungkin saat yang baik untuk membeli emas.")
+            recommendations.append(t("gold_price_falling", lang))
         else:
-            recommendations.append("Harga emas cenderung stabil.")
+            recommendations.append(t("gold_price_stable", lang))
         
         if gold["volatility_pct"] < 1:
-            recommendations.append("Volatilitas emas rendah, cocok untuk investasi jangka panjang.")
+            recommendations.append(t("gold_low_volatility", lang))
     
     # Determine best recommendation
     best_option = max(scores, key=scores.get)
     
     if best_option == "IDR":
-        main_recommendation = "HOLD IDR - Rupiah dalam kondisi cukup kuat, simpan dalam deposito IDR."
+        main_recommendation = t("rec_hold_idr", lang)
     elif best_option == "USD":
-        main_recommendation = "DIVERSIFIKASI USD - Pertimbangkan menyimpan sebagian dana dalam USD sebagai lindung nilai."
+        main_recommendation = t("rec_diversify_usd", lang)
     elif best_option == "SAR":
-        main_recommendation = "DIVERSIFIKASI SAR - Untuk kebutuhan Timur Tengah atau haji/umrah, SAR bisa dipertimbangkan."
+        main_recommendation = t("rec_diversify_sar", lang)
     elif best_option == "GOLD":
-        main_recommendation = "INVESTASI EMAS - Emas menunjukkan tren positif, cocok untuk diversifikasi dan lindung nilai."
+        main_recommendation = t("rec_invest_gold", lang)
     else:
-        main_recommendation = "DIVERSIFIKASI - Sebaiknya sebarkan investasi ke berbagai instrumen."
+        main_recommendation = t("rec_diversify_general", lang)
     
     return {
         "main_recommendation": main_recommendation,
@@ -354,25 +359,26 @@ def _generate_recommendation(analyses: Dict[str, Dict]) -> Dict[str, Any]:
 
 
 @router.get("/idr-summary")
-async def get_idr_summary():
+async def get_idr_summary(request: Request):
     """
     Get comprehensive IDR analysis summary comparing against USD, SAR, and Gold.
     Provides trend analysis, predictions, and investment recommendations.
     """
+    lang = get_lang_from_request(request)
     analyses = {}
     errors = []
     
     # Analyze each pair
     pairs = ["idr-usd", "idr-sar", "idr-gold-gram"]
     pair_labels = {
-        "idr-usd": {"label": "IDR vs USD", "unit": "USD per IDR"},
-        "idr-sar": {"label": "IDR vs SAR", "unit": "SAR per IDR"},
-        "idr-gold-gram": {"label": "Harga Emas (IDR/gram)", "unit": "IDR per gram"},
+        "idr-usd": {"label": t("pair_idr_usd_label", lang), "unit": t("pair_idr_usd_unit", lang)},
+        "idr-sar": {"label": t("pair_idr_sar_label", lang), "unit": t("pair_idr_sar_unit", lang)},
+        "idr-gold-gram": {"label": t("pair_gold_label", lang), "unit": t("pair_gold_unit", lang)},
     }
     
     for pair in pairs:
         try:
-            analysis = _get_trend_analysis(pair)
+            analysis = _get_trend_analysis(pair, lang=lang)
             analyses[pair] = {
                 **pair_labels[pair],
                 **analysis,
@@ -383,19 +389,19 @@ async def get_idr_summary():
             errors.append(f"{pair}: {str(e)}")
     
     if not analyses:
-        raise HTTPException(status_code=503, detail=f"Tidak dapat menganalisis data. Errors: {errors}")
+        raise HTTPException(status_code=503, detail=t("cannot_analyze_data", lang, errors=errors))
     
     # Generate recommendation
-    recommendation = _generate_recommendation(analyses)
+    recommendation = _generate_recommendation(analyses, lang)
     
     # Build summary
     summary_parts = []
     
     for pair, data in analyses.items():
         label = data["label"]
-        trend_id = data["trend_id"]
+        trend_localized = data["trend_localized"]
         pct = data["pct_change_predicted"]
-        summary_parts.append(f"{label}: {trend_id} ({pct:+.2f}%)")
+        summary_parts.append(f"{label}: {trend_localized} ({pct:+.2f}%)")
     
     summary_text = " | ".join(summary_parts)
     
@@ -405,5 +411,5 @@ async def get_idr_summary():
         "analyses": analyses,
         "recommendation": recommendation,
         "errors": errors if errors else None,
-        "note": "Analisis ini berdasarkan data historis dan model prediksi. Bukan saran investasi finansial.",
+        "note": t("note_analysis_disclaimer", lang),
     }

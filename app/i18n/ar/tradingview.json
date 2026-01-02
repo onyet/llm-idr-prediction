@@ -1,0 +1,11 @@
+{
+  "range_must_be": "يجب أن يكون النطاق '1y' أو '5y'",
+  "period_must_be": "يجب أن تكون الفترة '1y' أو '5y'",
+  "save_must_be": "يجب أن يكون الحفظ 0 أو 1",
+  "symbol_not_found": "الرمز '{symbol}' غير موجود. جرب زوج فوركس صالح مثل 'USDIDR=X'.",
+  "no_historical_data": "لا تتوفر بيانات تاريخية لـ '{symbol}' في آخر {period}.",
+  "symbol_invalid": "الرمز '{symbol}' غير موجود أو غير صالح. تحقق من الرمز (مثال: 'USDIDR=X' لـ USD/IDR).",
+  "error_fetching_data": "خطأ في جلب البيانات لـ '{symbol}': {error}",
+  "failed_to_save": "فشل في حفظ البيانات: {error}",
+  "mock_data_note": "هذه بيانات وهمية لأغراض الاختبار. تتطلب بيانات TradingView الحقيقية الوصول إلى API المميز."
+}

@@ -1,9 +1,25 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
 
 from . import rag, tradingview
+from .i18n import get_lang_from_request, set_current_lang, t
 
 app = FastAPI(title="LLM Exchange API", version="0.1.0")
+
+
+class LanguageMiddleware(BaseHTTPMiddleware):
+    """Middleware to set language from Accept-Language header."""
+    async def dispatch(self, request: Request, call_next):
+        lang = get_lang_from_request(request)
+        set_current_lang(lang)
+        response = await call_next(request)
+        return response
+
+
+# Add language middleware first
+app.add_middleware(LanguageMiddleware)
+
 app.include_router(rag.router)
 app.include_router(tradingview.router)
 
@@ -17,10 +33,12 @@ app.add_middleware(
 
 
 @app.get("/")
-async def root():
-    return {"message": "Hello, My name is LLM Exchange API"}
+async def root(request: Request):
+    lang = get_lang_from_request(request)
+    return {"message": t("hello_message", lang)}
 
 
 @app.get("/healthz")
-async def health():
-    return {"status": "ok"}
+async def health(request: Request):
+    lang = get_lang_from_request(request)
+    return {"status": t("status_ok", lang)}

@@ -1,0 +1,11 @@
+{
+  "range_must_be": "range harus '1y' atau '5y'",
+  "period_must_be": "period harus '1y' atau '5y'",
+  "save_must_be": "save harus 0 atau 1",
+  "symbol_not_found": "Simbol '{symbol}' tidak ditemukan. Coba pair forex yang valid seperti 'USDIDR=X'.",
+  "no_historical_data": "Tidak ada data historis untuk '{symbol}' dalam {period} terakhir.",
+  "symbol_invalid": "Simbol '{symbol}' tidak ditemukan atau tidak valid. Periksa simbol (contoh: 'USDIDR=X' untuk USD/IDR).",
+  "error_fetching_data": "Error mengambil data untuk '{symbol}': {error}",
+  "failed_to_save": "Gagal menyimpan data: {error}",
+  "mock_data_note": "Ini adalah data mock untuk keperluan testing. Data TradingView asli memerlukan akses API premium."
+}

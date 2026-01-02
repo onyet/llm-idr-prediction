@@ -1,0 +1,47 @@
+{
+  "model_data_not_ready": "Model data belum disiapkan",
+  "model_data_not_ready_named": "Model data belum disiapkan: {name}",
+  "model_data_empty": "Model data belum disiapkan: {name} (kosong)",
+  "model_data_no_date": "Model data belum disiapkan: {name} (tidak ada kolom tanggal)",
+  "model_data_no_close": "Model data belum disiapkan: {name} (tidak ada kolom close)",
+  "no_overlapping_dates": "Model data belum disiapkan: {pair} (tidak ada tanggal yang cocok)",
+  "no_valid_values": "Model data belum disiapkan: {pair} (tidak ada nilai yang valid)",
+  
+  "days_must_be_positive": "days harus >= 0",
+  "forecast_too_long": "horizon prediksi terlalu panjang (maksimal 7 hari)",
+  "amount_must_be_positive": "amount harus > 0",
+  "no_data_for_date": "tidak ada data untuk tanggal yang diminta dalam rentang historis",
+  "prediction_not_available": "prediksi tidak tersedia",
+  
+  "note_historical_value": "mengembalikan nilai historis yang diamati",
+  "note_analysis_disclaimer": "Analisis ini berdasarkan data historis dan model prediksi. Bukan saran investasi finansial.",
+  
+  "trend_up": "NAIK",
+  "trend_down": "TURUN",
+  "trend_stable": "STABIL",
+  
+  "pair_idr_usd_label": "IDR vs USD",
+  "pair_idr_usd_unit": "USD per IDR",
+  "pair_idr_sar_label": "IDR vs SAR",
+  "pair_idr_sar_unit": "SAR per IDR",
+  "pair_gold_label": "Harga Emas (IDR/gram)",
+  "pair_gold_unit": "IDR per gram",
+  
+  "idr_strengthening_usd": "IDR menguat terhadap USD, pertimbangkan untuk hold IDR.",
+  "idr_weakening_usd": "IDR melemah terhadap USD, pertimbangkan diversifikasi ke USD.",
+  "high_volatility_usd": "Volatilitas USD/IDR tinggi ({pct}%), pasar sedang tidak stabil.",
+  "idr_strengthening_sar": "IDR menguat terhadap SAR.",
+  "idr_weakening_sar": "IDR melemah terhadap SAR, pertimbangkan SAR untuk kebutuhan Timur Tengah.",
+  "gold_price_rising": "Harga emas naik {pct}%, emas masih menjadi safe haven yang baik.",
+  "gold_price_falling": "Harga emas turun, mungkin saat yang baik untuk membeli emas.",
+  "gold_price_stable": "Harga emas cenderung stabil.",
+  "gold_low_volatility": "Volatilitas emas rendah, cocok untuk investasi jangka panjang.",
+  
+  "rec_hold_idr": "HOLD IDR - Rupiah dalam kondisi cukup kuat, simpan dalam deposito IDR.",
+  "rec_diversify_usd": "DIVERSIFIKASI USD - Pertimbangkan menyimpan sebagian dana dalam USD sebagai lindung nilai.",
+  "rec_diversify_sar": "DIVERSIFIKASI SAR - Untuk kebutuhan Timur Tengah atau haji/umrah, SAR bisa dipertimbangkan.",
+  "rec_invest_gold": "INVESTASI EMAS - Emas menunjukkan tren positif, cocok untuk diversifikasi dan lindung nilai.",
+  "rec_diversify_general": "DIVERSIFIKASI - Sebaiknya sebarkan investasi ke berbagai instrumen.",
+  
+  "cannot_analyze_data": "Tidak dapat menganalisis data. Errors: {errors}"
+}
