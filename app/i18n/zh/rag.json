@@ -1,0 +1,47 @@
+{
+  "model_data_not_ready": "Model data not yet prepared",
+  "model_data_not_ready_named": "Model data not yet prepared: {name}",
+  "model_data_empty": "Model data not yet prepared: {name} (empty)",
+  "model_data_no_date": "Model data not yet prepared: {name} (no date column)",
+  "model_data_no_close": "Model data not yet prepared: {name} (no close column)",
+  "no_overlapping_dates": "Model data not yet prepared: {pair} (no overlapping dates)",
+  "no_valid_values": "Model data not yet prepared: {pair} (no valid values)",
+  
+  "days_must_be_positive": "days must be >= 0",
+  "forecast_too_long": "requested forecast horizon too long (max 7 days)",
+  "amount_must_be_positive": "amount must be > 0",
+  "no_data_for_date": "no data for requested date in historical range",
+  "prediction_not_available": "prediction not available",
+  
+  "note_historical_value": "returned historical observed value",
+  "note_analysis_disclaimer": "This analysis is based on historical data and prediction models. Not financial investment advice.",
+  
+  "trend_up": "UP",
+  "trend_down": "DOWN",
+  "trend_stable": "STABLE",
+  
+  "pair_idr_usd_label": "IDR vs USD",
+  "pair_idr_usd_unit": "USD per IDR",
+  "pair_idr_sar_label": "IDR vs SAR",
+  "pair_idr_sar_unit": "SAR per IDR",
+  "pair_gold_label": "Gold Price (IDR/gram)",
+  "pair_gold_unit": "IDR per gram",
+  
+  "idr_strengthening_usd": "IDR strengthening against USD, consider holding IDR.",
+  "idr_weakening_usd": "IDR weakening against USD, consider diversifying to USD.",
+  "high_volatility_usd": "USD/IDR volatility is high ({pct}%), market is unstable.",
+  "idr_strengthening_sar": "IDR strengthening against SAR.",
+  "idr_weakening_sar": "IDR weakening against SAR, consider SAR for Middle East needs.",
+  "gold_price_rising": "Gold price rising {pct}%, gold remains a good safe haven.",
+  "gold_price_falling": "Gold price falling, might be a good time to buy gold.",
+  "gold_price_stable": "Gold price tends to be stable.",
+  "gold_low_volatility": "Gold volatility is low, suitable for long-term investment.",
+  
+  "rec_hold_idr": "HOLD IDR - Rupiah is in fairly strong condition, keep in IDR deposits.",
+  "rec_diversify_usd": "DIVERSIFY USD - Consider keeping some funds in USD as a hedge.",
+  "rec_diversify_sar": "DIVERSIFY SAR - For Middle East needs or hajj/umrah, SAR can be considered.",
+  "rec_invest_gold": "INVEST GOLD - Gold shows positive trend, suitable for diversification and hedging.",
+  "rec_diversify_general": "DIVERSIFY - It's advisable to spread investments across various instruments.",
+  
+  "cannot_analyze_data": "Unable to analyze data. Errors: {errors}"
+}

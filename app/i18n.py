@@ -22,7 +22,7 @@ from fastapi import Request
 DEFAULT_LANG = "id"
 
 # Bahasa yang didukung
-SUPPORTED_LANGS = ["id", "en", "ar"]
+SUPPORTED_LANGS = ["id", "en", "ar", "de", "ja", "zh", "ru"]
 
 # Path direktori i18n
 I18N_DIR = Path(__file__).resolve().parent / "i18n"

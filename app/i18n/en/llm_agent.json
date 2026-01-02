@@ -1,0 +1,19 @@
+{
+  "insights.bullish_trend": "Current trend shows strong bullish momentum",
+  "insights.bearish_trend": "Current trend shows bearish pressure",
+  "insights.sideways_trend": "Market is in consolidation phase",
+  "insights.rsi_high": "RSI indicator shows overbought condition, watch for correction",
+  "insights.rsi_low": "RSI indicator shows oversold condition, potential rebound",
+  "insights.high_volatility": "High volatility indicates greater risk",
+  "insights.low_volatility": "Low volatility shows market stability",
+
+  "recommendations.strong_buy": "Very positive signal for buy position",
+  "recommendations.buy": "Consider opening buy position with proper risk management",
+  "recommendations.hold": "Maintain current position and wait for further confirmation",
+  "recommendations.sell": "Consider taking profit or reducing exposure",
+  "recommendations.strong_sell": "Strong negative signal, consider exiting position",
+
+  "summary.analysis": "Analysis of {pair} for {target_date}: Trend {trend}, signal {signal}. Current price {current_price}.",
+
+  "prompt.instruction": "Provide analysis in English."
+}

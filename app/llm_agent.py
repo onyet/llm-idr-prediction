@@ -18,6 +18,7 @@ from abc import ABC, abstractmethod
 from typing import Dict, Any, List, Optional
 from dataclasses import dataclass
 from enum import Enum
+from .i18n import t
 
 # Muat variabel lingkungan dari file .env jika python-dotenv terpasang
 try:
@@ -118,85 +119,43 @@ class MockLLMAgent(BaseLLMAgent):
         }
     
     def _get_insight(self, key: str, lang: str) -> str:
-        insights = {
-            "bullish_trend": {
-                "id": "Tren saat ini menunjukkan momentum bullish yang kuat",
-                "en": "Current trend shows strong bullish momentum",
-                "ar": "الاتجاه الحالي يُظهر زخمًا صعوديًا قويًا"
-            },
-            "bearish_trend": {
-                "id": "Tren saat ini menunjukkan tekanan bearish",
-                "en": "Current trend shows bearish pressure",
-                "ar": "الاتجاه الحالي يُظهر ضغطًا هبوطيًا"
-            },
-            "sideways_trend": {
-                "id": "Pasar sedang dalam fase konsolidasi",
-                "en": "Market is in consolidation phase",
-                "ar": "السوق في مرحلة تماسك"
-            },
-            "rsi_high": {
-                "id": "Indikator RSI menunjukkan kondisi overbought, waspadai koreksi",
-                "en": "RSI indicator shows overbought condition, watch for correction",
-                "ar": "مؤشر RSI يُظهر حالة ذروة الشراء، احذر من التصحيح"
-            },
-            "rsi_low": {
-                "id": "Indikator RSI menunjukkan kondisi oversold, potensi rebound",
-                "en": "RSI indicator shows oversold condition, potential rebound",
-                "ar": "مؤشر RSI يُظهر حالة ذروة البيع، احتمال الارتداد"
-            },
-            "high_volatility": {
-                "id": "Volatilitas tinggi mengindikasikan risiko yang lebih besar",
-                "en": "High volatility indicates greater risk",
-                "ar": "التقلب العالي يشير إلى مخاطر أكبر"
-            },
-            "low_volatility": {
-                "id": "Volatilitas rendah menunjukkan stabilitas pasar",
-                "en": "Low volatility shows market stability",
-                "ar": "التقلب المنخفض يُظهر استقرار السوق"
-            }
-        }
-        return insights.get(key, {}).get(lang, insights.get(key, {}).get("en", key))
+        """Dapatkan insight yang sudah diterjemahkan menggunakan i18n.
+        Kunci terjemahan: `insights.<key>` di module `llm_agent`.
+        """
+        # Minta terjemahan dari modul i18n
+        translation = t(f"insights.{key}", lang, module="llm_agent")
+        # Jika tidak ditemukan untuk bahasa yang diminta, fallback ke bahasa Inggris
+        if translation == f"insights.{key}":
+            translation = t(f"insights.{key}", "en", module="llm_agent")
+        return translation
     
     def _generate_recommendation(self, signal: str, trend: str, lang: str) -> str:
-        recommendations = {
-            "strong_buy": {
-                "id": "Sinyal sangat positif untuk posisi beli",
-                "en": "Very positive signal for buy position",
-                "ar": "إشارة إيجابية جدًا لموقف الشراء"
-            },
-            "buy": {
-                "id": "Pertimbangkan untuk membuka posisi beli dengan manajemen risiko yang baik",
-                "en": "Consider opening buy position with proper risk management",
-                "ar": "فكر في فتح موقف شراء مع إدارة مخاطر مناسبة"
-            },
-            "hold": {
-                "id": "Pertahankan posisi saat ini dan tunggu konfirmasi lebih lanjut",
-                "en": "Maintain current position and wait for further confirmation",
-                "ar": "حافظ على الموقف الحالي وانتظر مزيدًا من التأكيد"
-            },
-            "sell": {
-                "id": "Pertimbangkan untuk mengambil profit atau mengurangi eksposur",
-                "en": "Consider taking profit or reducing exposure",
-                "ar": "فكر في جني الأرباح أو تقليل التعرض"
-            },
-            "strong_sell": {
-                "id": "Sinyal negatif kuat, pertimbangkan untuk keluar dari posisi",
-                "en": "Strong negative signal, consider exiting position",
-                "ar": "إشارة سلبية قوية، فكر في الخروج من الموقف"
-            }
-        }
-        return recommendations.get(signal, {}).get(lang, recommendations.get(signal, {}).get("en", "Hold"))
+        """Dapatkan rekomendasi terjemahan dari modul i18n (kunci: recommendations.<signal>)."""
+        key = f"recommendations.{signal}"
+        rec = t(key, lang, module="llm_agent")
+        if rec == key:
+            # fallback ke bahasa Inggris
+            rec = t(key, "en", module="llm_agent")
+        # Jika masih tidak ditemukan, gunakan rekomendasi 'hold'
+        if rec == key:
+            rec = t("recommendations.hold", lang, module="llm_agent")
+            if rec == "recommendations.hold":
+                rec = "Hold"
+        return rec
     
     def _generate_summary(self, context: AnalysisContext, trend: str, signal: str) -> str:
-        summaries = {
-            "id": f"Analisis {context.pair} untuk {context.target_date}: Tren {trend}, sinyal {signal}. "
-                  f"Harga saat ini {context.current_price:.6f}.",
-            "en": f"Analysis of {context.pair} for {context.target_date}: Trend {trend}, signal {signal}. "
-                  f"Current price {context.current_price:.6f}.",
-            "ar": f"تحليل {context.pair} لـ {context.target_date}: الاتجاه {trend}، الإشارة {signal}. "
-                  f"السعر الحالي {context.current_price:.6f}."
-        }
-        return summaries.get(context.language, summaries["en"])
+        """Bangun ringkasan singkat menggunakan terjemahan dari i18n dan format parameter."""
+        current_price = format(context.current_price, ".6f")
+        return t(
+            "summary.analysis",
+            context.language,
+            module="llm_agent",
+            pair=context.pair,
+            target_date=context.target_date,
+            trend=trend,
+            signal=signal,
+            current_price=current_price,
+        )
 
 
 class OllamaAgent(BaseLLMAgent):
@@ -361,15 +320,11 @@ class OpenAIAgent(BaseLLMAgent):
             return result
     
     def _build_prompt(self, context: AnalysisContext) -> str:
-        lang_instruction = {
-            "id": "Berikan analisis dalam Bahasa Indonesia.",
-            "en": "Provide analysis in English.",
-            "ar": "قدم التحليل باللغة العربية."
-        }
-        
+        instruction = t("prompt.instruction", context.language, module="llm_agent")
+
         return f"""Analyze the following market data:
 
-{lang_instruction.get(context.language, lang_instruction['en'])}
+{instruction}
 
 Market Data:
 - Pair: {context.pair}
@@ -472,15 +427,11 @@ class HuggingFaceAgent(BaseLLMAgent):
             return result
     
     def _build_prompt(self, context: AnalysisContext) -> str:
-        lang_instruction = {
-            "id": "Berikan analisis dalam Bahasa Indonesia.",
-            "en": "Provide analysis in English.",
-            "ar": "قدم التحليل باللغة العربية."
-        }
-        
+        instruction = t("prompt.instruction", context.language, module="llm_agent")
+
         return f"""<s>[INST] You are a professional financial analyst. Analyze the following market data.
 
-{lang_instruction.get(context.language, lang_instruction['en'])}
+{instruction}
 
 Market Data:
 - Pair: {context.pair}
@@ -559,15 +510,11 @@ class GroqAgent(BaseLLMAgent):
             return result
     
     def _build_prompt(self, context: AnalysisContext) -> str:
-        lang_instruction = {
-            "id": "Berikan analisis dalam Bahasa Indonesia.",
-            "en": "Provide analysis in English.",
-            "ar": "قدم التحليل باللغة العربية."
-        }
-        
+        instruction = t("prompt.instruction", context.language, module="llm_agent")
+
         return f"""Analyze the following market data:
 
-{lang_instruction.get(context.language, lang_instruction['en'])}
+{instruction}
 
 Market Data:
 - Pair: {context.pair}

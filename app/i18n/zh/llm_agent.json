@@ -1,0 +1,19 @@
+{
+  "insights.bullish_trend": "当前趋势显示强劲的上涨动能",
+  "insights.bearish_trend": "当前趋势显示下行压力",
+  "insights.sideways_trend": "市场处于盘整阶段",
+  "insights.rsi_high": "RSI 指标显示超买，需警惕回调",
+  "insights.rsi_low": "RSI 指标显示超卖，存在反弹可能",
+  "insights.high_volatility": "高波动性表示更大的风险",
+  "insights.low_volatility": "低波动性显示市场稳定",
+
+  "recommendations.strong_buy": "非常积极的买入信号",
+  "recommendations.buy": "考虑在适当的风险管理下建仓",
+  "recommendations.hold": "维持当前仓位，等待进一步确认",
+  "recommendations.sell": "考虑获利了结或减少敞口",
+  "recommendations.strong_sell": "强烈的卖出信号，考虑退出仓位",
+
+  "summary.analysis": "{target_date} 的 {pair} 分析：趋势 {trend}，信号 {signal}。当前价格 {current_price}。",
+
+  "prompt.instruction": "请用中文提供分析。"
+}

@@ -1,0 +1,19 @@
+{
+  "insights.bullish_trend": "Tren saat ini menunjukkan momentum bullish yang kuat",
+  "insights.bearish_trend": "Tren saat ini menunjukkan tekanan bearish",
+  "insights.sideways_trend": "Pasar sedang dalam fase konsolidasi",
+  "insights.rsi_high": "Indikator RSI menunjukkan kondisi overbought, waspadai koreksi",
+  "insights.rsi_low": "Indikator RSI menunjukkan kondisi oversold, potensi rebound",
+  "insights.high_volatility": "Volatilitas tinggi mengindikasikan risiko yang lebih besar",
+  "insights.low_volatility": "Volatilitas rendah menunjukkan stabilitas pasar",
+
+  "recommendations.strong_buy": "Sinyal sangat positif untuk posisi beli",
+  "recommendations.buy": "Pertimbangkan untuk membuka posisi beli dengan manajemen risiko yang baik",
+  "recommendations.hold": "Pertahankan posisi saat ini dan tunggu konfirmasi lebih lanjut",
+  "recommendations.sell": "Pertimbangkan untuk mengambil profit atau mengurangi eksposur",
+  "recommendations.strong_sell": "Sinyal negatif kuat, pertimbangkan untuk keluar dari posisi",
+
+  "summary.analysis": "Analisis {pair} untuk {target_date}: Tren {trend}, sinyal {signal}. Harga saat ini {current_price}.",
+
+  "prompt.instruction": "Berikan analisis dalam Bahasa Indonesia."
+}

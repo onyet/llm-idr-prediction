@@ -1,0 +1,11 @@
+{
+  "range_must_be": "range must be '1y' or '5y'",
+  "period_must_be": "period must be '1y' or '5y'",
+  "save_must_be": "save must be 0 or 1",
+  "symbol_not_found": "Symbol '{symbol}' not found. Try a valid forex pair like 'USDIDR=X'.",
+  "no_historical_data": "No historical data available for '{symbol}' in the last {period}.",
+  "symbol_invalid": "Symbol '{symbol}' not found or invalid. Check the symbol (e.g., 'USDIDR=X' for USD/IDR).",
+  "error_fetching_data": "Error fetching data for '{symbol}': {error}",
+  "failed_to_save": "Failed to save data: {error}",
+  "mock_data_note": "This is mock data for testing purposes. Real TradingView data requires premium API access."
+}

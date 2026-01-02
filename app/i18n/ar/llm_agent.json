@@ -1,0 +1,19 @@
+{
+  "insights.bullish_trend": "الاتجاه الحالي يُظهر زخمًا صعوديًا قويًا",
+  "insights.bearish_trend": "الاتجاه الحالي يُظهر ضغطًا هبوطيًا",
+  "insights.sideways_trend": "السوق في مرحلة تماسك",
+  "insights.rsi_high": "مؤشر RSI يُظهر حالة ذروة الشراء، احذر من التصحيح",
+  "insights.rsi_low": "مؤشر RSI يُظهر حالة ذروة البيع، احتمال الارتداد",
+  "insights.high_volatility": "التقلب العالي يشير إلى مخاطر أكبر",
+  "insights.low_volatility": "التقلب المنخفض يُظهر استقرار السوق",
+
+  "recommendations.strong_buy": "إشارة إيجابية جدًا لموقف الشراء",
+  "recommendations.buy": "فكر في فتح موقف شراء مع إدارة مخاطر مناسبة",
+  "recommendations.hold": "حافظ على الموقف الحالي وانتظر مزيدًا من التأكيد",
+  "recommendations.sell": "فكر في جني الأرباح أو تقليل التعرض",
+  "recommendations.strong_sell": "إشارة سلبية قوية، فكر في الخروج من الموقف",
+
+  "summary.analysis": "تحليل {pair} لـ {target_date}: الاتجاه {trend}، الإشارة {signal}. السعر الحالي {current_price}.",
+
+  "prompt.instruction": "قدم التحليل باللغة العربية."
+}

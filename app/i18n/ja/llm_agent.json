@@ -1,0 +1,19 @@
+{
+  "insights.bullish_trend": "現在のトレンドは強い強気の勢いを示しています",
+  "insights.bearish_trend": "現在のトレンドは弱気の圧力を示しています",
+  "insights.sideways_trend": "市場は統合段階にあります",
+  "insights.rsi_high": "RSIが過熱状態を示しており、調整に注意が必要です",
+  "insights.rsi_low": "RSIが売られ過ぎを示しており、反発の可能性があります",
+  "insights.high_volatility": "高いボラティリティはリスクの増大を示します",
+  "insights.low_volatility": "低いボラティリティは市場の安定を示します",
+
+  "recommendations.strong_buy": "買いポジションに対して非常に好意的なシグナル",
+  "recommendations.buy": "適切なリスク管理で買いポジションの検討を",
+  "recommendations.hold": "現在のポジションを維持し、さらなる確認を待つ",
+  "recommendations.sell": "利食いまたはエクスポージャー縮小を検討",
+  "recommendations.strong_sell": "強い売りシグナル、ポジションからの撤退を検討",
+
+  "summary.analysis": "{target_date}の{pair}の分析: トレンド {trend}, シグナル {signal}. 現在の価格 {current_price}.",
+
+  "prompt.instruction": "日本語で分析を行ってください。"
+}

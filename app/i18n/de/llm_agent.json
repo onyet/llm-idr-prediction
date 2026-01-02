@@ -1,0 +1,19 @@
+{
+  "insights.bullish_trend": "Der aktuelle Trend zeigt eine starke bullische Dynamik",
+  "insights.bearish_trend": "Der aktuelle Trend zeigt bärischen Druck",
+  "insights.sideways_trend": "Der Markt befindet sich in einer Konsolidierungsphase",
+  "insights.rsi_high": "Der RSI zeigt überkaufte Bedingungen, Vorsicht vor Korrektur",
+  "insights.rsi_low": "Der RSI zeigt überverkaufte Bedingungen, potenzielle Erholung",
+  "insights.high_volatility": "Hohe Volatilität weist auf größeres Risiko hin",
+  "insights.low_volatility": "Geringe Volatilität zeigt Marktstabilität",
+
+  "recommendations.strong_buy": "Sehr positives Signal für Kaufposition",
+  "recommendations.buy": "Erwägen Sie den Einstieg in eine Kaufposition mit angemessenem Risikomanagement",
+  "recommendations.hold": "Behalten Sie die aktuelle Position bei und warten Sie auf weitere Bestätigungen",
+  "recommendations.sell": "Erwägen Sie Gewinnmitnahme oder Reduzierung der Exposition",
+  "recommendations.strong_sell": "Stark negatives Signal, Erwägen Sie den Ausstieg",
+
+  "summary.analysis": "Analyse von {pair} für {target_date}: Trend {trend}, Signal {signal}. Aktueller Preis {current_price}.",
+
+  "prompt.instruction": "Geben Sie die Analyse auf Deutsch an."
+}
