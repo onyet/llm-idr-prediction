@@ -892,7 +892,7 @@ async def analyze_idr(
     - AI-powered insights (optional)
     - Human-readable explanations and recommendations
     - Target tracer comparison (optional)
-    
+
     If date is in the past and data exists, returns historical analysis.
     If date is in the future, returns prediction-based analysis.
     """

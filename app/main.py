@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from . import rag, tradingview, analyze
+from . import ollama
 from .i18n import get_lang_from_request, set_current_lang, t
 
 app = FastAPI(title="LLM Exchange API", version="0.1.0")
@@ -23,6 +24,7 @@ app.add_middleware(LanguageMiddleware)
 app.include_router(rag.router)
 app.include_router(tradingview.router)
 app.include_router(analyze.router)
+app.include_router(ollama.router)
 
 # Izinkan CORS untuk pengujian cepat di browser (sesuaikan origin di produksi)
 app.add_middleware(

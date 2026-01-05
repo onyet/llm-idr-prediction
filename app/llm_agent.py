@@ -197,7 +197,7 @@ class OllamaAgent(BaseLLMAgent):
                 if response.status_code == 200:
                     result = response.json()
                     analysis_text = result.get("response", "")
-                    
+
                     # Try to parse JSON response
                     try:
                         parsed = json.loads(analysis_text)
