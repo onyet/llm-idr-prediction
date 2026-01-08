@@ -7,5 +7,10 @@
   "no_date_column": "Keine Datumsspalte in den Daten",
   "market_search_error": "Marktsuche fehlgeschlagen: {err}",
   "market_detail_error": "Abruf der Ticker-Details fehlgeschlagen: {err}",
-  "market_history_error": "Abruf der Ticker-Historie fehlgeschlagen: {err}"
+  "market_history_error": "Abruf der Ticker-Historie fehlgeschlagen: {err}",
+  "invalid_start_date_format": "Ungültiges start_date-Format. Verwenden Sie YYYY-MM-DD",
+  "invalid_end_date_format": "Ungültiges end_date-Format. Verwenden Sie YYYY-MM-DD",
+  "end_before_start": "end_date muss >= start_date sein",
+  "range_too_large": "Bereich zu groß ({total_days} Tage). Maximal {max_days} Tage",
+  "symbol_error": "Fehler bei der Verarbeitung des Symbols {symbol}: {err}"
 }

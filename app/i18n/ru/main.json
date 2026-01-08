@@ -7,5 +7,10 @@
   "no_date_column": "В данных отсутствует столбец даты",
   "market_search_error": "Ошибка поиска рынка: {err}",
   "market_detail_error": "Не удалось получить детали тикера: {err}",
-  "market_history_error": "Не удалось получить историю тикера: {err}"
+  "market_history_error": "Не удалось получить историю тикера: {err}",
+  "invalid_start_date_format": "Неверный формат start_date. Используйте YYYY-MM-DD",
+  "invalid_end_date_format": "Неверный формат end_date. Используйте YYYY-MM-DD",
+  "end_before_start": "end_date должен быть >= start_date",
+  "range_too_large": "Диапазон слишком большой ({total_days} дней). Максимум {max_days} дней",
+  "symbol_error": "Ошибка при обработке символа {symbol}: {err}"
 }

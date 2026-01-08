@@ -1,0 +1,11 @@
+{
+  "range_must_be": "範囲は '1y' または '5y' でなければなりません",
+  "period_must_be": "期間は '1y' または '5y' でなければなりません",
+  "save_must_be": "save は 0 または 1 でなければなりません",
+  "symbol_not_found": "シンボル '{symbol}' が見つかりません。例: 'USDIDR=X' のような有効な通貨ペアを試してください。",
+  "no_historical_data": "'{symbol}' の過去データが {period} に存在しません。",
+  "symbol_invalid": "シンボル '{symbol}' が見つからないか無効です。シンボルを確認してください（例: USDIDR=X）。",
+  "error_fetching_data": "'{symbol}' のデータの取得中にエラーが発生しました: {error}",
+  "failed_to_save": "データの保存に失敗しました: {error}",
+  "mock_data_note": "これはテスト用のモックデータです。実際の TradingView データにはプレミアム API アクセスが必要です。"
+}

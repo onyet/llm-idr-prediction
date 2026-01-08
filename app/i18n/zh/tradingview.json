@@ -1,0 +1,11 @@
+{
+  "range_must_be": "范围必须是 '1y' 或 '5y'",
+  "period_must_be": "周期必须是 '1y' 或 '5y'",
+  "save_must_be": "save 必须为 0 或 1",
+  "symbol_not_found": "未找到符号 '{symbol}'。请尝试有效的外汇对，例如 'USDIDR=X'。",
+  "no_historical_data": "在过去的 {period} 中，'{symbol}' 没有历史数据。",
+  "symbol_invalid": "符号 '{symbol}' 未找到或无效。请检查符号（例如：'USDIDR=X'）。",
+  "error_fetching_data": "获取 '{symbol}' 的数据时出错：{error}",
+  "failed_to_save": "保存数据失败：{error}",
+  "mock_data_note": "这是用于测试的模拟数据。真实的 TradingView 数据需要高级 API 访问权限。"
+}

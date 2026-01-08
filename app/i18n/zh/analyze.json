@@ -1,0 +1,168 @@
+{
+  "analyze_title": "综合 IDR 分析",
+  "fundamental_analysis": "基本面分析",
+  "technical_analysis": "技术分析",
+  "trend_analysis_title": "趋势分析",
+  "prediction_analysis": "预测分析",
+  "historical_analysis": "历史数据分析",
+
+  "analysis_type_historical": "历史",
+  "analysis_type_prediction": "预测",
+
+  "date_must_be_valid": "日期格式无效。请使用 YYYY-MM-DD",
+  "target_tracer_not_found": "未找到目标跟踪器 '{symbol}' 的数据",
+  "no_data_available": "没有可用于分析的数据",
+
+  "days": "天",
+
+  "trend_bullish": "看涨（上升趋势）",
+  "trend_bearish": "看跌（下降趋势）",
+  "trend_sideways": "区间（横盘）",
+
+  "strength_strong": "强",
+  "strength_moderate": "中等",
+  "strength_weak": "弱",
+
+  "reversal_bullish_crossover": "发现金叉 - 可能的看涨反转",
+  "reversal_bearish_crossover": "发现死叉 - 可能的看跌反转",
+  "reversal_potential_bullish_reversal": "可能正在形成看涨反转",
+  "reversal_potential_bearish_reversal": "可能正在形成看跌反转",
+
+  "signal_strong_buy": "强烈买入",
+  "signal_buy": "买入",
+  "signal_hold": "持有",
+  "signal_sell": "卖出",
+  "signal_strong_sell": "强烈卖出",
+
+  "support_level": "支撑位",
+  "resistance_level": "阻力位",
+
+  "ma_cross_bullish": "金叉（MA{short} 上穿 MA{long}）- 看涨信号",
+  "ma_cross_bearish": "死叉（MA{short} 下穿 MA{long}）- 看跌信号",
+
+  "rsi_overbought": "RSI 显示超买（{value}），可能下跌修正",
+  "rsi_oversold": "RSI 显示超卖（{value}），可能反弹",
+  "rsi_neutral": "RSI 处于中性区域（{value}）",
+
+  "macd_bullish": "MACD 显示看涨动量",
+  "macd_bearish": "MACD 显示看跌动量",
+
+  "bollinger_upper": "价格接近上轨，可能超买",
+  "bollinger_lower": "价格接近下轨，可能超卖",
+  "bollinger_middle": "价格在布林带正常范围内",
+
+  "volatility_high": "高波动性（{value}%），风险高",
+  "volatility_medium": "中等波动性（{value}%）",
+  "volatility_low": "低波动性（{value}%），相对稳定",
+
+  "fundamental_strong": "基本面强 - 持续上升趋势",
+  "fundamental_weak": "基本面弱 - 持续下降趋势",
+  "fundamental_neutral": "基本面中性",
+  "fundamental_bullish": "基本面偏向积极",
+  "fundamental_bearish": "基本面偏向消极",
+
+  "fund_insight_strong_gain_7d": "过去7天显著上涨 {pct}%",
+  "fund_insight_strong_loss_7d": "过去7天显著下跌 {pct}%",
+  "fund_insight_above_avg": "当前价格高于30日均线",
+  "fund_insight_below_avg": "当前价格低于30日均线",
+  "fund_insight_near_high": "价格接近30日高点",
+  "fund_insight_near_low": "价格接近30日低点",
+
+  "comparison_better": "{symbol} 相对于 IDR 表现更好",
+  "comparison_worse": "{symbol} 相对于 IDR 表现更差",
+  "comparison_similar": "{symbol} 与 IDR 的表现相似",
+
+  "llm_analysis_title": "AI 分析",
+  "llm_analysis_unavailable": "AI 分析目前不可用",
+
+  "target_tracer_analysis": "目标跟踪器分析",
+  "target_tracer_comparison": "与 {symbol} 的比较",
+
+  "recommendations_title": "建议与提示",
+  "risk_assessment": "风险评估",
+  "risk_high": "高",
+  "risk_medium": "中",
+  "risk_low": "低",
+
+  "outlook_positive": "所选期间展望乐观",
+  "outlook_negative": "所选期间展望悲观",
+  "outlook_neutral": "所选期间展望中性",
+
+  "data_source_historical": "来源：实际历史数据",
+  "data_source_prediction": "来源：Prophet 预测模型",
+
+  "method_fundamental_title": "基本面方法",
+  "method_fundamental_desc": "基于历史价格变动、均线和趋势一致性的分析，用于评估资产基本面强度。",
+  "method_price_momentum": "价格动量",
+  "method_price_momentum_desc": "衡量 1 天、7 天和 30 天的价格变化，以识别方向和强度。",
+  "method_avg_comparison": "均线比较",
+  "method_avg_comparison_desc": "将当前价格与 7 日和 30 日均线比较以确定相对位置。",
+  "method_trend_consistency": "趋势一致性",
+  "method_trend_consistency_desc": "统计过去14天内上涨/下跌天数以衡量趋势一致性。",
+
+  "method_technical_title": "技术分析",
+  "method_technical_desc": "使用行业标准技术指标来识别交易机会和关键水平。",
+  "method_rsi_desc": "衡量价格变动的速度和变化。RSI > 70 = 超买，RSI < 30 = 超卖。",
+  "method_macd_desc": "显示两条移动平均线之间的关系以识别动量和趋势方向。",
+  "method_bollinger_desc": "使用标准差来判断超买/超卖水平和市场波动性。",
+  "method_ma_desc": "简单与指数移动平均用于识别趋势和动态支撑/阻力水平。",
+  "method_support_resistance": "支撑与阻力",
+  "method_support_resistance_desc": "识别价格经常反转或停滞的关键价格水平。",
+
+  "explanation_title": "分析说明",
+  "explanation_situation_bullish_strong": "市场目前处于强劲的上涨状态。上升趋势在多个时间框架内一致，动量稳健。",
+  "explanation_situation_bullish_moderate": "市场显示中等的上涨趋势。有积极迹象，但需要进一步确认。",
+  "explanation_situation_bullish_weak": "发现弱势上涨信号。存在正向趋势，但不强烈。",
+  "explanation_situation_bearish_strong": "市场处于强劲下跌状态。持续的下跌与显著的卖压并存。",
+  "explanation_situation_bearish_moderate": "市场显示中等下跌趋势。存在卖压，但并不极端。",
+  "explanation_situation_bearish_weak": "发现弱势下跌信号。卖压较轻，市场相对稳定。",
+  "explanation_situation_sideways_strong": "市场处于紧密盘整期。",
+  "explanation_situation_sideways_moderate": "市场在无明显方向的横盘中运行。",
+  "explanation_situation_sideways_weak": "市场不确定，等待催化剂以决定方向。",
+
+  "explanation_technical_summary": "从技术角度看，RSI 显示 {rsi}，MACD 为 {macd}，波动率为 {volatility}% 。",
+  "explanation_fundamental_summary": "从基本面看，情况为 {strength}，7 天变动为 {pct_7d}% ，30 天变动为 {pct_30d}%。",
+
+  "explanation_outlook_bullish": "市场前景偏正面。上升动量保持，指标支持。",
+  "explanation_outlook_bearish": "市场前景偏负面。卖压占主导，建议谨慎。",
+  "explanation_outlook_sideways": "市场前景中性。建议等待更明确的方向性确认。",
+
+  "explanation_risk_high": "⚠️ 警告：高波动性意味着更大风险。请使用严格的风险管理。",
+  "explanation_risk_medium": "📊 中等波动性。请确保设置合理的止损。",
+  "explanation_risk_low": "✅ 低波动性表明市场相对稳定。",
+
+  "rec_bullish_trend_buy": "确认上升趋势并出现买入信号。进入多头头寸的机会。",
+  "rec_bullish_trend_hold": "上升趋势，但信号尚未确认。建议持有或等待回调。",
+  "rec_bearish_trend_sell": "下降趋势并出现卖出信号。考虑获利或退出。",
+  "rec_bearish_trend_caution": "下降趋势。谨慎对待多头头寸，考虑减少敞口。",
+  "rec_sideways_trend": "区间震荡。避免大仓位，等待突破。",
+  "rec_rsi_overbought": "RSI 超买 - 避免当前价格买入，等待修正。",
+  "rec_rsi_oversold": "RSI 超卖 - 可能的建仓区域。",
+  "rec_high_volatility": "高波动性 - 使用较小的仓位规模。",
+  "rec_bullish_reversal": "检测到看涨反转信号 - 注意确认以进场。",
+  "rec_bearish_reversal": "检测到看跌反转信号 - 考虑锁定利润。",
+
+  "action_consider_buy": "考虑在设置明确止损的前提下建仓买入",
+  "action_wait_confirmation": "等待信号确认再采取行动",
+  "action_consider_sell": "考虑平仓或获利了结",
+  "action_reduce_exposure": "减少敞口并收紧止损",
+  "action_wait_breakout": "等待当前区间突破后再入场",
+  "action_avoid_buying": "避免买入，等待回调或修正",
+  "action_look_for_entry": "在超卖区域寻找入场机会",
+  "action_use_stop_loss": "必须使用止损，建议更保守的仓位规模",
+
+  "primary_action_strong_buy": "主要动作：高信心买入。所有指标支持多头头寸。",
+  "primary_action_buy": "主要动作：在适当的风险管理下考虑买入。",
+  "primary_action_hold": "主要动作：持有当前头寸。市场尚未给出明确信号。",
+  "primary_action_sell": "主要动作：考虑卖出或获利了结。",
+  "primary_action_strong_sell": "主要动作：卖出或退出头寸。强烈的看跌信号。",
+
+  "confidence_high": "高",
+  "confidence_medium": "中",
+  "confidence_low": "低",
+
+  "stop_loss_suggestion": "建议止损：自进场价起 {pct}%",
+  "position_sizing_high": "仓位规模：正常（每笔交易风险 1-2%）",
+  "position_sizing_medium": "仓位规模：中等（每笔交易风险 0.5-1%）",
+  "position_sizing_low": "仓位规模：保守（每笔交易风险 0.25-0.5%）"
+}

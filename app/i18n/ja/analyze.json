@@ -1,0 +1,168 @@
+{
+  "analyze_title": "包括的なIDR分析",
+  "fundamental_analysis": "ファンダメンタル分析",
+  "technical_analysis": "テクニカル分析",
+  "trend_analysis_title": "トレンド分析",
+  "prediction_analysis": "予測分析",
+  "historical_analysis": "過去データの分析",
+
+  "analysis_type_historical": "履歴データ",
+  "analysis_type_prediction": "予測",
+
+  "date_must_be_valid": "日付形式が無効です。YYYY-MM-DD を使用してください",
+  "target_tracer_not_found": "ターゲットトレーサー '{symbol}' のデータが見つかりません",
+  "no_data_available": "分析に利用できるデータがありません",
+
+  "days": "日",
+
+  "trend_bullish": "強気（上昇トレンド）",
+  "trend_bearish": "弱気（下降トレンド）",
+  "trend_sideways": "レンジ（横ばい）",
+
+  "strength_strong": "強い",
+  "strength_moderate": "中程度",
+  "strength_weak": "弱い",
+
+  "reversal_bullish_crossover": "ゴールデンクロス検出 - 強気の反転の可能性",
+  "reversal_bearish_crossover": "デスクロス検出 - 弱気の反転の可能性",
+  "reversal_potential_bullish_reversal": "強気の反転が形成されつつあります",
+  "reversal_potential_bearish_reversal": "弱気の反転が形成されつつあります",
+
+  "signal_strong_buy": "強く買い",
+  "signal_buy": "買い",
+  "signal_hold": "保有",
+  "signal_sell": "売り",
+  "signal_strong_sell": "強く売り",
+
+  "support_level": "サポートレベル",
+  "resistance_level": "レジスタンスレベル",
+
+  "ma_cross_bullish": "ゴールデンクロス（MA{short} が MA{long} を上抜け）- 強気シグナル",
+  "ma_cross_bearish": "デスクロス（MA{short} が MA{long} を下抜け）- 弱気シグナル",
+
+  "rsi_overbought": "RSI が過熱（{value}）で、下落の可能性があります",
+  "rsi_oversold": "RSI が売られすぎ（{value}）で、上昇の可能性があります",
+  "rsi_neutral": "RSI は中立ゾーン（{value}）です",
+
+  "macd_bullish": "MACD が強気の勢いを示しています",
+  "macd_bearish": "MACD が弱気の勢いを示しています",
+
+  "bollinger_upper": "価格が上部ボリンジャーバンドに接近、過熱の可能性",
+  "bollinger_lower": "価格が下部ボリンジャーバンドに接近、売られ過ぎの可能性",
+  "bollinger_middle": "価格はボリンジャーバンドの通常範囲内です",
+
+  "volatility_high": "高いボラティリティ（{value}%）- 高リスク",
+  "volatility_medium": "中程度のボラティリティ（{value}%）",
+  "volatility_low": "低いボラティリティ（{value}%）- 比較的安定",
+
+  "fundamental_strong": "ファンダメンタルが強い - 継続的な上昇傾向",
+  "fundamental_weak": "ファンダメンタルが弱い - 継続的な下降傾向",
+  "fundamental_neutral": "ファンダメンタルは中立",
+  "fundamental_bullish": "ファンダメンタルは強気寄り",
+  "fundamental_bearish": "ファンダメンタルは弱気寄り",
+
+  "fund_insight_strong_gain_7d": "過去7日間で {pct}% の大幅な上昇",
+  "fund_insight_strong_loss_7d": "過去7日間で {pct}% の大幅な下落",
+  "fund_insight_above_avg": "現在の価格は30日平均を上回っています",
+  "fund_insight_below_avg": "現在の価格は30日平均を下回っています",
+  "fund_insight_near_high": "価格は30日高値付近です",
+  "fund_insight_near_low": "価格は30日安値付近です",
+
+  "comparison_better": "{symbol} は IDR と比較してより良いパフォーマンスを示しています",
+  "comparison_worse": "{symbol} は IDR と比較してパフォーマンスが悪いです",
+  "comparison_similar": "{symbol} は IDR と類似したパフォーマンスを示しています",
+
+  "llm_analysis_title": "AI 分析",
+  "llm_analysis_unavailable": "AI 分析は現在利用できません",
+
+  "target_tracer_analysis": "ターゲットトレーサー分析",
+  "target_tracer_comparison": "{symbol} との比較",
+
+  "recommendations_title": "推奨事項とアドバイス",
+  "risk_assessment": "リスク評価",
+  "risk_high": "高い",
+  "risk_medium": "中程度",
+  "risk_low": "低い",
+
+  "outlook_positive": "選択した期間の見通しは良好です",
+  "outlook_negative": "選択した期間の見通しは否定的です",
+  "outlook_neutral": "選択した期間の見通しは中立です",
+
+  "data_source_historical": "出典: 実際の履歴データ",
+  "data_source_prediction": "出典: Prophet 予測モデル",
+
+  "method_fundamental_title": "ファンダメンタル分析",
+  "method_fundamental_desc": "価格の過去の動き、平均、およびトレンドの一貫性に基づく分析で資産の基礎的強度を評価します。",
+  "method_price_momentum": "価格モメンタム",
+  "method_price_momentum_desc": "1日、7日、30日での価格変化を測定して、方向性と強さを識別します。",
+  "method_avg_comparison": "平均比較",
+  "method_avg_comparison_desc": "現在の価格を7日と30日の平均と比較して、価格の相対位置を判断します。",
+  "method_trend_consistency": "トレンドの一貫性",
+  "method_trend_consistency_desc": "過去14日間の上昇日数と下降日数を数えてトレンドの一貫性を測定します。",
+
+  "method_technical_title": "テクニカル分析",
+  "method_technical_desc": "業界標準のテクニカル指標を用いて取引機会と重要な水準を特定します。",
+  "method_rsi_desc": "価格変化の速度と変化を測定。RSI > 70 = 過熱、RSI < 30 = 売られ過ぎ。",
+  "method_macd_desc": "2つの移動平均の関係を示し、モメンタムとトレンド方向を特定します。",
+  "method_bollinger_desc": "標準偏差を用いて過熱/売られ過ぎレベルと市場のボラティリティを判定します。",
+  "method_ma_desc": "単純および指数移動平均によりトレンドと動的なサポート/レジスタンスを特定します。",
+  "method_support_resistance": "サポートとレジスタンス",
+  "method_support_resistance_desc": "価格が反転または停滞しやすい重要な価格レベルを特定します。",
+
+  "explanation_title": "分析の説明",
+  "explanation_situation_bullish_strong": "現在、市場は強い上昇傾向にあります。複数のタイムフレームで上昇トレンドが一貫しており、強いモメンタムがあります。",
+  "explanation_situation_bullish_moderate": "市場は中程度の上昇トレンドを示しています。ポジティブな兆候はありますが、さらなる確認が必要です。",
+  "explanation_situation_bullish_weak": "弱い上昇の兆候が検出されました。ポジティブなトレンドはありますが、特に強くはありません。",
+  "explanation_situation_bearish_strong": "市場は強い下落傾向にあります。継続的な下落と顕著な販売圧力があります。",
+  "explanation_situation_bearish_moderate": "市場は中程度の下落トレンドを示しています。販売圧力はありますが、極端ではありません。",
+  "explanation_situation_bearish_weak": "弱い下落の兆候が検出されました。軽い販売圧力があり、市場は比較的安定しています。",
+  "explanation_situation_sideways_strong": "市場は狭いレンジでの収束状態にあります。",
+  "explanation_situation_sideways_moderate": "市場は明確な方向性なく横ばいに動いています。",
+  "explanation_situation_sideways_weak": "市場は不確実で、方向性を決定するきっかけを待っています。",
+
+  "explanation_technical_summary": "技術的には RSI は {rsi}、MACD は {macd} を示し、ボラティリティは {volatility}% です。",
+  "explanation_fundamental_summary": "基礎的には状況は {strength} で、7日間の変化は {pct_7d}%、30日間の変化は {pct_30d}% です。",
+
+  "explanation_outlook_bullish": "市場見通しは上向きです。上昇モメンタムは維持され、指標も支援しています。",
+  "explanation_outlook_bearish": "市場見通しは下向きです。販売圧力が支配的であり、注意が必要です。",
+  "explanation_outlook_sideways": "市場見通しは中立です。より明確な方向性の確認を待つことを推奨します。",
+
+  "explanation_risk_high": "⚠️ 警告: 高いボラティリティは大きなリスクを示します。厳格なリスク管理を行ってください。",
+  "explanation_risk_medium": "📊 中程度のボラティリティ。妥当なストップロスを設定してください。",
+  "explanation_risk_low": "✅ 低いボラティリティは比較的安定した市場状況を示します。",
+
+  "rec_bullish_trend_buy": "上昇トレンドが確認され、買いシグナルです。ロングポジションの機会があります。",
+  "rec_bullish_trend_hold": "上昇トレンドだがシグナルは未確認。ポジションは保有、または押し目を待つ。",
+  "rec_bearish_trend_sell": "下降トレンドで売りシグナルです。利確や撤退を検討してください。",
+  "rec_bearish_trend_caution": "下降トレンド。ロングポジションには注意し、エクスポージャーを減らすことを検討してください。",
+  "rec_sideways_trend": "レンジ相場。大きなポジションは避け、明確なブレイクアウトを待ってください。",
+  "rec_rsi_overbought": "RSI が過熱 – 現在の価格での買いは避け、調整を待つ。",
+  "rec_rsi_oversold": "RSI が売られ過ぎ – エントリーポイントとしての蓄積領域の可能性あり。",
+  "rec_high_volatility": "高いボラティリティ – ポジションサイズを小さくしてください。",
+  "rec_bullish_reversal": "強気の反転シグナルが検出されました – 確認を待ってエントリーを検討してください。",
+  "rec_bearish_reversal": "弱気の反転シグナルが検出されました – 利益確定を検討してください。",
+
+  "action_consider_buy": "明確なストップロス付きで買いを検討してください",
+  "action_wait_confirmation": "シグナル確認を待ってから行動してください",
+  "action_consider_sell": "ポジションのクローズや利確を検討してください",
+  "action_reduce_exposure": "露出を減らし、ストップロスをタイトに設定してください",
+  "action_wait_breakout": "現在のレンジのブレイクアウトを待ってからエントリーしてください",
+  "action_avoid_buying": "買いを避け、押し目や調整を待ってください",
+  "action_look_for_entry": "売られすぎのレベルでエントリー機会を探してください",
+  "action_use_stop_loss": "必ずストップロスを使用し、より保守的なポジションサイズを推奨します",
+
+  "primary_action_strong_buy": "主要アクション: 高い確信をもって買い。すべての指標が強気を支持しています。",
+  "primary_action_buy": "主要アクション: 適切なリスク管理で買いを検討してください。",
+  "primary_action_hold": "主要アクション: 現在のポジションを保持してください。市場からの明確なシグナルはありません。",
+  "primary_action_sell": "主要アクション: 売りや利確を検討してください。",
+  "primary_action_strong_sell": "主要アクション: 売りまたはポジションを閉じてください。強い弱気シグナルです。",
+
+  "confidence_high": "高い",
+  "confidence_medium": "中程度",
+  "confidence_low": "低い",
+
+  "stop_loss_suggestion": "推奨ストップロス: エントリー価格から {pct}%",
+  "position_sizing_high": "ポジションサイズ: 標準（1-2% リスク/トレード）",
+  "position_sizing_medium": "ポジションサイズ: 中程度（0.5-1% リスク/トレード）",
+  "position_sizing_low": "ポジションサイズ: 保守的（0.25-0.5% リスク/トレード）"
+}

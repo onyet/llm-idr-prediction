@@ -7,5 +7,10 @@
   "no_date_column": "数据中没有日期列",
   "market_search_error": "市场搜索失败：{err}",
   "market_detail_error": "获取代码详情失败：{err}",
-  "market_history_error": "获取历史记录失败：{err}"
+  "market_history_error": "获取历史记录失败：{err}",
+  "invalid_start_date_format": "start_date 格式无效。请使用 YYYY-MM-DD",
+  "invalid_end_date_format": "end_date 格式无效。请使用 YYYY-MM-DD",
+  "end_before_start": "end_date 必须 >= start_date",
+  "range_too_large": "范围太大（{total_days} 天）。最大为 {max_days} 天",
+  "symbol_error": "处理符号 {symbol} 时出错：{err}"
 }
