@@ -14,5 +14,6 @@
   "market_detail_error": "Ticker detail fetch failed: {err}",
   "market_history_error": "Ticker history fetch failed: {err}",
   "invalid_amount": "Invalid amount. Use a positive number",
-  "no_valid_price_for_start": "No valid price available for start date for {symbol}"
+  "no_valid_price_for_start": "No valid price available for start date for {symbol}",
+  "trend_fetch_error": "Failed to fetch trending tickers: {err}"
 }

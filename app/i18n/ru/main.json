@@ -14,5 +14,6 @@
   "range_too_large": "Диапазон слишком большой ({total_days} дней). Максимум {max_days} дней",
   "symbol_error": "Ошибка при обработке символа {symbol}: {err}",
   "invalid_amount": "Недействительная сумма. Используйте положительное число",
-  "no_valid_price_for_start": "Нет действующей цены на дату начала для {symbol}"
+  "no_valid_price_for_start": "Нет действующей цены на дату начала для {symbol}",
+  "trend_fetch_error": "Не удалось получить трендовые тикеры: {err}"
 }

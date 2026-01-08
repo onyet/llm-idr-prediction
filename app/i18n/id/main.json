@@ -14,5 +14,6 @@
   "market_detail_error": "Pengambilan detail ticker gagal: {err}",
   "market_history_error": "Pengambilan history ticker gagal: {err}",
   "invalid_amount": "Jumlah tidak valid. Gunakan angka positif",
-  "no_valid_price_for_start": "Tidak ada harga valid untuk tanggal mulai untuk {symbol}"
+  "no_valid_price_for_start": "Tidak ada harga valid untuk tanggal mulai untuk {symbol}",
+  "trend_fetch_error": "Gagal mengambil daftar saham trending: {err}"
 }

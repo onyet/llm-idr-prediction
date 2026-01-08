@@ -9,14 +9,26 @@ PYTHON_EXEC="$PROJECT_DIR/.venv/bin/python"
 # Ensure the script is executable
 chmod +x "$SCRIPT_PATH"
 
-# The cron command to add
-CRON_CMD="0 7 * * * $PYTHON_EXEC $SCRIPT_PATH >> $LOG_PATH 2>&1"
+# The cron commands to add (morning and evening)
+CRON_CMD_MORNING="0 7 * * * $PYTHON_EXEC $SCRIPT_PATH >> $LOG_PATH 2>&1"
+CRON_CMD_EVENING="0 17 * * * $PYTHON_EXEC $SCRIPT_PATH >> $LOG_PATH 2>&1"
 
-# Check if the job already exists in crontab
-if crontab -l 2>/dev/null | grep -Fq "$SCRIPT_PATH"; then
-    echo "Cronjob for update_data.py already exists. Skipping."
+# Ensure the morning job exists
+CRONTAB_CONTENT=$(crontab -l 2>/dev/null || true)
+if echo "$CRONTAB_CONTENT" | grep -Fq "$CRON_CMD_MORNING"; then
+    echo "Morning cronjob for update_data.py already exists."
 else
-    echo "Adding cronjob for update_data.py to run daily at 07:00..."
-    (crontab -l 2>/dev/null || true; echo "$CRON_CMD") | crontab -
-    echo "Cronjob added successfully."
+    echo "Adding morning cronjob for update_data.py to run daily at 07:00..."
+    (crontab -l 2>/dev/null || true; echo "$CRON_CMD_MORNING") | crontab -
+    echo "Morning cronjob added successfully."
+fi
+
+# Ensure the evening job exists
+CRONTAB_CONTENT=$(crontab -l 2>/dev/null || true)
+if echo "$CRONTAB_CONTENT" | grep -Fq "$CRON_CMD_EVENING"; then
+    echo "Evening cronjob for update_data.py already exists."
+else
+    echo "Adding evening cronjob for update_data.py to run daily at 17:00..."
+    (crontab -l 2>/dev/null || true; echo "$CRON_CMD_EVENING") | crontab -
+    echo "Evening cronjob added successfully."
 fi

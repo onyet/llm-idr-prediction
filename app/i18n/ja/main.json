@@ -14,5 +14,6 @@
   "range_too_large": "範囲が大きすぎます（{total_days} 日）。最大 {max_days} 日",
   "symbol_error": "シンボル {symbol} の処理中にエラーが発生しました: {err}",
   "invalid_amount": "無効な金額です。正の数を使用してください",
-  "no_valid_price_for_start": "開始日の有効な価格が見つかりません: {symbol}"
+  "no_valid_price_for_start": "開始日の有効な価格が見つかりません: {symbol}",
+  "trend_fetch_error": "トレンド銘柄の取得に失敗しました: {err}"
 }

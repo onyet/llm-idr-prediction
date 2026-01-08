@@ -2,6 +2,7 @@ from fastapi import APIRouter, Query, Request
 import json
 import os
 from yahooquery import search, Ticker
+import requests, time, copy
 import yfinance as yf
 import pandas as pd
 from .i18n import get_lang_from_request, set_current_lang, t, tr, get_current_lang
@@ -253,6 +254,11 @@ def get_price_on_date(symbol, req_date):
 # Caches and persistence for investment projections and AI analyses
 INVEST_CACHE = {}
 INVEST_PERSIST_DIR = PREDICTION_DIR
+
+# Trending tickers cache (short TTL to avoid repeated external calls)
+TREND_CACHE = {}
+TREND_CACHE_TTL = 60  # seconds
+
 
 import statistics
 from .llm_agent import get_llm_analyzer, AnalysisContext, MockLLMAgent, GroqAgent
@@ -663,6 +669,8 @@ async def get_ticker_history(request: Request, ticker: str = Query(..., descript
 
 @router.get("/exchange")
 async def get_exchange_rates(symbols: str = Query("", description="Comma-separated list of additional symbols, e.g., AAPL,BBCA.JK (default GOLD, USD, SAR always included)"), date: str = Query(None, description="Date YYYY-MM-DD, default today"), start_date: str = Query(None, description="Start date YYYY-MM-DD for range queries"), end_date: str = Query(None, description="End date YYYY-MM-DD for range queries"), max_days: int = Query(90, description="Maximum allowed days in range"), request: Request = None):
+    """Existing exchange endpoint (unchanged)"""
+
     # Determine date range
     today = pd.Timestamp.now().date()
     # Determine language from request headers and set context
@@ -846,4 +854,40 @@ async def get_exchange_rates(symbols: str = Query("", description="Comma-separat
         return {"date": str(start), "is_prediction": any_prediction, "exchanges": flat}
 
     return {"date_range": {"start": str(start), "end": str(end)}, "is_prediction": any_prediction, "exchanges": results}
+
+
+@router.get('/get_trend')
+async def get_trend(request: Request, region: str = Query('US', description='Region code, e.g., US, GB, HK'), count: int = Query(10, description='Maximum number of trending tickers to return')):
+    lang = get_lang_from_request(request)
+    cache_key = region.upper()
+    now = time.time()
+
+    cached = TREND_CACHE.get(cache_key)
+    if cached and now - cached['ts'] < TREND_CACHE_TTL:
+        quotes = copy.deepcopy(cached['data'])
+        return {"region": region, "count": min(count, len(quotes)), "results": quotes[:count]}
+
+    url = f"https://query1.finance.yahoo.com/v1/finance/trending/{region}"
+    try:
+        resp = requests.get(url, timeout=5)
+        if resp.status_code != 200:
+            return {"error": t('trend_fetch_error', lang=lang, err=f"HTTP {resp.status_code}")}
+        payload = resp.json()
+        quotes = []
+        # Keep only EQUITY quoteType
+        for r in payload.get('finance', {}).get('result', [])[:1]:
+            for q in r.get('quotes', []):
+                if q.get('quoteType') != 'EQUITY':
+                    continue
+                quotes.append({
+                    'symbol': q.get('symbol'),
+                    'shortName': q.get('shortName') or q.get('longName'),
+                    'quoteType': q.get('quoteType'),
+                    'exchange': q.get('exchDisp') or q.get('exchange'),
+                })
+        # cache the full equity results
+        TREND_CACHE[cache_key] = {'ts': now, 'data': quotes}
+        return {"region": region, "count": min(count, len(quotes)), "results": quotes[:count]}
+    except Exception as e:
+        return {"error": t('trend_fetch_error', lang=lang, err=str(e))} 
 

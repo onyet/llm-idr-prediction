@@ -14,5 +14,6 @@
   "range_too_large": "Bereich zu groß ({total_days} Tage). Maximal {max_days} Tage",
   "symbol_error": "Fehler bei der Verarbeitung des Symbols {symbol}: {err}",
   "invalid_amount": "Ungültiger Betrag. Verwenden Sie eine positive Zahl",
-  "no_valid_price_for_start": "Keine gültigen Preise für das Startdatum für {symbol}"
+  "no_valid_price_for_start": "Keine gültigen Preise für das Startdatum für {symbol}",
+  "trend_fetch_error": "Fehler beim Abrufen der Trending-Ticker: {err}"
 }
