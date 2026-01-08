@@ -55,3 +55,15 @@ async def get_ticker_detail(ticker: str = Query(..., description="Ticker symbol 
         return {"detail": info.get(ticker, {})}
     except Exception as e:
         return {"error": str(e)}
+
+@router.get("/market/history")
+async def get_ticker_history(ticker: str = Query(..., description="Ticker symbol"), period: str = Query("1d", description="Time period: 1d, 5d, 1mo, 6mo, 1y, 5y")):
+    try:
+        stock = yf.Ticker(ticker)
+        hist = stock.history(period=period)
+        # Reset index to include date as column, then convert to list of dicts
+        hist = hist.reset_index()
+        return {"history": hist.to_dict('records')}
+    except Exception as e:
+        return {"error": str(e)}
+
