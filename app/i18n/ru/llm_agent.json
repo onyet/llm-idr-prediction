@@ -15,5 +15,10 @@
 
   "summary.analysis": "Анализ {pair} на {target_date}: тренд {trend}, сигнал {signal}. Текущая цена {current_price}.",
 
-  "prompt.instruction": "Предоставьте анализ на русском языке."
+  "prompt.instruction": "Предоставьте анализ на русском языке.",
+  "ai.analysis_insufficient": "AI-анализ недоступен из-за недостатка данных.",
+  "ai.analysis_summary": "На основе текущей волатильности и исторических тенденций ожидается, что IDR {direction} по отношению к USD в выбранный период. Уверенность в этом прогнозе составляет {confidence}%.",
+  "ai.direction_strengthen": "укрепится",
+  "ai.direction_weaken": "ослабнет",
+  "ai.direction_stable": "останется примерно на том же уровне"
 }

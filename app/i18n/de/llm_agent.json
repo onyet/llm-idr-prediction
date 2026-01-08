@@ -15,5 +15,10 @@
 
   "summary.analysis": "Analyse von {pair} für {target_date}: Trend {trend}, Signal {signal}. Aktueller Preis {current_price}.",
 
-  "prompt.instruction": "Geben Sie die Analyse auf Deutsch an."
+  "prompt.instruction": "Geben Sie die Analyse auf Deutsch an.",
+  "ai.analysis_insufficient": "AI-Analyse nicht verfügbar aufgrund unzureichender Daten.",
+  "ai.analysis_summary": "Basierend auf aktueller Volatilität und historischen Trends wird erwartet, dass die IDR {direction} gegenüber dem USD über den ausgewählten Zeitraum. Unsere Vertrauensbewertung für diese Vorhersage beträgt {confidence}%.",
+  "ai.direction_strengthen": "stärker werden",
+  "ai.direction_weaken": "schwächer werden",
+  "ai.direction_stable": "weitgehend stabil bleiben"
 }

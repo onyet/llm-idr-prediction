@@ -250,7 +250,352 @@ def get_price_on_date(symbol, req_date):
     first_row = df.iloc[0]
     return first_row['Close'], str(first_row['date_only']), False, None, None
 
+# Caches and persistence for investment projections and AI analyses
+INVEST_CACHE = {}
+INVEST_PERSIST_DIR = PREDICTION_DIR
+
+import statistics
+from .llm_agent import get_llm_analyzer, AnalysisContext, MockLLMAgent, GroqAgent
+
+
+def _safe_amount_key(amount: float) -> int:
+    return int(round(amount))
+
+
+def _safe_symbol_file(symbol: str) -> str:
+    return symbol.replace('=', '_').replace('/', '_').replace('.', '_')
+
+
+def build_series_for_symbol(symbol: str, date_list, currencies, usd_map, usd_pred_map, usd_date_map, lang: str):
+    series = []
+    try:
+        if symbol == "GC=F":
+            for d in date_list:
+                gold_p, gold_pd, gold_pred, gold_lower, gold_upper = get_price_on_date('GC=F', d)
+                usd_p = usd_map[d]
+                gold_per_gram_usd = gold_p / 31.1034768
+                idr_value = gold_per_gram_usd * usd_p
+                is_pred = gold_pred or usd_pred_map[d]['is_pred']
+                series.append({
+                    "date": str(d),
+                    "idr_value": idr_value,
+                    "is_prediction": is_pred,
+                    "price_date": gold_pd,
+                    "details": {"unit": "per gram", "price_usd_per_ounce": gold_p, "price_usd_per_gram": gold_per_gram_usd, "prediction": {"lower": gold_lower, "upper": gold_upper} if gold_pred else None}
+                })
+            return series, "IDR"
+        elif symbol == "USDIDR=X":
+            for d in date_list:
+                usd_p = usd_map[d]
+                is_pred = usd_pred_map[d]['is_pred']
+                series.append({"date": str(d), "idr_value": usd_p, "is_prediction": is_pred, "price_date": usd_date_map.get(d), "details": {"unit": "IDR per USD", "prediction": {"lower": usd_pred_map[d]['lower'], "upper": usd_pred_map[d]['upper']} if is_pred else None}})
+            return series, "IDR"
+        elif symbol == "SAR=X":
+            for d in date_list:
+                sar_p, sar_pd, sar_pred, sar_lower, sar_upper = get_price_on_date('SAR_X', d)
+                usd_p = usd_map[d]
+                # avoid division by zero
+                idr_value = usd_p / sar_p if sar_p else None
+                is_pred = sar_pred or usd_pred_map[d]['is_pred']
+                series.append({"date": str(d), "idr_value": idr_value, "is_prediction": is_pred, "price_date": sar_pd, "details": {"unit": "IDR per SAR", "price_usd_per_sar": sar_p, "prediction": {"lower": sar_lower, "upper": sar_upper} if sar_pred else None}})
+            return series, "IDR"
+        elif symbol in currencies:
+            curr = currencies[symbol]
+            yf_symbol = curr['yfinance']['symbol']
+            unit = curr['yfinance']['unit']
+            for d in date_list:
+                price, pd_str, is_pred, lower, upper = get_price_on_date(yf_symbol, d)
+                usd_p = usd_map[d]
+                if 'IDR' in unit:
+                    idr_value = price
+                elif unit.startswith('USD/'):
+                    idr_value = usd_p / price if price else None
+                else:
+                    idr_value = price * usd_p
+                is_pred = is_pred or usd_pred_map[d]['is_pred']
+                series.append({"date": str(d), "idr_value": idr_value, "is_prediction": is_pred, "price_date": pd_str, "details": {"unit": unit, "name": curr.get('name'), "code": curr.get('code'), "original_yf_symbol": yf_symbol, "prediction": {"lower": lower, "upper": upper} if is_pred else None}})
+            return series, "IDR"
+        else:
+            # treat as stock or other ticker
+            currency = get_currency_for_ticker(symbol)
+            for d in date_list:
+                price, pd_str, is_price_pred, p_lower, p_upper = get_price_on_date(symbol, d)
+                if currency == 'IDR':
+                    idr_value = price
+                    conversion_meta = {"rate": 1, "source_symbol": None, "is_prediction": False}
+                elif currency in currencies:
+                    curr_meta = currencies[currency]
+                    curr_yf = curr_meta['yfinance']['symbol']
+                    curr_unit = curr_meta['yfinance']['unit']
+                    curr_price, curr_pd, curr_pred, curr_lower, curr_upper = get_price_on_date(curr_yf, d)
+                    if 'IDR' in curr_unit:
+                        idr_per_unit = curr_price
+                    elif curr_unit.startswith('USD/'):
+                        idr_per_unit = usd_map[d] / curr_price if curr_price else None
+                    else:
+                        idr_per_unit = curr_price * usd_map[d] if curr_price else None
+                    idr_value = price * idr_per_unit if price and idr_per_unit else None
+                    conversion_meta = {"rate": idr_per_unit, "source_symbol": curr_yf, "is_prediction": curr_pred, "prediction": {"lower": curr_lower, "upper": curr_upper} if curr_pred else None}
+                else:
+                    idr_per_unit = usd_map[d]
+                    idr_value = price * idr_per_unit if price else None
+                    conversion_meta = {"rate": idr_per_unit, "source_symbol": "USDIDR=X", "note": "assumed USD"}
+                try:
+                    info = Ticker(symbol).info
+                except Exception:
+                    info = {}
+                is_pred = is_price_pred or conversion_meta.get('is_prediction', False)
+                series.append({"date": str(d), "idr_value": idr_value, "is_prediction": is_pred, "price_date": pd_str, "details": {"last_price": price, "name": info.get('shortName') or info.get('longName') or clean_symbol_name(symbol), "longName": info.get('longName'), "sector": info.get('sector'), "industry": info.get('industry'), "exchange": info.get('exchange') or info.get('fullExchangeName'), "original_yf_symbol": symbol, "conversion": conversion_meta, "prediction": {"lower": p_lower, "upper": p_upper} if is_price_pred else None}})
+            return series, currency
+    except Exception as e:
+        raw = str(e)
+        localized = t('symbol_error', lang=lang, symbol=clean_symbol_name(symbol), err=raw)
+        return None, {"error": {"message": localized, "raw": raw}}
+
+
+async def generate_ai_analysis(series, symbol: str = "IDR", lang: str = "en"):
+    # Build simple technical summary
+    values = [s.get('idr_value') for s in series if s.get('idr_value') is not None]
+    if not values or len(values) < 2:
+        return {"text": t('ai.analysis_insufficient', lang, module='llm_agent'), "confidence": 50}
+
+    start = values[0]
+    end = values[-1]
+    change_pct = ((end - start) / start) * 100 if start else 0
+    vol_pct = 0
+    try:
+        vol_pct = statistics.pstdev(values) / statistics.mean(values) * 100
+    except Exception:
+        vol_pct = 0
+
+    # estimate RSI-like value (very rough)
+    changes = [values[i] - values[i - 1] for i in range(1, len(values))]
+    gains = [c for c in changes if c > 0]
+    losses = [-c for c in changes if c < 0]
+    avg_gain = sum(gains) / len(gains) if gains else 0
+    avg_loss = sum(losses) / len(losses) if losses else 0
+    rsi = 0
+    try:
+        rs = avg_gain / avg_loss if avg_loss else float('inf')
+        rsi = 100 - (100 / (1 + rs)) if avg_loss else 100
+    except Exception:
+        rsi = 50
+
+    trend = 'bullish' if change_pct > 0.1 else 'bearish' if change_pct < -0.1 else 'sideways'
+    signal = 'buy' if change_pct > 0.5 else 'sell' if change_pct < -0.5 else 'hold'
+
+    tech = {
+        'trend': trend,
+        'signal': signal,
+        'rsi': {'value': round(rsi, 2)},
+        'volatility': round(vol_pct, 2)
+    }
+
+    hist_summary = t('summary.analysis', lang, module='llm_agent', pair=symbol, target_date=series[-1].get('date'), trend=trend, signal=signal, current_price=format(end, '.6f'))
+
+    ctx = AnalysisContext(
+        pair=symbol,
+        current_price=end,
+        technical_indicators=tech,
+        fundamental_data={},
+        historical_summary=hist_summary,
+        target_date=series[-1].get('date'),
+        analysis_type='prediction' if any(s.get('is_prediction') for s in series) else 'historical',
+        language=lang
+    )
+
+    analyzer = get_llm_analyzer()
+
+    # Prefer GroqAgent if available
+    try:
+        for agent in analyzer.agents:
+            if isinstance(agent, GroqAgent) and await agent.is_available():
+                res = await agent.analyze(ctx)
+                # Normalize
+                text = res.get('summary') or ' '.join(res.get('insights', [])) or res.get('recommendation', '')
+                conf = res.get('confidence', res.get('confidence', 0.5))
+                if isinstance(conf, float) and conf <= 1:
+                    conf = int(conf * 100)
+                return {"text": text, "confidence": int(conf)}
+        # fallback to first available agent
+        res = await analyzer.analyze(ctx)
+        text = res.get('summary') or ' '.join(res.get('insights', [])) or res.get('recommendation', '')
+        conf = res.get('confidence', 0.5)
+        if isinstance(conf, float) and conf <= 1:
+            conf = int(conf * 100)
+        return {"text": text, "confidence": int(conf)}
+    except Exception:
+        # Final fallback: craft translated message similar to previous heuristic
+        direction = t('ai.direction_strengthen', lang, module='llm_agent') if change_pct < 0 else t('ai.direction_weaken', lang, module='llm_agent') if change_pct > 0 else t('ai.direction_stable', lang, module='llm_agent')
+        confidence = int(max(40, min(95, 90 - vol_pct)))
+        text = t('ai.analysis_summary', lang, module='llm_agent', direction=direction, confidence=confidence)
+        return {"text": text, "confidence": confidence}
+
+
 router = APIRouter(prefix="/exchange/idr")
+
+@router.get("/invest")
+async def invest_projection(symbol: str = Query(None, description="(Deprecated) Target symbol e.g., AAPL, GC=F, USDIDR=X"), symbols: str = Query(None, description="Comma-separated list of target symbols, e.g., AAPL,GC=F,USDIDR=X"), amount: float = Query(..., description="Investment amount in IDR"), start_date: str = Query(None, description="Start date YYYY-MM-DD"), end_date: str = Query(None, description="End date YYYY-MM-DD"), max_days: int = Query(90, description="Maximum allowed days in range"), request: Request = None):
+    lang = get_lang_from_request(request)
+    set_current_lang(lang)
+
+    if amount is None or amount <= 0:
+        return {"error": t('invalid_amount', lang=lang)}
+
+    # Determine symbol list: prefer `symbols` if provided, otherwise support legacy `symbol`
+    symbol_input = symbols if symbols else symbol
+    if not symbol_input:
+        return {"error": t('symbol_error', lang=lang, symbol='(missing)')}
+    symbol_list = [s.strip() for s in symbol_input.split(',') if s.strip()]
+    if not symbol_list:
+        return {"error": t('symbol_error', lang=lang, symbol='(missing)')}
+
+    if start_date:
+        try:
+            start = pd.to_datetime(start_date).date()
+        except Exception:
+            return {"error": t('invalid_start_date_format', lang=lang)}
+        if end_date:
+            try:
+                end = pd.to_datetime(end_date).date()
+            except Exception:
+                return {"error": t('invalid_end_date_format', lang=lang)}
+        else:
+            end = start
+    else:
+        # default window: today
+        start = pd.Timestamp.now().date()
+        end = start
+
+    if end < start:
+        return {"error": t('end_before_start', lang=lang)}
+
+    total_days = (end - start).days + 1
+    if total_days > max_days:
+        return {"error": t('range_too_large', lang=lang, total_days=total_days, max_days=max_days)}
+
+    date_list = [d.date() for d in pd.date_range(start=start, end=end, freq='D')]
+
+    with open(CURRENCY_FILE, "r") as f:
+        currency_data = json.load(f)
+
+    currencies = {c['code']: c for c in currency_data['currencies'] if c.get('yfinance')}
+
+    # precompute USD map
+    usd_map = {}
+    usd_pred_map = {}
+    usd_date_map = {}
+    for d in date_list:
+        p, pd_str, is_pred, lower, upper = get_price_on_date('USDIDR=X', d)
+        usd_map[d] = p
+        usd_pred_map[d] = {'is_pred': is_pred, 'lower': lower, 'upper': upper}
+        usd_date_map[d] = pd_str
+
+    results_list = []
+
+    for sym in symbol_list:
+        cache_key = (sym, start.isoformat(), end.isoformat(), _safe_amount_key(amount))
+        if cache_key in INVEST_CACHE:
+            results_list.append(INVEST_CACHE[cache_key])
+            continue
+
+        series, currency = build_series_for_symbol(sym, date_list, currencies, usd_map, usd_pred_map, usd_date_map, lang)
+        if series is None:
+            # error object returned
+            err_obj = currency
+            results_list.append({"symbol": clean_symbol_name(sym), "error": err_obj})
+            continue
+
+        # find start and end prices (fallback to nearest non-null)
+        start_price = None
+        end_price = None
+        start_pred_band = None
+        end_pred_band = None
+        for s in series:
+            if s['date'] == str(start) and s.get('idr_value') is not None:
+                start_price = s['idr_value']
+                start_pred_band = s['details'].get('prediction') if s.get('details') else None
+            if s['date'] == str(end) and s.get('idr_value') is not None:
+                end_price = s['idr_value']
+                end_pred_band = s['details'].get('prediction') if s.get('details') else None
+        if start_price is None:
+            # fallback first non-null
+            for s in series:
+                if s.get('idr_value') is not None:
+                    start_price = s['idr_value']
+                    start_pred_band = s['details'].get('prediction') if s.get('details') else None
+                    break
+        if end_price is None:
+            for s in reversed(series):
+                if s.get('idr_value') is not None:
+                    end_price = s['idr_value']
+                    end_pred_band = s['details'].get('prediction') if s.get('details') else None
+                    break
+
+        if start_price in (None, 0):
+            results_list.append({"symbol": clean_symbol_name(sym), "error": {"message": t('no_valid_price_for_start', lang=lang, symbol=clean_symbol_name(sym))}})
+            continue
+
+        units_bought = amount / start_price
+        projected_final = units_bought * end_price if end_price is not None else None
+
+        projected_lower = None
+        projected_upper = None
+        # propagate uncertainty when prediction bands exist
+        try:
+            if start_pred_band and end_pred_band:
+                s_low = start_pred_band.get('lower', start_price)
+                s_up = start_pred_band.get('upper', start_price)
+                e_low = end_pred_band.get('lower', end_price)
+                e_up = end_pred_band.get('upper', end_price)
+                # conservative bounds
+                projected_lower = (amount / s_up) * e_low if s_up and e_low else None
+                projected_upper = (amount / s_low) * e_up if s_low and e_up else None
+        except Exception:
+            projected_lower = projected_upper = None
+
+        ai_analysis = await generate_ai_analysis(series, symbol=sym, lang=lang)
+
+        per_res = {
+            "symbol": clean_symbol_name(sym),
+            "start_date": str(start),
+            "end_date": str(end),
+            "amount_idr": amount,
+            "start_price_idr": start_price,
+            "end_price_idr": end_price,
+            "units_bought": units_bought,
+            "projected_final": projected_final,
+            "projected_final_lower": projected_lower,
+            "projected_final_upper": projected_upper,
+            "is_prediction": any([s.get('is_prediction', False) for s in series]),
+            "series": series,
+            "ai_analysis": ai_analysis
+        }
+
+        INVEST_CACHE[cache_key] = per_res
+        # persist result for reproducibility
+        try:
+            safe = _safe_symbol_file(sym)
+            fname = f"invest_{safe}_{start.isoformat()}_{end.isoformat()}_{_safe_amount_key(amount)}.json"
+            with open(os.path.join(INVEST_PERSIST_DIR, fname), 'w') as pf:
+                json.dump(per_res, pf, default=str)
+        except Exception:
+            pass
+
+        results_list.append(per_res)
+
+    # If caller requested a single symbol, keep backward-compatible response
+    if len(symbol_list) == 1:
+        return results_list[0]
+
+    final_result = {
+        "start_date": str(start),
+        "end_date": str(end),
+        "amount_idr": amount,
+        "results": results_list
+    }
+
+    return final_result
 
 # Path to the currency data file
 CURRENCY_FILE = os.path.join(os.path.dirname(__file__), "..", "currency", "BIXYFINANCE.json")

@@ -15,5 +15,10 @@
 
   "summary.analysis": "Analysis of {pair} for {target_date}: Trend {trend}, signal {signal}. Current price {current_price}.",
 
-  "prompt.instruction": "Provide analysis in English."
-}
+  "prompt.instruction": "Provide analysis in English.",
+  "ai.analysis_insufficient": "AI analysis not available due to insufficient data.",
+  "ai.analysis_summary": "Based on current volatility and historical trends, the IDR is expected to {direction} against the USD over the selected period. Our confidence score for this prediction is {confidence}%.",
+  "ai.direction_strengthen": "strengthen",
+  "ai.direction_weaken": "weaken",
+  "ai.direction_stable": "stay roughly the same"
+} 

@@ -15,5 +15,10 @@
 
   "summary.analysis": "Analisis {pair} untuk {target_date}: Tren {trend}, sinyal {signal}. Harga saat ini {current_price}.",
 
-  "prompt.instruction": "Berikan analisis dalam Bahasa Indonesia."
+  "prompt.instruction": "Berikan analisis dalam Bahasa Indonesia.",
+  "ai.analysis_insufficient": "Analisis AI tidak tersedia karena data tidak mencukupi.",
+  "ai.analysis_summary": "Berdasarkan volatilitas saat ini dan tren historis, IDR diperkirakan akan {direction} terhadap USD selama periode yang dipilih. Skor kepercayaan kami untuk prediksi ini adalah {confidence}%.",
+  "ai.direction_strengthen": "menguat",
+  "ai.direction_weaken": "melemah",
+  "ai.direction_stable": "tetap relatif sama"
 }

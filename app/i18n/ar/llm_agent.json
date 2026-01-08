@@ -15,5 +15,10 @@
 
   "summary.analysis": "تحليل {pair} لـ {target_date}: الاتجاه {trend}، الإشارة {signal}. السعر الحالي {current_price}.",
 
-  "prompt.instruction": "قدم التحليل باللغة العربية."
+  "prompt.instruction": "قدم التحليل باللغة العربية.",
+  "ai.analysis_insufficient": "التحليل المعتمد على الذكاء الاصطناعي غير متاح بسبب نقص البيانات.",
+  "ai.analysis_summary": "بناءً على التقلبات الحالية والاتجاهات التاريخية، من المتوقع أن {direction} للروبية الإندونيسية (IDR) مقابل الدولار الأمريكي خلال الفترة المحددة. درجة الثقة في هذا التنبؤ هي {confidence}%.",
+  "ai.direction_strengthen": "تزداد قوة",
+  "ai.direction_weaken": "تضعف",
+  "ai.direction_stable": "تظل مستقرة إلى حد ما"
 }

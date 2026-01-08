@@ -12,5 +12,7 @@
   "invalid_end_date_format": "end_date 格式无效。请使用 YYYY-MM-DD",
   "end_before_start": "end_date 必须 >= start_date",
   "range_too_large": "范围太大（{total_days} 天）。最大为 {max_days} 天",
-  "symbol_error": "处理符号 {symbol} 时出错：{err}"
+  "symbol_error": "处理符号 {symbol} 时出错：{err}",
+  "invalid_amount": "无效金额。请使用正数",
+  "no_valid_price_for_start": "未找到开始日期的有效价格：{symbol}"
 }

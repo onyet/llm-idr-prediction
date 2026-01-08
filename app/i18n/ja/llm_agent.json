@@ -15,5 +15,10 @@
 
   "summary.analysis": "{target_date}の{pair}の分析: トレンド {trend}, シグナル {signal}. 現在の価格 {current_price}.",
 
-  "prompt.instruction": "日本語で分析を行ってください。"
+  "prompt.instruction": "日本語で分析を行ってください。",
+  "ai.analysis_insufficient": "データが不十分なためAI分析は利用できません。",
+  "ai.analysis_summary": "現在のボラティリティと過去のトレンドに基づき、選択された期間においてIDRはUSDに対して{direction}と予想されます。予測の信頼度は{confidence}%です。",
+  "ai.direction_strengthen": "強まる",
+  "ai.direction_weaken": "弱まる",
+  "ai.direction_stable": "概ね変わらない"
 }

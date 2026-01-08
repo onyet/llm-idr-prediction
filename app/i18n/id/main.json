@@ -12,5 +12,7 @@
   "no_date_column": "Tidak ada kolom Tanggal di data",
   "market_search_error": "Pencarian pasar gagal: {err}",
   "market_detail_error": "Pengambilan detail ticker gagal: {err}",
-  "market_history_error": "Pengambilan history ticker gagal: {err}"
+  "market_history_error": "Pengambilan history ticker gagal: {err}",
+  "invalid_amount": "Jumlah tidak valid. Gunakan angka positif",
+  "no_valid_price_for_start": "Tidak ada harga valid untuk tanggal mulai untuk {symbol}"
 }

@@ -15,5 +15,10 @@
 
   "summary.analysis": "{target_date} 的 {pair} 分析：趋势 {trend}，信号 {signal}。当前价格 {current_price}。",
 
-  "prompt.instruction": "请用中文提供分析。"
+  "prompt.instruction": "请用中文提供分析。",
+  "ai.analysis_insufficient": "由于数据不足，AI 分析不可用。",
+  "ai.analysis_summary": "根据当前波动性和历史趋势，预计在所选期间，印尼盾（IDR）相对于美元将{direction}。我们对该预测的置信度为 {confidence}%。",
+  "ai.direction_strengthen": "走强",
+  "ai.direction_weaken": "走弱",
+  "ai.direction_stable": "保持相对稳定"
 }

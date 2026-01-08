@@ -1,14 +1,21 @@
 <!DOCTYPE html>
 
-<html class="dark" lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>AI Finance Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script id="tailwind-config">
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>AI Finance Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
             theme: {
@@ -24,28 +31,31 @@
                         "display": ["Inter", "sans-serif"],
                         "body": ["Inter", "sans-serif"]
                     },
-                    borderRadius: {"DEFAULT": "0.5rem", "lg": "0.75rem", "xl": "1rem", "full": "9999px"},
+                    borderRadius: { "DEFAULT": "0.5rem", "lg": "0.75rem", "xl": "1rem", "full": "9999px" },
                 },
             },
         }
     </script>
-<style>
+    <style>
         /* Custom scrollbar for sleeker look */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
         }
+
         ::-webkit-scrollbar-track {
-            background: #111722; 
+            background: #111722;
         }
+
         ::-webkit-scrollbar-thumb {
-            background: #2d3748; 
+            background: #2d3748;
             border-radius: 4px;
         }
+
         ::-webkit-scrollbar-thumb:hover {
-            background: #4a5568; 
+            background: #4a5568;
         }
-        
+
         .glass-effect {
             background: rgba(30, 41, 59, 0.7);
             backdrop-filter: blur(10px);
@@ -54,291 +64,388 @@
         }
     </style>
 </head>
+
 <body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display overflow-hidden">
-<div class="flex h-screen w-full">
-<!-- SideNavBar -->
-<aside class="w-64 h-full hidden lg:flex flex-col justify-between border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111722] p-4 z-20">
-<div class="flex flex-col gap-8">
-<div class="flex items-center gap-3 px-2">
-<div class="bg-center bg-no-repeat bg-cover rounded-xl size-10 shadow-lg shadow-blue-500/20" data-alt="Abstract blue digital finance logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDSMlbIAGA4g36Pkg02rkokurEMrIvtGaJk0yQS0MWsSJtpsPV9j_74pApY1h_yP5FUZRZORPM6l8-qgb1HMFn9JmLzyQ2vAoqRC5x1QrEcFSMJWsqvflu2U1RyK6cwKEFrUQU0f7UZoqKM2RvSd9zRsMCOF9dCsh08Eurw4br1nQAIUxbzkPrkfj8-Nv1366iteRJXArdTFON3-u4bm3g0I1cCQDjIoKciUM9tszbwnvTm7gwzzMzxDb3G4BWjW-sXDlnHZGzk_vTW");'></div>
-<h1 class="text-xl font-bold tracking-tight">AI Finance</h1>
-</div>
-<nav class="flex flex-col gap-1">
-<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary text-white shadow-md shadow-blue-600/20 transition-all hover:bg-blue-600" href="#">
-<span class="material-symbols-outlined text-[20px]">dashboard</span>
-<span class="text-sm font-medium">Dashboard</span>
-</a>
-<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
-<span class="material-symbols-outlined text-[20px]">account_balance_wallet</span>
-<span class="text-sm font-medium">Wallet</span>
-</a>
-<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
-<span class="material-symbols-outlined text-[20px]">analytics</span>
-<span class="text-sm font-medium">Analytics</span>
-</a>
-<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
-<span class="material-symbols-outlined text-[20px]">settings</span>
-<span class="text-sm font-medium">Settings</span>
-</a>
-</nav>
-</div>
-<div class="flex flex-col gap-4">
-<div class="bg-gradient-to-br from-indigo-900 to-slate-900 rounded-xl p-4 relative overflow-hidden group cursor-pointer border border-slate-800">
-<div class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-<div class="relative z-10 flex flex-col gap-2">
-<span class="material-symbols-outlined text-yellow-400">workspace_premium</span>
-<p class="text-xs text-slate-300">Upgrade to Pro</p>
-<p class="text-sm font-bold text-white">Unlock AI Insights</p>
-</div>
-</div>
-<button class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-500 dark:text-slate-400 hover:text-red-500 dark:hover:text-red-400 transition-colors w-full">
-<span class="material-symbols-outlined text-[20px]">logout</span>
-<span class="text-sm font-medium">Logout</span>
-</button>
-</div>
-</aside>
-<!-- Main Content Area -->
-<main class="flex-1 h-full overflow-y-auto bg-slate-50 dark:bg-[#101622] relative">
-<!-- Mobile Header -->
-<div class="lg:hidden flex items-center justify-between p-4 bg-white dark:bg-[#111722] border-b border-slate-200 dark:border-slate-800 sticky top-0 z-30">
-<div class="flex items-center gap-2">
-<div class="bg-center bg-no-repeat bg-cover rounded-lg size-8" data-alt="Abstract blue digital finance logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCcJZ8la18r2otMJQU-j1RXDDjSThvwrV4su1lVs9RlSH9kPbd6cpsLQW_KB2gm3k-tTXr8cJnvfU0hMawhNDNjp-k2vXT7B5ZgazojIRH1rLk2ZUvfrb_A7mgNCWvDbMeXnX5BkCXklGGeul6Dp_TsyzToMEK_M9f5izz21XT3FURtv_OJKWrD9JKN9-j-k-_ZeNERw9TeqaNsGzP-bH_g2sszRRFbtNEVUhjTL0MTGiNv7QlM0ja7V6TtaGKImgZ8kzQ_w3ld4qtR");'></div>
-<h1 class="text-lg font-bold text-slate-900 dark:text-white">AI Finance</h1>
-</div>
-<button class="text-slate-500">
-<span class="material-symbols-outlined">menu</span>
-</button>
-</div>
-<div class="max-w-7xl mx-auto p-4 lg:p-8 flex flex-col gap-8">
-<!-- Page Heading & Actions -->
-<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
-<div class="flex flex-col gap-1">
-<h2 class="text-3xl font-black tracking-tight text-slate-900 dark:text-white">Market Overview</h2>
-<p class="text-slate-500 dark:text-slate-400">Real-time exchange rates and market data</p>
-</div>
-<div class="flex items-center gap-3">
-<div class="relative">
-<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]">search</span>
-<input class="pl-10 pr-4 py-2 rounded-lg bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 text-slate-900 dark:text-white w-full md:w-64 placeholder-slate-400 transition-shadow" placeholder="Search symbol..." type="text"/>
-</div>
-<button class="flex items-center justify-center size-10 rounded-lg bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors text-slate-500 dark:text-white relative">
-<span class="material-symbols-outlined">notifications</span>
-<span class="absolute top-2 right-2 size-2 bg-red-500 rounded-full border border-[#1e293b]"></span>
-</button>
-</div>
-</div>
-<!-- Stats / Market Tickers -->
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-<!-- Card 1 -->
-<div class="flex flex-col gap-4 p-5 rounded-xl bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700/50 shadow-sm hover:shadow-lg transition-all group">
-<div class="flex justify-between items-start">
-<div class="flex flex-col">
-<span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">USD / IDR</span>
-<span class="text-2xl font-bold text-slate-900 dark:text-white mt-1 group-hover:text-primary transition-colors">15,450</span>
-</div>
-<div class="flex items-center gap-1 text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded text-xs font-medium">
-<span class="material-symbols-outlined text-[14px]">trending_up</span>
+    <div class="flex h-screen w-full">
+        <!-- SideNavBar -->
+        <aside
+            class="w-64 h-full hidden lg:flex flex-col justify-between border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111722] p-4 z-20">
+            <div class="flex flex-col gap-8">
+                <div class="flex items-center gap-3 px-2">
+                    <div class="bg-center bg-no-repeat bg-cover rounded-xl size-10 shadow-lg shadow-blue-500/20"
+                        data-alt="Abstract blue digital finance logo"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDSMlbIAGA4g36Pkg02rkokurEMrIvtGaJk0yQS0MWsSJtpsPV9j_74pApY1h_yP5FUZRZORPM6l8-qgb1HMFn9JmLzyQ2vAoqRC5x1QrEcFSMJWsqvflu2U1RyK6cwKEFrUQU0f7UZoqKM2RvSd9zRsMCOF9dCsh08Eurw4br1nQAIUxbzkPrkfj8-Nv1366iteRJXArdTFON3-u4bm3g0I1cCQDjIoKciUM9tszbwnvTm7gwzzMzxDb3G4BWjW-sXDlnHZGzk_vTW");'>
+                    </div>
+                    <h1 class="text-xl font-bold tracking-tight">AI Finance</h1>
+                </div>
+                <nav class="flex flex-col gap-1">
+                    <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary text-white shadow-md shadow-blue-600/20 transition-all hover:bg-blue-600"
+                        href="#">
+                        <span class="material-symbols-outlined text-[20px]">dashboard</span>
+                        <span class="text-sm font-medium">Dashboard</span>
+                    </a>
+                    <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                        href="#">
+                        <span class="material-symbols-outlined text-[20px]">account_balance_wallet</span>
+                        <span class="text-sm font-medium">Wallet</span>
+                    </a>
+                    <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                        href="#">
+                        <span class="material-symbols-outlined text-[20px]">analytics</span>
+                        <span class="text-sm font-medium">Analytics</span>
+                    </a>
+                    <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                        href="#">
+                        <span class="material-symbols-outlined text-[20px]">settings</span>
+                        <span class="text-sm font-medium">Settings</span>
+                    </a>
+                </nav>
+            </div>
+            <div class="flex flex-col gap-4">
+                <div
+                    class="bg-gradient-to-br from-indigo-900 to-slate-900 rounded-xl p-4 relative overflow-hidden group cursor-pointer border border-slate-800">
+                    <div class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity">
+                    </div>
+                    <div class="relative z-10 flex flex-col gap-2">
+                        <span class="material-symbols-outlined text-yellow-400">workspace_premium</span>
+                        <p class="text-xs text-slate-300">Upgrade to Pro</p>
+                        <p class="text-sm font-bold text-white">Unlock AI Insights</p>
+                    </div>
+                </div>
+                <button
+                    class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-500 dark:text-slate-400 hover:text-red-500 dark:hover:text-red-400 transition-colors w-full">
+                    <span class="material-symbols-outlined text-[20px]">logout</span>
+                    <span class="text-sm font-medium">Logout</span>
+                </button>
+            </div>
+        </aside>
+        <!-- Main Content Area -->
+        <main class="flex-1 h-full overflow-y-auto bg-slate-50 dark:bg-[#101622] relative">
+            <!-- Mobile Header -->
+            <div
+                class="lg:hidden flex items-center justify-between p-4 bg-white dark:bg-[#111722] border-b border-slate-200 dark:border-slate-800 sticky top-0 z-30">
+                <div class="flex items-center gap-2">
+                    <div class="bg-center bg-no-repeat bg-cover rounded-lg size-8"
+                        data-alt="Abstract blue digital finance logo"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCcJZ8la18r2otMJQU-j1RXDDjSThvwrV4su1lVs9RlSH9kPbd6cpsLQW_KB2gm3k-tTXr8cJnvfU0hMawhNDNjp-k2vXT7B5ZgazojIRH1rLk2ZUvfrb_A7mgNCWvDbMeXnX5BkCXklGGeul6Dp_TsyzToMEK_M9f5izz21XT3FURtv_OJKWrD9JKN9-j-k-_ZeNERw9TeqaNsGzP-bH_g2sszRRFbtNEVUhjTL0MTGiNv7QlM0ja7V6TtaGKImgZ8kzQ_w3ld4qtR");'>
+                    </div>
+                    <h1 class="text-lg font-bold text-slate-900 dark:text-white">AI Finance</h1>
+                </div>
+                <button class="text-slate-500">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+            </div>
+            <div class="max-w-7xl mx-auto p-4 lg:p-8 flex flex-col gap-8">
+                <!-- Page Heading & Actions -->
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                    <div class="flex flex-col gap-1">
+                        <h2 class="text-3xl font-black tracking-tight text-slate-900 dark:text-white">Market Overview
+                        </h2>
+                        <p class="text-slate-500 dark:text-slate-400">Real-time exchange rates and market data</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="relative">
+                            <span
+                                class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]">search</span>
+                            <input
+                                class="pl-10 pr-4 py-2 rounded-lg bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 text-slate-900 dark:text-white w-full md:w-64 placeholder-slate-400 transition-shadow"
+                                placeholder="Search symbol..." type="text" />
+                        </div>
+                        <button
+                            class="flex items-center justify-center size-10 rounded-lg bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors text-slate-500 dark:text-white relative">
+                            <span class="material-symbols-outlined">notifications</span>
+                            <span
+                                class="absolute top-2 right-2 size-2 bg-red-500 rounded-full border border-[#1e293b]"></span>
+                        </button>
+                    </div>
+                </div>
+                <!-- Stats / Market Tickers -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                    <!-- Card 1 -->
+                    <div
+                        class="flex flex-col gap-4 p-5 rounded-xl bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700/50 shadow-sm hover:shadow-lg transition-all group">
+                        <div class="flex justify-between items-start">
+                            <div class="flex flex-col">
+                                <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">USD /
+                                    IDR</span>
+                                <span
+                                    class="text-2xl font-bold text-slate-900 dark:text-white mt-1 group-hover:text-primary transition-colors">15,450</span>
+                            </div>
+                            <div
+                                class="flex items-center gap-1 text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded text-xs font-medium">
+                                <span class="material-symbols-outlined text-[14px]">trending_up</span>
                                 +0.5%
                             </div>
-</div>
-<!-- Mini Chart (Simulated with gradients) -->
-<div class="h-10 w-full bg-gradient-to-r from-emerald-500/0 via-emerald-500/10 to-emerald-500/20 rounded-md relative overflow-hidden">
-<svg class="absolute bottom-0 left-0 w-full h-full" preserveaspectratio="none" viewbox="0 0 100 40">
-<path d="M0 35 Q 20 38, 40 20 T 100 5" fill="none" stroke="#10b981" stroke-width="2" vector-effect="non-scaling-stroke"></path>
-</svg>
-</div>
-</div>
-<!-- Card 2 -->
-<div class="flex flex-col gap-4 p-5 rounded-xl bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700/50 shadow-sm hover:shadow-lg transition-all group">
-<div class="flex justify-between items-start">
-<div class="flex flex-col">
-<span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">GOLD / IDR</span>
-<span class="text-2xl font-bold text-slate-900 dark:text-white mt-1 group-hover:text-yellow-500 transition-colors">1,020,000</span>
-</div>
-<div class="flex items-center gap-1 text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded text-xs font-medium">
-<span class="material-symbols-outlined text-[14px]">trending_up</span>
+                        </div>
+                        <!-- Mini Chart (Simulated with gradients) -->
+                        <div
+                            class="h-10 w-full bg-gradient-to-r from-emerald-500/0 via-emerald-500/10 to-emerald-500/20 rounded-md relative overflow-hidden">
+                            <svg class="absolute bottom-0 left-0 w-full h-full" preserveaspectratio="none"
+                                viewbox="0 0 100 40">
+                                <path d="M0 35 Q 20 38, 40 20 T 100 5" fill="none" stroke="#10b981" stroke-width="2"
+                                    vector-effect="non-scaling-stroke"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <!-- Card 2 -->
+                    <div
+                        class="flex flex-col gap-4 p-5 rounded-xl bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700/50 shadow-sm hover:shadow-lg transition-all group">
+                        <div class="flex justify-between items-start">
+                            <div class="flex flex-col">
+                                <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">GOLD /
+                                    IDR</span>
+                                <span
+                                    class="text-2xl font-bold text-slate-900 dark:text-white mt-1 group-hover:text-yellow-500 transition-colors">1,020,000</span>
+                            </div>
+                            <div
+                                class="flex items-center gap-1 text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded text-xs font-medium">
+                                <span class="material-symbols-outlined text-[14px]">trending_up</span>
                                 +1.2%
                             </div>
-</div>
-<div class="h-10 w-full bg-gradient-to-r from-emerald-500/0 via-emerald-500/10 to-emerald-500/20 rounded-md relative overflow-hidden">
-<svg class="absolute bottom-0 left-0 w-full h-full" preserveaspectratio="none" viewbox="0 0 100 40">
-<path d="M0 30 Q 30 35, 60 15 T 100 10" fill="none" stroke="#10b981" stroke-width="2" vector-effect="non-scaling-stroke"></path>
-</svg>
-</div>
-</div>
-<!-- Card 3 -->
-<div class="flex flex-col gap-4 p-5 rounded-xl bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700/50 shadow-sm hover:shadow-lg transition-all group">
-<div class="flex justify-between items-start">
-<div class="flex flex-col">
-<span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">BBCA.JK</span>
-<span class="text-2xl font-bold text-slate-900 dark:text-white mt-1">9,200</span>
-</div>
-<div class="flex items-center gap-1 text-red-500 bg-red-500/10 px-2 py-1 rounded text-xs font-medium">
-<span class="material-symbols-outlined text-[14px]">trending_down</span>
+                        </div>
+                        <div
+                            class="h-10 w-full bg-gradient-to-r from-emerald-500/0 via-emerald-500/10 to-emerald-500/20 rounded-md relative overflow-hidden">
+                            <svg class="absolute bottom-0 left-0 w-full h-full" preserveaspectratio="none"
+                                viewbox="0 0 100 40">
+                                <path d="M0 30 Q 30 35, 60 15 T 100 10" fill="none" stroke="#10b981" stroke-width="2"
+                                    vector-effect="non-scaling-stroke"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <!-- Card 3 -->
+                    <div
+                        class="flex flex-col gap-4 p-5 rounded-xl bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700/50 shadow-sm hover:shadow-lg transition-all group">
+                        <div class="flex justify-between items-start">
+                            <div class="flex flex-col">
+                                <span
+                                    class="text-xs font-semibold text-slate-400 uppercase tracking-wider">BBCA.JK</span>
+                                <span class="text-2xl font-bold text-slate-900 dark:text-white mt-1">9,200</span>
+                            </div>
+                            <div
+                                class="flex items-center gap-1 text-red-500 bg-red-500/10 px-2 py-1 rounded text-xs font-medium">
+                                <span class="material-symbols-outlined text-[14px]">trending_down</span>
                                 -0.2%
                             </div>
-</div>
-<div class="h-10 w-full bg-gradient-to-r from-red-500/0 via-red-500/10 to-red-500/20 rounded-md relative overflow-hidden">
-<svg class="absolute bottom-0 left-0 w-full h-full" preserveaspectratio="none" viewbox="0 0 100 40">
-<path d="M0 10 Q 30 5, 60 25 T 100 30" fill="none" stroke="#ef4444" stroke-width="2" vector-effect="non-scaling-stroke"></path>
-</svg>
-</div>
-</div>
-<!-- Card 4 -->
-<div class="flex flex-col gap-4 p-5 rounded-xl bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700/50 shadow-sm hover:shadow-lg transition-all group">
-<div class="flex justify-between items-start">
-<div class="flex flex-col">
-<span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">SAR / IDR</span>
-<span class="text-2xl font-bold text-slate-900 dark:text-white mt-1">4,120</span>
-</div>
-<div class="flex items-center gap-1 text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded text-xs font-medium">
-<span class="material-symbols-outlined text-[14px]">trending_up</span>
+                        </div>
+                        <div
+                            class="h-10 w-full bg-gradient-to-r from-red-500/0 via-red-500/10 to-red-500/20 rounded-md relative overflow-hidden">
+                            <svg class="absolute bottom-0 left-0 w-full h-full" preserveaspectratio="none"
+                                viewbox="0 0 100 40">
+                                <path d="M0 10 Q 30 5, 60 25 T 100 30" fill="none" stroke="#ef4444" stroke-width="2"
+                                    vector-effect="non-scaling-stroke"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <!-- Card 4 -->
+                    <div
+                        class="flex flex-col gap-4 p-5 rounded-xl bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700/50 shadow-sm hover:shadow-lg transition-all group">
+                        <div class="flex justify-between items-start">
+                            <div class="flex flex-col">
+                                <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">SAR /
+                                    IDR</span>
+                                <span class="text-2xl font-bold text-slate-900 dark:text-white mt-1">4,120</span>
+                            </div>
+                            <div
+                                class="flex items-center gap-1 text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded text-xs font-medium">
+                                <span class="material-symbols-outlined text-[14px]">trending_up</span>
                                 +0.1%
                             </div>
-</div>
-<div class="h-10 w-full bg-gradient-to-r from-emerald-500/0 via-emerald-500/10 to-emerald-500/20 rounded-md relative overflow-hidden">
-<svg class="absolute bottom-0 left-0 w-full h-full" preserveaspectratio="none" viewbox="0 0 100 40">
-<path d="M0 25 Q 40 30, 70 20 T 100 15" fill="none" stroke="#10b981" stroke-width="2" vector-effect="non-scaling-stroke"></path>
-</svg>
-</div>
-</div>
-<!-- Add Button -->
-<button class="flex flex-col items-center justify-center gap-2 p-5 rounded-xl border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-primary/50 hover:bg-primary/5 transition-all group min-h-[140px]">
-<div class="size-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center group-hover:scale-110 transition-transform">
-<span class="material-symbols-outlined text-slate-500 dark:text-slate-400 group-hover:text-primary">add</span>
-</div>
-<span class="text-sm font-semibold text-slate-500 dark:text-slate-400 group-hover:text-primary">Add Market</span>
-</button>
-</div>
-<!-- AI Forecast Section -->
-<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-<!-- Left: Input Form -->
-<div class="lg:col-span-4 flex flex-col gap-6">
-<div class="bg-white dark:bg-[#1e293b] rounded-xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm h-full">
-<div class="flex items-center gap-2 mb-6">
-<span class="material-symbols-outlined text-primary">auto_awesome</span>
-<h3 class="text-lg font-bold text-slate-900 dark:text-white">AI Value Forecast</h3>
-</div>
-<form class="flex flex-col gap-5">
-<div class="flex flex-col gap-2">
-<label class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Investment Amount (IDR)</label>
-<div class="relative">
-<span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-medium">Rp</span>
-<input class="w-full bg-slate-50 dark:bg-[#111722] border border-slate-200 dark:border-slate-700 rounded-lg py-3 pl-10 pr-4 text-slate-900 dark:text-white font-bold text-lg focus:outline-none focus:border-primary transition-colors" type="text" value="100,000"/>
-</div>
-</div>
-<div class="flex flex-col gap-2">
-<label class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Target Market</label>
-<div class="relative">
-<select class="w-full bg-slate-50 dark:bg-[#111722] border border-slate-200 dark:border-slate-700 rounded-lg py-3 pl-4 pr-10 text-slate-900 dark:text-white appearance-none focus:outline-none focus:border-primary transition-colors cursor-pointer">
-<option>USD - US Dollar</option>
-<option>XAU - Gold</option>
-<option>SAR - Saudi Riyal</option>
-<option>BBCA.JK - Bank Central Asia</option>
-<option>AAPL - Apple Inc.</option>
-</select>
-<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">expand_more</span>
-</div>
-</div>
-<div class="flex flex-col gap-2">
-<label class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Forecast Period</label>
-<div class="grid grid-cols-3 gap-2">
-<button class="py-2 px-3 rounded-lg border border-primary bg-primary/10 text-primary font-medium text-sm transition-all text-center" type="button">1 Week</button>
-<button class="py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 font-medium text-sm transition-all text-center" type="button">1 Month</button>
-<button class="py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 font-medium text-sm transition-all text-center" type="button">3 Months</button>
-</div>
-</div>
-<button class="mt-4 bg-primary hover:bg-blue-600 text-white font-bold py-3.5 px-4 rounded-lg shadow-lg shadow-blue-600/30 transition-all active:scale-[0.98] flex items-center justify-center gap-2" type="button">
-<span class="material-symbols-outlined">psychology</span>
+                        </div>
+                        <div
+                            class="h-10 w-full bg-gradient-to-r from-emerald-500/0 via-emerald-500/10 to-emerald-500/20 rounded-md relative overflow-hidden">
+                            <svg class="absolute bottom-0 left-0 w-full h-full" preserveaspectratio="none"
+                                viewbox="0 0 100 40">
+                                <path d="M0 25 Q 40 30, 70 20 T 100 15" fill="none" stroke="#10b981" stroke-width="2"
+                                    vector-effect="non-scaling-stroke"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <!-- Add Button -->
+                    <button
+                        class="flex flex-col items-center justify-center gap-2 p-5 rounded-xl border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-primary/50 hover:bg-primary/5 transition-all group min-h-[140px]">
+                        <div
+                            class="size-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <span
+                                class="material-symbols-outlined text-slate-500 dark:text-slate-400 group-hover:text-primary">add</span>
+                        </div>
+                        <span
+                            class="text-sm font-semibold text-slate-500 dark:text-slate-400 group-hover:text-primary">Add
+                            Market</span>
+                    </button>
+                </div>
+                <!-- AI Forecast Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                    <!-- Left: Input Form -->
+                    <div class="lg:col-span-4 flex flex-col gap-6">
+                        <div
+                            class="bg-white dark:bg-[#1e293b] rounded-xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm h-full">
+                            <div class="flex items-center gap-2 mb-6">
+                                <span class="material-symbols-outlined text-primary">auto_awesome</span>
+                                <h3 class="text-lg font-bold text-slate-900 dark:text-white">AI Value Forecast</h3>
+                            </div>
+                            <form class="flex flex-col gap-5">
+                                <div class="flex flex-col gap-2">
+                                    <label
+                                        class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Investment
+                                        Amount (IDR)</label>
+                                    <div class="relative">
+                                        <span
+                                            class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-medium">Rp</span>
+                                        <input
+                                            class="w-full bg-slate-50 dark:bg-[#111722] border border-slate-200 dark:border-slate-700 rounded-lg py-3 pl-10 pr-4 text-slate-900 dark:text-white font-bold text-lg focus:outline-none focus:border-primary transition-colors"
+                                            type="text" value="100,000" />
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label
+                                        class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Target
+                                        Market</label>
+                                    <div class="relative">
+                                        <select
+                                            class="w-full bg-slate-50 dark:bg-[#111722] border border-slate-200 dark:border-slate-700 rounded-lg py-3 pl-4 pr-10 text-slate-900 dark:text-white appearance-none focus:outline-none focus:border-primary transition-colors cursor-pointer">
+                                            <option>USD - US Dollar</option>
+                                            <option>XAU - Gold</option>
+                                            <option>SAR - Saudi Riyal</option>
+                                            <option>BBCA.JK - Bank Central Asia</option>
+                                            <option>AAPL - Apple Inc.</option>
+                                        </select>
+                                        <span
+                                            class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">expand_more</span>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label
+                                        class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Forecast
+                                        Period</label>
+                                    <div class="grid grid-cols-3 gap-2">
+                                        <button
+                                            class="py-2 px-3 rounded-lg border border-primary bg-primary/10 text-primary font-medium text-sm transition-all text-center"
+                                            type="button">1 Week</button>
+                                        <button
+                                            class="py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 font-medium text-sm transition-all text-center"
+                                            type="button">1 Month</button>
+                                        <button
+                                            class="py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 font-medium text-sm transition-all text-center"
+                                            type="button">3 Months</button>
+                                    </div>
+                                </div>
+                                <button
+                                    class="mt-4 bg-primary hover:bg-blue-600 text-white font-bold py-3.5 px-4 rounded-lg shadow-lg shadow-blue-600/30 transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+                                    type="button">
+                                    <span class="material-symbols-outlined">psychology</span>
                                     Run AI Prediction
                                 </button>
-</form>
-</div>
-</div>
-<!-- Right: Visualization -->
-<div class="lg:col-span-8 flex flex-col gap-6">
-<div class="bg-white dark:bg-[#1e293b] rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm p-6 relative overflow-hidden h-full min-h-[400px]">
-<!-- Header of chart -->
-<div class="flex flex-wrap items-center justify-between mb-8 gap-4">
-<div>
-<p class="text-sm font-medium text-slate-500 dark:text-slate-400">Projected Value (USD)</p>
-<div class="flex items-baseline gap-3 mt-1">
-<h3 class="text-3xl font-bold text-slate-900 dark:text-white">$6.80</h3>
-<span class="text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded text-sm font-semibold">+5.12%</span>
-</div>
-</div>
-<div class="flex items-center gap-2 bg-slate-50 dark:bg-[#111722] px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700">
-<span class="w-2 h-2 rounded-full bg-blue-500"></span>
-<span class="text-xs font-medium text-slate-600 dark:text-slate-300">Historical</span>
-<span class="w-px h-3 bg-slate-300 dark:bg-slate-600 mx-1"></span>
-<span class="w-2 h-2 rounded-full bg-indigo-400 border border-dashed border-white"></span>
-<span class="text-xs font-medium text-slate-600 dark:text-slate-300">AI Forecast</span>
-</div>
-</div>
-<!-- Chart Area -->
-<div class="relative w-full h-64 lg:h-80">
-<!-- Grid Lines -->
-<div class="absolute inset-0 flex flex-col justify-between pointer-events-none">
-<div class="w-full h-px bg-slate-100 dark:bg-slate-700/50"></div>
-<div class="w-full h-px bg-slate-100 dark:bg-slate-700/50"></div>
-<div class="w-full h-px bg-slate-100 dark:bg-slate-700/50"></div>
-<div class="w-full h-px bg-slate-100 dark:bg-slate-700/50"></div>
-<div class="w-full h-px bg-slate-100 dark:bg-slate-700/50"></div>
-</div>
-<!-- Chart Lines (SVG) -->
-<svg class="w-full h-full overflow-visible" preserveaspectratio="none">
-<defs>
-<lineargradient id="gradientHistorical" x1="0" x2="0" y1="0" y2="1">
-<stop offset="0%" stop-color="#3b82f6" stop-opacity="0.3"></stop>
-<stop offset="100%" stop-color="#3b82f6" stop-opacity="0"></stop>
-</lineargradient>
-<lineargradient id="gradientForecast" x1="0" x2="0" y1="0" y2="1">
-<stop offset="0%" stop-color="#818cf8" stop-opacity="0.2"></stop>
-<stop offset="100%" stop-color="#818cf8" stop-opacity="0"></stop>
-</lineargradient>
-</defs>
-<!-- Historical Area -->
-<path d="M0,200 C50,190 100,210 150,180 S250,150 350,160 S450,130 500,140 L500,320 L0,320 Z" fill="url(#gradientHistorical)"></path>
-<!-- Historical Line -->
-<path d="M0,200 C50,190 100,210 150,180 S250,150 350,160 S450,130 500,140" fill="none" stroke="#3b82f6" stroke-linecap="round" stroke-width="3"></path>
-<!-- Forecast Area (starts where historical ends at x=500, y=140) -->
-<path class="opacity-50" d="M500,140 C550,135 600,110 650,100 S750,80 850,70 L850,320 L500,320 Z" fill="url(#gradientForecast)"></path>
-<!-- Forecast Line (Dashed) -->
-<path d="M500,140 C550,135 600,110 650,100 S750,80 850,70" fill="none" stroke="#818cf8" stroke-dasharray="6,4" stroke-linecap="round" stroke-width="3"></path>
-<!-- Data Point (End) -->
-<circle class="fill-indigo-500 stroke-white dark:stroke-[#1e293b] stroke-2 shadow-lg" cx="850" cy="70" r="6"></circle>
-</svg>
-<!-- Tooltip Overlay (Static for design) -->
-<div class="absolute top-[50px] right-[5%] bg-slate-900 text-white text-xs py-1.5 px-3 rounded shadow-xl border border-slate-700 transform -translate-x-1/2">
-<p class="font-bold">Oct 24</p>
-<p>$6.80 USD</p>
-<div class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-slate-900 border-r border-b border-slate-700 transform rotate-45"></div>
-</div>
-</div>
-<!-- X Axis Labels -->
-<div class="flex justify-between mt-4 text-xs font-medium text-slate-400">
-<span>Today</span>
-<span>Oct 14</span>
-<span>Oct 18</span>
-<span>Oct 22</span>
-<span>Oct 26</span>
-</div>
-</div>
-<!-- Insight Card -->
-<div class="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 rounded-lg flex gap-4 items-start">
-<div class="p-2 bg-blue-100 dark:bg-blue-800 rounded-full text-primary dark:text-blue-300">
-<span class="material-symbols-outlined text-[20px]">tips_and_updates</span>
-</div>
-<div>
-<h4 class="font-bold text-slate-900 dark:text-white text-sm">AI Analysis</h4>
-<p class="text-sm text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">
-                                     Based on current volatility and historical trends, the IDR is expected to strengthen slightly against the USD over the next 7 days. Our confidence score for this prediction is <strong class="text-emerald-600 dark:text-emerald-400">87%</strong>.
-                                 </p>
-</div>
-</div>
-</div>
-</div>
-</div>
-</main>
-</div>
-</body></html>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- Right: Visualization -->
+                    <div class="lg:col-span-8 flex flex-col gap-6">
+                        <div
+                            class="bg-white dark:bg-[#1e293b] rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm p-6 relative overflow-hidden h-full min-h-[400px]">
+                            <!-- Header of chart -->
+                            <div class="flex flex-wrap items-center justify-between mb-8 gap-4">
+                                <div>
+                                    <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Projected Value
+                                        (USD)</p>
+                                    <div class="flex items-baseline gap-3 mt-1">
+                                        <h3 class="text-3xl font-bold text-slate-900 dark:text-white">$6.80</h3>
+                                        <span
+                                            class="text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded text-sm font-semibold">+5.12%</span>
+                                    </div>
+                                </div>
+                                <div
+                                    class="flex items-center gap-2 bg-slate-50 dark:bg-[#111722] px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700">
+                                    <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                                    <span
+                                        class="text-xs font-medium text-slate-600 dark:text-slate-300">Historical</span>
+                                    <span class="w-px h-3 bg-slate-300 dark:bg-slate-600 mx-1"></span>
+                                    <span
+                                        class="w-2 h-2 rounded-full bg-indigo-400 border border-dashed border-white"></span>
+                                    <span class="text-xs font-medium text-slate-600 dark:text-slate-300">AI
+                                        Forecast</span>
+                                </div>
+                            </div>
+                            <!-- Chart Area -->
+                            <div class="relative w-full h-64 lg:h-80">
+                                <!-- Grid Lines -->
+                                <div class="absolute inset-0 flex flex-col justify-between pointer-events-none">
+                                    <div class="w-full h-px bg-slate-100 dark:bg-slate-700/50"></div>
+                                    <div class="w-full h-px bg-slate-100 dark:bg-slate-700/50"></div>
+                                    <div class="w-full h-px bg-slate-100 dark:bg-slate-700/50"></div>
+                                    <div class="w-full h-px bg-slate-100 dark:bg-slate-700/50"></div>
+                                    <div class="w-full h-px bg-slate-100 dark:bg-slate-700/50"></div>
+                                </div>
+                                <!-- Chart Lines (SVG) -->
+                                <svg class="w-full h-full overflow-visible" preserveaspectratio="none">
+                                    <defs>
+                                        <lineargradient id="gradientHistorical" x1="0" x2="0" y1="0" y2="1">
+                                            <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.3"></stop>
+                                            <stop offset="100%" stop-color="#3b82f6" stop-opacity="0"></stop>
+                                        </lineargradient>
+                                        <lineargradient id="gradientForecast" x1="0" x2="0" y1="0" y2="1">
+                                            <stop offset="0%" stop-color="#818cf8" stop-opacity="0.2"></stop>
+                                            <stop offset="100%" stop-color="#818cf8" stop-opacity="0"></stop>
+                                        </lineargradient>
+                                    </defs>
+                                    <!-- Historical Area -->
+                                    <path
+                                        d="M0,200 C50,190 100,210 150,180 S250,150 350,160 S450,130 500,140 L500,320 L0,320 Z"
+                                        fill="url(#gradientHistorical)"></path>
+                                    <!-- Historical Line -->
+                                    <path d="M0,200 C50,190 100,210 150,180 S250,150 350,160 S450,130 500,140"
+                                        fill="none" stroke="#3b82f6" stroke-linecap="round" stroke-width="3"></path>
+                                    <!-- Forecast Area (starts where historical ends at x=500, y=140) -->
+                                    <path class="opacity-50"
+                                        d="M500,140 C550,135 600,110 650,100 S750,80 850,70 L850,320 L500,320 Z"
+                                        fill="url(#gradientForecast)"></path>
+                                    <!-- Forecast Line (Dashed) -->
+                                    <path d="M500,140 C550,135 600,110 650,100 S750,80 850,70" fill="none"
+                                        stroke="#818cf8" stroke-dasharray="6,4" stroke-linecap="round" stroke-width="3">
+                                    </path>
+                                    <!-- Data Point (End) -->
+                                    <circle
+                                        class="fill-indigo-500 stroke-white dark:stroke-[#1e293b] stroke-2 shadow-lg"
+                                        cx="850" cy="70" r="6"></circle>
+                                </svg>
+                                <!-- Tooltip Overlay (Static for design) -->
+                                <div
+                                    class="absolute top-[50px] right-[5%] bg-slate-900 text-white text-xs py-1.5 px-3 rounded shadow-xl border border-slate-700 transform -translate-x-1/2">
+                                    <p class="font-bold">Oct 24</p>
+                                    <p>$6.80 USD</p>
+                                    <div
+                                        class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-slate-900 border-r border-b border-slate-700 transform rotate-45">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- X Axis Labels -->
+                            <div class="flex justify-between mt-4 text-xs font-medium text-slate-400">
+                                <span>Today</span>
+                                <span>Oct 14</span>
+                                <span>Oct 18</span>
+                                <span>Oct 22</span>
+                                <span>Oct 26</span>
+                            </div>
+                        </div>
+                        <!-- Insight Card -->
+                        <div
+                            class="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 rounded-lg flex gap-4 items-start">
+                            <div class="p-2 bg-blue-100 dark:bg-blue-800 rounded-full text-primary dark:text-blue-300">
+                                <span class="material-symbols-outlined text-[20px]">tips_and_updates</span>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-900 dark:text-white text-sm">AI Analysis</h4>
+                                <p class="text-sm text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">
+                                    Based on current volatility and historical trends, the IDR is expected to strengthen
+                                    slightly against the USD over the next 7 days. Our confidence score for this
+                                    prediction is <strong class="text-emerald-600 dark:text-emerald-400">87%</strong>.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>
