@@ -1,4 +1,16 @@
 {
   "hello_message": "Halo, nama saya LLM Exchange API",
-  "status_ok": "ok"
+  "status_ok": "ok",
+  "invalid_start_date_format": "Format start_date tidak valid. Gunakan YYYY-MM-DD",
+  "invalid_end_date_format": "Format end_date tidak valid. Gunakan YYYY-MM-DD",
+  "end_before_start": "end_date harus >= start_date",
+  "range_too_large": "Rentang terlalu besar ({total_days} hari). Maksimum {max_days} hari",
+  "symbol_error": "Terjadi kesalahan memproses simbol {symbol}: {err}",
+  "no_data_for_symbol": "Tidak ada data untuk {symbol}",
+  "no_historical_data_for_symbol": "Tidak ada data historis untuk {symbol}",
+  "no_valid_date_entries": "Tidak ada entri Tanggal yang valid setelah parsing",
+  "no_date_column": "Tidak ada kolom Tanggal di data",
+  "market_search_error": "Pencarian pasar gagal: {err}",
+  "market_detail_error": "Pengambilan detail ticker gagal: {err}",
+  "market_history_error": "Pengambilan history ticker gagal: {err}"
 }

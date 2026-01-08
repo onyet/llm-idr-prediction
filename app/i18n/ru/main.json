@@ -1,4 +1,11 @@
 {
   "hello_message": "Привет, я LLM Exchange API",
-  "status_ok": "ok"
+  "status_ok": "ok",
+  "no_data_for_symbol": "Нет данных для {symbol}",
+  "no_historical_data_for_symbol": "Нет исторических данных для {symbol}",
+  "no_valid_date_entries": "Нет корректных записей даты после разбора",
+  "no_date_column": "В данных отсутствует столбец даты",
+  "market_search_error": "Ошибка поиска рынка: {err}",
+  "market_detail_error": "Не удалось получить детали тикера: {err}",
+  "market_history_error": "Не удалось получить историю тикера: {err}"
 }

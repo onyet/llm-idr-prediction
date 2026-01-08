@@ -1,4 +1,11 @@
 {
   "hello_message": "こんにちは、私はLLM Exchange APIです",
-  "status_ok": "ok"
+  "status_ok": "ok",
+  "no_data_for_symbol": "{symbol} のデータがありません",
+  "no_historical_data_for_symbol": "{symbol} の過去データがありません",
+  "no_valid_date_entries": "解析後に有効な日付エントリがありません",
+  "no_date_column": "データに日付列がありません",
+  "market_search_error": "マーケット検索に失敗しました: {err}",
+  "market_detail_error": "ティッカーの詳細取得に失敗しました: {err}",
+  "market_history_error": "ティッカーヒストリーの取得に失敗しました: {err}"
 }

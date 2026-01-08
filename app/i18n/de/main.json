@@ -1,4 +1,11 @@
 {
   "hello_message": "Hallo, saya LLM Exchange API",
-  "status_ok": "ok"
+  "status_ok": "ok",
+  "no_data_for_symbol": "Keine Daten für {symbol}",
+  "no_historical_data_for_symbol": "Keine historischen Daten für {symbol}",
+  "no_valid_date_entries": "Keine gültigen Datumseinträge nach dem Parsen",
+  "no_date_column": "Keine Datumsspalte in den Daten",
+  "market_search_error": "Marktsuche fehlgeschlagen: {err}",
+  "market_detail_error": "Abruf der Ticker-Details fehlgeschlagen: {err}",
+  "market_history_error": "Abruf der Ticker-Historie fehlgeschlagen: {err}"
 }

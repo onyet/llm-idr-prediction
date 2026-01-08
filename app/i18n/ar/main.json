@@ -1,4 +1,11 @@
 {
   "hello_message": "مرحبًا، اسمي LLM Exchange API",
-  "status_ok": "حسنًا"
+  "status_ok": "حسنًا",
+  "no_data_for_symbol": "لا توجد بيانات لـ {symbol}",
+  "no_historical_data_for_symbol": "لا توجد بيانات تاريخية لـ {symbol}",
+  "no_valid_date_entries": "لا توجد إدخالات تاريخ صالحة بعد التحليل",
+  "no_date_column": "لا يوجد عمود تاريخ في البيانات",
+  "market_search_error": "فشل البحث في السوق: {err}",
+  "market_detail_error": "فشل جلب تفاصيل الرمز: {err}",
+  "market_history_error": "فشل جلب تاريخ الرمز: {err}"
 }

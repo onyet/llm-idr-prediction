@@ -1,4 +1,16 @@
 {
   "hello_message": "Hello, My name is LLM Exchange API",
-  "status_ok": "ok"
+  "status_ok": "ok",
+  "invalid_start_date_format": "Invalid start_date format. Use YYYY-MM-DD",
+  "invalid_end_date_format": "Invalid end_date format. Use YYYY-MM-DD",
+  "end_before_start": "end_date must be >= start_date",
+  "range_too_large": "Range too large ({total_days} days). Max is {max_days} days",
+  "symbol_error": "Error processing symbol {symbol}: {err}",
+  "no_data_for_symbol": "No data for {symbol}",
+  "no_historical_data_for_symbol": "No historical data for {symbol}",
+  "no_valid_date_entries": "No valid Date entries after parsing",
+  "no_date_column": "No Date column in data",
+  "market_search_error": "Market search failed: {err}",
+  "market_detail_error": "Ticker detail fetch failed: {err}",
+  "market_history_error": "Ticker history fetch failed: {err}"
 }
