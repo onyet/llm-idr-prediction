@@ -1,0 +1,316 @@
+{
+  "base_currency": "IDR",
+  "source": "Bank Indonesia",
+  "type": "official_fx",
+  "currencies": [
+    {
+      "code": "AED",
+      "name": "United Arab Emirates Dirham",
+      "symbol": "د.إ",
+      "country": "United Arab Emirates",
+      "unit": 1,
+      "bi_note": "Kurs transaksi BI",
+      "yfinance": {
+        "symbol": "AED=X",
+        "unit": "USD/AED"
+      }
+    },
+    {
+      "code": "AUD",
+      "name": "Australian Dollar",
+      "symbol": "A$",
+      "country": "Australia",
+      "unit": 1,
+      "bi_note": "Kurs transaksi BI",
+      "yfinance": {
+        "symbol": "AUDIDR=X",
+        "unit": "AUD/IDR"
+      }
+    },
+    {
+      "code": "BND",
+      "name": "Brunei Dollar",
+      "symbol": "B$",
+      "country": "Brunei Darussalam",
+      "unit": 1,
+      "bi_note": "Kurs transaksi BI",
+      "yfinance": {
+        "symbol": "BND=X",
+        "unit": "USD/BND"
+      }
+    },
+    {
+      "code": "CAD",
+      "name": "Canadian Dollar",
+      "symbol": "C$",
+      "country": "Canada",
+      "unit": 1,
+      "bi_note": "Kurs transaksi BI",
+      "yfinance": {
+        "symbol": "CADIDR=X",
+        "unit": "CAD/IDR"
+      }
+    },
+    {
+      "code": "CHF",
+      "name": "Swiss Franc",
+      "symbol": "CHF",
+      "country": "Switzerland",
+      "unit": 1,
+      "bi_note": "Kurs transaksi BI",
+      "yfinance": {
+        "symbol": "CHFIDR=X",
+        "unit": "CHF/IDR"
+      }
+    },
+    {
+      "code": "CNH",
+      "name": "Chinese Yuan (Offshore)",
+      "symbol": "¥",
+      "country": "China (Offshore)",
+      "unit": 1,
+      "bi_note": "Offshore Yuan",
+      "yfinance": {
+        "symbol": "CNHIDR=X",
+        "unit": "CNH/IDR"
+      }
+    },
+    {
+      "code": "CNY",
+      "name": "Chinese Yuan (Onshore)",
+      "symbol": "¥",
+      "country": "China",
+      "unit": 1,
+      "bi_note": "Onshore Yuan",
+      "yfinance": {
+        "symbol": "CNYIDR=X",
+        "unit": "CNY/IDR"
+      }
+    },
+    {
+      "code": "DKK",
+      "name": "Danish Krone",
+      "symbol": "kr",
+      "country": "Denmark",
+      "unit": 1,
+      "bi_note": "Kurs transaksi BI",
+      "yfinance": {
+        "symbol": "DKKIDR=X",
+        "unit": "DKK/IDR"
+      }
+    },
+    {
+      "code": "EUR",
+      "name": "Euro",
+      "symbol": "€",
+      "country": "European Union",
+      "unit": 1,
+      "bi_note": "Kurs transaksi BI",
+      "yfinance": {
+        "symbol": "EURIDR=X",
+        "unit": "EUR/IDR"
+      }
+    },
+    {
+      "code": "GBP",
+      "name": "Pound Sterling",
+      "symbol": "£",
+      "country": "United Kingdom",
+      "unit": 1,
+      "bi_note": "Kurs transaksi BI",
+      "yfinance": {
+        "symbol": "GBPIDR=X",
+        "unit": "GBP/IDR"
+      }
+    },
+    {
+      "code": "HKD",
+      "name": "Hong Kong Dollar",
+      "symbol": "HK$",
+      "country": "Hong Kong",
+      "unit": 1,
+      "bi_note": "Kurs transaksi BI",
+      "yfinance": {
+        "symbol": "HKDIDR=X",
+        "unit": "HKD/IDR"
+      }
+    },
+    {
+      "code": "JPY",
+      "name": "Japanese Yen",
+      "symbol": "¥",
+      "country": "Japan",
+      "unit": 100,
+      "bi_note": "BI menggunakan 100 JPY",
+      "yfinance": {
+        "symbol": "JPYIDR=X",
+        "unit": "JPY/IDR"
+      }
+    },
+    {
+      "code": "KRW",
+      "name": "South Korean Won",
+      "symbol": "₩",
+      "country": "South Korea",
+      "unit": 100,
+      "bi_note": "BI menggunakan 100 KRW",
+      "yfinance": {
+        "symbol": "KRWIDR=X",
+        "unit": "KRW/IDR"
+      }
+    },
+    {
+      "code": "KWD",
+      "name": "Kuwaiti Dinar",
+      "symbol": "د.ك",
+      "country": "Kuwait",
+      "unit": 1,
+      "bi_note": "Kurs transaksi BI",
+      "yfinance": {
+        "symbol": "KWD=X",
+        "unit": "USD/KWD"
+      }
+    },
+    {
+      "code": "LAK",
+      "name": "Lao Kip",
+      "symbol": "₭",
+      "country": "Laos",
+      "unit": 100,
+      "bi_note": "BI menggunakan 100 LAK",
+      "yfinance": {
+        "symbol": "LAK=X",
+        "unit": "USD/LAK"
+      }
+    },
+    {
+      "code": "MYR",
+      "name": "Malaysian Ringgit",
+      "symbol": "RM",
+      "country": "Malaysia",
+      "unit": 1,
+      "bi_note": "Kurs transaksi BI",
+      "yfinance": {
+        "symbol": "MYRIDR=X",
+        "unit": "MYR/IDR"
+      }
+    },
+    {
+      "code": "NOK",
+      "name": "Norwegian Krone",
+      "symbol": "kr",
+      "country": "Norway",
+      "unit": 1,
+      "bi_note": "Kurs transaksi BI",
+      "yfinance": {
+        "symbol": "NOK=X",
+        "unit": "USD/NOK"
+      }
+    },
+    {
+      "code": "NZD",
+      "name": "New Zealand Dollar",
+      "symbol": "NZ$",
+      "country": "New Zealand",
+      "unit": 1,
+      "bi_note": "Kurs transaksi BI",
+      "yfinance": {
+        "symbol": "NZDIDR=X",
+        "unit": "NZD/IDR"
+      }
+    },
+    {
+      "code": "PGK",
+      "name": "Papua New Guinean Kina",
+      "symbol": "K",
+      "country": "Papua New Guinea",
+      "unit": 1,
+      "bi_note": "Kurs transaksi BI",
+      "yfinance": null
+    },
+    {
+      "code": "PHP",
+      "name": "Philippine Peso",
+      "symbol": "₱",
+      "country": "Philippines",
+      "unit": 1,
+      "bi_note": "Kurs transaksi BI",
+      "yfinance": {
+        "symbol": "PHPIDR=X",
+        "unit": "PHP/IDR"
+      }
+    },
+    {
+      "code": "SAR",
+      "name": "Saudi Riyal",
+      "symbol": "﷼",
+      "country": "Saudi Arabia",
+      "unit": 1,
+      "bi_note": "Kurs transaksi BI",
+      "yfinance": {
+        "symbol": "SAR=X",
+        "unit": "USD/SAR"
+      }
+    },
+    {
+      "code": "SEK",
+      "name": "Swedish Krona",
+      "symbol": "kr",
+      "country": "Sweden",
+      "unit": 1,
+      "bi_note": "Kurs transaksi BI",
+      "yfinance": {
+        "symbol": "SEKIDR=X",
+        "unit": "SEK/IDR"
+      }
+    },
+    {
+      "code": "SGD",
+      "name": "Singapore Dollar",
+      "symbol": "S$",
+      "country": "Singapore",
+      "unit": 1,
+      "bi_note": "Kurs transaksi BI",
+      "yfinance": {
+        "symbol": "SGDIDR=X",
+        "unit": "SGD/IDR"
+      }
+    },
+    {
+      "code": "THB",
+      "name": "Thai Baht",
+      "symbol": "฿",
+      "country": "Thailand",
+      "unit": 1,
+      "bi_note": "Kurs transaksi BI",
+      "yfinance": {
+        "symbol": "THBIDR=X",
+        "unit": "THB/IDR"
+      }
+    },
+    {
+      "code": "USD",
+      "name": "United States Dollar",
+      "symbol": "$",
+      "country": "United States",
+      "unit": 1,
+      "bi_note": "Kurs transaksi BI",
+      "yfinance": {
+        "symbol": "USDIDR=X",
+        "unit": "USD/IDR"
+      }
+    },
+    {
+      "code": "VND",
+      "name": "Vietnamese Dong",
+      "symbol": "₫",
+      "country": "Vietnam",
+      "unit": 100,
+      "bi_note": "BI menggunakan 100 VND",
+      "yfinance": {
+        "symbol": "VND=X",
+        "unit": "USD/VND"
+      }
+    }
+  ]
+}

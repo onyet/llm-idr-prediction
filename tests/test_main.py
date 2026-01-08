@@ -101,3 +101,23 @@ def test_rag_idr_summary():
     assert "recommendation" in body
     assert "main_recommendation" in body["recommendation"]
     assert "best_option" in body["recommendation"]
+
+
+def test_exchange_idr_currencies():
+    rv = client.get("/exchange/idr/currencies")
+    assert rv.status_code == 200
+    body = rv.json()
+    assert "currencies" in body
+    currencies = body["currencies"]
+    assert isinstance(currencies, list)
+    # Check that all have yfinance not null
+    for c in currencies:
+        assert c.get("yfinance") is not None
+    # Check search functionality
+    rv_search = client.get("/exchange/idr/currencies?search=USD")
+    assert rv_search.status_code == 200
+    body_search = rv_search.json()
+    currencies_search = body_search["currencies"]
+    assert len(currencies_search) > 0
+    for c in currencies_search:
+        assert "USD" in c.get("code", "").upper() or "USD" in c.get("name", "").upper() or "USD" in c.get("symbol", "") or "USD" in c.get("country", "").upper()
