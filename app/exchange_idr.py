@@ -2,6 +2,7 @@ from fastapi import APIRouter, Query, Request
 import json
 import os
 from yahooquery import search, Ticker
+from fastapi.responses import JSONResponse
 import requests, time, copy
 import yfinance as yf
 import pandas as pd
@@ -258,6 +259,9 @@ INVEST_PERSIST_DIR = PREDICTION_DIR
 # Trending tickers cache (short TTL to avoid repeated external calls)
 TREND_CACHE = {}
 TREND_CACHE_TTL = 60  # seconds
+# Cooldown map for regions when provider returns 429
+TREND_COOLDOWN = {}  # region -> unix timestamp (seconds)
+
 
 
 import statistics
@@ -858,34 +862,34 @@ async def get_exchange_rates(symbols: str = Query("", description="Comma-separat
 
 @router.get('/get_trend')
 async def get_trend(request: Request, region: str = Query('US', description='Region code, e.g., US, GB, HK'), count: int = Query(10, description='Maximum number of trending tickers to return')):
+    """Return trending tickers from the local `trending/stocks.json` file (populated by the cron scraper)."""
     lang = get_lang_from_request(request)
     cache_key = region.upper()
     now = time.time()
 
+    # Serve from in-memory cache if fresh
     cached = TREND_CACHE.get(cache_key)
     if cached and now - cached['ts'] < TREND_CACHE_TTL:
         quotes = copy.deepcopy(cached['data'])
         return {"region": region, "count": min(count, len(quotes)), "results": quotes[:count]}
 
-    url = f"https://query1.finance.yahoo.com/v1/finance/trending/{region}"
+    # Read the persisted file (trending/stocks.json)
     try:
-        resp = requests.get(url, timeout=5)
-        if resp.status_code != 200:
-            return {"error": t('trend_fetch_error', lang=lang, err=f"HTTP {resp.status_code}")}
-        payload = resp.json()
+        trend_file = os.path.join(os.path.dirname(__file__), '..', 'trending', 'stocks.json')
+        if not os.path.exists(trend_file):
+            return {"error": t('trend_fetch_error', lang=lang, err='no_trending_file')}
+        with open(trend_file, 'r') as f:
+            payload = json.load(f)
         quotes = []
-        # Keep only EQUITY quoteType
-        for r in payload.get('finance', {}).get('result', [])[:1]:
-            for q in r.get('quotes', []):
-                if q.get('quoteType') != 'EQUITY':
-                    continue
-                quotes.append({
-                    'symbol': q.get('symbol'),
-                    'shortName': q.get('shortName') or q.get('longName'),
-                    'quoteType': q.get('quoteType'),
-                    'exchange': q.get('exchDisp') or q.get('exchange'),
-                })
-        # cache the full equity results
+        for q in payload.get('data', []):
+            # payload is expected to already contain EQUITY entries, but validate shape
+            quotes.append({
+                'symbol': q.get('symbol'),
+                'shortName': q.get('shortName') or q.get('longName'),
+                'quoteType': q.get('quoteType'),
+                'exchange': q.get('exchange') or q.get('exchDisp') or q.get('fullExchangeName'),
+            })
+        # cache the results
         TREND_CACHE[cache_key] = {'ts': now, 'data': quotes}
         return {"region": region, "count": min(count, len(quotes)), "results": quotes[:count]}
     except Exception as e:

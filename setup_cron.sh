@@ -23,6 +23,19 @@ else
     echo "Morning cronjob added successfully."
 fi
 
+# Ensure the trending scraper morning job exists
+TREND_SCRIPT="${SCRIPT_PATH%/*}/update_trending.py"
+chmod +x "$TREND_SCRIPT" || true
+CRON_CMD_TREND="0 7 * * * $PYTHON_EXEC $TREND_SCRIPT >> $LOG_PATH 2>&1"
+CRONTAB_CONTENT=$(crontab -l 2>/dev/null || true)
+if echo "$CRONTAB_CONTENT" | grep -Fq "$TREND_SCRIPT"; then
+    echo "Morning cronjob for update_trending.py already exists."
+else
+    echo "Adding morning cronjob for update_trending.py to run daily at 07:00..."
+    (crontab -l 2>/dev/null || true; echo "$CRON_CMD_TREND") | crontab -
+    echo "Morning cronjob for trending added successfully."
+fi
+
 # Ensure the evening job exists
 CRONTAB_CONTENT=$(crontab -l 2>/dev/null || true)
 if echo "$CRONTAB_CONTENT" | grep -Fq "$CRON_CMD_EVENING"; then

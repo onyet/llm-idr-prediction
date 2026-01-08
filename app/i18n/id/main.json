@@ -15,5 +15,6 @@
   "market_history_error": "Pengambilan history ticker gagal: {err}",
   "invalid_amount": "Jumlah tidak valid. Gunakan angka positif",
   "no_valid_price_for_start": "Tidak ada harga valid untuk tanggal mulai untuk {symbol}",
-  "trend_fetch_error": "Gagal mengambil daftar saham trending: {err}"
+  "trend_fetch_error": "Gagal mengambil daftar saham trending: {err}",
+  "trend_rate_limited": "Dibatasi oleh provider. Coba lagi setelah {retry_after} detik"
 }

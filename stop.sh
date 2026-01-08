@@ -47,14 +47,18 @@ fi
 if is_port_in_use; then
     echo "Warning: Port $PORT still in use after cleanup"
 else
-    # Remove cronjob
+    # Remove cronjobs for update_data and update_trending
     PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
     SCRIPT_PATH="$PROJECT_DIR/update_data.py"
+    TREND_SCRIPT="$PROJECT_DIR/update_trending.py"
 
-    if crontab -l 2>/dev/null | grep -Fq "$SCRIPT_PATH"; then
-        echo "Removing cronjob for update_data.py..."
-        (crontab -l 2>/dev/null | grep -Fv "$SCRIPT_PATH" || true) | crontab -
-        echo "Cronjob removed."
+    # Remove any cron entries that reference either script
+    if crontab -l 2>/dev/null | grep -Fq -e "$SCRIPT_PATH" -e "$TREND_SCRIPT"; then
+        echo "Removing cronjobs for update_data.py and/or update_trending.py..."
+        (crontab -l 2>/dev/null | grep -Fv -e "$SCRIPT_PATH" -e "$TREND_SCRIPT" || true) | crontab -
+        echo "Cronjobs removed."
+    else
+        echo "No cronjobs to remove."
     fi
 
     echo "Server stopped successfully"
