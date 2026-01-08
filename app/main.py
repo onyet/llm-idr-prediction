@@ -1,7 +1,9 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 
+from .mini import models as admin_models
 from . import rag, tradingview, analyze
 from . import ollama
 from . import exchange_idr
@@ -19,8 +21,27 @@ class LanguageMiddleware(BaseHTTPMiddleware):
         return response
 
 
+# Tambahkan middleware offline terlebih dahulu (admin turnoff)
+
+class OfflineMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        # allow admin paths to be called even when offline
+        try:
+            if admin_models.is_offline():
+                if not request.url.path.startswith(admin_models.ADMIN_BASE_PATH):
+                    return JSONResponse(status_code=503, content={"detail": "Service is turned off"})
+        except Exception:
+            # If admin module is missing or has issues, fail fast by refusing requests
+            return JSONResponse(status_code=500, content={"detail": "Admin module error"})
+        return await call_next(request)
+
+app.add_middleware(OfflineMiddleware)
+
 # Tambahkan middleware bahasa terlebih dahulu
 app.add_middleware(LanguageMiddleware)
+
+# Mount admin router early; missing admin module will cause import-time failure
+app.include_router(admin_models.router)
 
 app.include_router(rag.router)
 app.include_router(tradingview.router)
