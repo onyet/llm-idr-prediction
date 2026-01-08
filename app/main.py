@@ -7,6 +7,7 @@ from .mini import models as admin_models
 from . import rag, tradingview, analyze
 from . import ollama
 from . import exchange_idr
+from . import demo
 from .i18n import get_lang_from_request, set_current_lang, t
 
 app = FastAPI(title="LLM Exchange API", version="0.1.0")
@@ -48,6 +49,7 @@ app.include_router(tradingview.router)
 app.include_router(analyze.router)
 app.include_router(ollama.router)
 app.include_router(exchange_idr.router)
+app.include_router(demo.router)
 
 # Izinkan CORS untuk pengujian cepat di browser (sesuaikan origin di produksi)
 app.add_middleware(
