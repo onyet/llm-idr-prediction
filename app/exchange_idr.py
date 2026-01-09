@@ -505,6 +505,9 @@ async def invest_projection(symbol: str = Query(None, description="(Deprecated) 
     symbol_list = [s.strip() for s in symbol_input.split(',') if s.strip()]
     if not symbol_list:
         return {"error": t('symbol_error', lang=lang, symbol='(missing)')}
+    # Normalize friendly names to canonical yfinance tickers (e.g., GOLD -> GC=F)
+    _SYM_NORM = {'GOLD': 'GC=F', 'USD': 'USDIDR=X', 'SAR': 'SAR=X'}
+    symbol_list = [(_SYM_NORM.get(s.upper(), s)) for s in symbol_list]
 
     if start_date:
         try:
@@ -768,7 +771,10 @@ async def get_exchange_rates(symbols: str = Query("", description="Comma-separat
     # Always include defaults
     default_symbols = ["GC=F", "USDIDR=X", "SAR=X"]
     additional_symbols = [s.strip() for s in symbols.split(',') if s.strip()]
-    symbol_list = default_symbols + [s for s in additional_symbols if s not in default_symbols]
+    # Normalize friendly names to canonical yfinance tickers (e.g., GOLD -> GC=F)
+    _SYM_NORM = {'GOLD': 'GC=F', 'USD': 'USDIDR=X', 'SAR': 'SAR=X'}
+    normalized_additional = [_SYM_NORM.get(s.upper(), s) for s in additional_symbols]
+    symbol_list = default_symbols + [s for s in normalized_additional if s not in default_symbols]
 
     # Precompute USDIDR series for range
     usd_map = {}

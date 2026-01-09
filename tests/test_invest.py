@@ -52,3 +52,16 @@ def test_invest_with_prediction(monkeypatch):
     assert data['is_prediction'] is True
     assert data['projected_final'] is not None
     assert 'ai_analysis' in data
+
+
+def test_invest_gold_alias():
+    today = pd.Timestamp.now().date()
+    r1 = client.get(f"/exchange/idr/invest?symbol=GC=F&amount=100000&start_date={today}&end_date={today}")
+    r2 = client.get(f"/exchange/idr/invest?symbol=GOLD&amount=100000&start_date={today}&end_date={today}")
+    assert r1.status_code == 200 and r2.status_code == 200
+    d1 = r1.json()
+    d2 = r2.json()
+    # GOLD should normalize to GC=F and produce identical results for same date
+    assert d1['start_price_idr'] == d2['start_price_idr']
+    assert d1['end_price_idr'] == d2['end_price_idr']
+    assert d1['series'][0]['idr_value'] == d2['series'][0]['idr_value']
