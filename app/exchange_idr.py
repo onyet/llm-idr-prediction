@@ -181,8 +181,18 @@ def get_price_on_date(symbol, req_date):
                 if not le.empty:
                     row = le.iloc[-1]
                     return row['Close'], str(row['date_only']), False, None, None
+            # if update did not fetch today's data, fall back to last available (do not predict for today)
+            if last_date < today and not df.empty:
+                row = df.iloc[-1]
+                return float(row['Close']), str(row['date_only']), False, None, None
         except Exception:
-            pass
+            # If update failed, try to return last available data (do not predict)
+            try:
+                if not df.empty:
+                    row = df.iloc[-1]
+                    return float(row['Close']), str(row['date_only']), False, None, None
+            except Exception:
+                pass
 
     # if requested date is after last available, predict (future dates)
     if req_date > last_date:
@@ -195,14 +205,32 @@ def get_price_on_date(symbol, req_date):
                     preds = json.load(pf)
                 if req_key in preds:
                     p = preds[req_key]
-                    return float(p['yhat']), req_key, True, float(p.get('yhat_lower', p['yhat'])), float(p.get('yhat_upper', p['yhat']))
+                    try:
+                        last_close = float(df.iloc[-1]['Close'])
+                        # ignore persisted predictions that deviate wildly (>50%) from last known close
+                        if last_close and abs(float(p['yhat']) - last_close) / last_close > 0.5:
+                            # persisted prediction looks implausible (>50% change); ignore it
+                            pass
+                        else:
+                            return float(p['yhat']), req_key, True, float(p.get('yhat_lower', p['yhat'])), float(p.get('yhat_upper', p['yhat']))
+                    except Exception:
+                        # if check fails, return persisted value
+                        return float(p['yhat']), req_key, True, float(p.get('yhat_lower', p['yhat'])), float(p.get('yhat_upper', p['yhat']))
             except Exception:
                 pass
         # check in-memory cache
         cache_key = (safe_symbol, req_key)
         if cache_key in PREDICTION_CACHE:
             yhat, lower, upper = PREDICTION_CACHE[cache_key]
-            return yhat, req_key, True, lower, upper
+            try:
+                last_close = float(df.iloc[-1]['Close'])
+                # ignore cache prediction if it deviates >50% from last known close
+                if last_close and abs(yhat - last_close) / last_close > 0.5:
+                    pass
+                else:
+                    return yhat, req_key, True, lower, upper
+            except Exception:
+                return yhat, req_key, True, lower, upper
         # fit or reuse model
         try:
             from prophet import Prophet
@@ -223,6 +251,14 @@ def get_price_on_date(symbol, req_date):
                 yhat = float(rowf.iloc[0]['yhat'])
                 yhat_lower = float(rowf.iloc[0].get('yhat_lower', yhat))
                 yhat_upper = float(rowf.iloc[0].get('yhat_upper', yhat))
+                # sanity check: if prediction is wildly different (>50%) from last known close, ignore prediction and return last close
+                try:
+                    last_close = float(df.iloc[-1]['Close'])
+                    if last_close and abs(yhat - last_close) / last_close > 0.5:
+                        # considered implausible (>50% change); return last known close
+                        return last_close, str(last_date), False, None, None
+                except Exception:
+                    pass
                 # cache in-memory
                 PREDICTION_CACHE[cache_key] = (yhat, yhat_lower, yhat_upper)
                 # persist
@@ -330,22 +366,32 @@ def build_series_for_symbol(symbol: str, date_list, currencies, usd_map, usd_pre
             currency = get_currency_for_ticker(symbol)
             for d in date_list:
                 price, pd_str, is_price_pred, p_lower, p_upper = get_price_on_date(symbol, d)
+                # ensure conversion_meta always exists to avoid NameError if a conversion fails
+                conversion_meta = {"rate": None, "source_symbol": None, "is_prediction": False}
+                idr_value = None
+
                 if currency == 'IDR':
                     idr_value = price
                     conversion_meta = {"rate": 1, "source_symbol": None, "is_prediction": False}
                 elif currency in currencies:
-                    curr_meta = currencies[currency]
-                    curr_yf = curr_meta['yfinance']['symbol']
-                    curr_unit = curr_meta['yfinance']['unit']
-                    curr_price, curr_pd, curr_pred, curr_lower, curr_upper = get_price_on_date(curr_yf, d)
-                    if 'IDR' in curr_unit:
-                        idr_per_unit = curr_price
-                    elif curr_unit.startswith('USD/'):
-                        idr_per_unit = usd_map[d] / curr_price if curr_price else None
-                    else:
-                        idr_per_unit = curr_price * usd_map[d] if curr_price else None
-                    idr_value = price * idr_per_unit if price and idr_per_unit else None
-                    conversion_meta = {"rate": idr_per_unit, "source_symbol": curr_yf, "is_prediction": curr_pred, "prediction": {"lower": curr_lower, "upper": curr_upper} if curr_pred else None}
+                    try:
+                        curr_meta = currencies[currency]
+                        curr_yf = curr_meta['yfinance']['symbol']
+                        curr_unit = curr_meta['yfinance']['unit']
+                        curr_price, curr_pd, curr_pred, curr_lower, curr_upper = get_price_on_date(curr_yf, d)
+                        if 'IDR' in curr_unit:
+                            idr_per_unit = curr_price
+                        elif curr_unit.startswith('USD/'):
+                            idr_per_unit = usd_map[d] / curr_price if curr_price else None
+                        else:
+                            idr_per_unit = curr_price * usd_map[d] if curr_price else None
+                        idr_value = price * idr_per_unit if price and idr_per_unit else None
+                        conversion_meta = {"rate": idr_per_unit, "source_symbol": curr_yf, "is_prediction": curr_pred, "prediction": {"lower": curr_lower, "upper": curr_upper} if curr_pred else None}
+                    except Exception:
+                        # On any failure in currency conversion, fall back to assuming USD conversion
+                        idr_per_unit = usd_map[d]
+                        idr_value = price * idr_per_unit if price and idr_per_unit else None
+                        conversion_meta = {"rate": idr_per_unit, "source_symbol": "USDIDR=X", "note": "assumed USD (fallback)"}
                 else:
                     idr_per_unit = usd_map[d]
                     idr_value = price * idr_per_unit if price else None
@@ -793,21 +839,31 @@ async def get_exchange_rates(symbols: str = Query("", description="Comma-separat
                 currency = get_currency_for_ticker(symbol)
                 for d in date_list:
                     price, pd_str, is_price_pred, p_lower, p_upper = get_price_on_date(symbol, d)
+                    # ensure conversion_meta exists
+                    conversion_meta = {"rate": None, "source_symbol": None, "is_prediction": False}
+                    idr_value = None
+
                     if currency == 'IDR':
                         idr_value = price
                     elif currency in currencies:
-                        curr_meta = currencies[currency]
-                        curr_yf = curr_meta['yfinance']['symbol']
-                        curr_unit = curr_meta['yfinance']['unit']
-                        curr_price, curr_pd, curr_pred, curr_lower, curr_upper = get_price_on_date(curr_yf, d)
-                        if 'IDR' in curr_unit:
-                            idr_per_unit = curr_price
-                        elif curr_unit.startswith('USD/'):
-                            idr_per_unit = usd_map[d] / curr_price
-                        else:
-                            idr_per_unit = curr_price * usd_map[d]
-                        idr_value = price * idr_per_unit
-                        conversion_meta = {"rate": idr_per_unit, "source_symbol": curr_yf, "is_prediction": curr_pred, "prediction": {"lower": curr_lower, "upper": curr_upper} if curr_pred else None}
+                        try:
+                            curr_meta = currencies[currency]
+                            curr_yf = curr_meta['yfinance']['symbol']
+                            curr_unit = curr_meta['yfinance']['unit']
+                            curr_price, curr_pd, curr_pred, curr_lower, curr_upper = get_price_on_date(curr_yf, d)
+                            if 'IDR' in curr_unit:
+                                idr_per_unit = curr_price
+                            elif curr_unit.startswith('USD/'):
+                                idr_per_unit = usd_map[d] / curr_price
+                            else:
+                                idr_per_unit = curr_price * usd_map[d]
+                            idr_value = price * idr_per_unit
+                            conversion_meta = {"rate": idr_per_unit, "source_symbol": curr_yf, "is_prediction": curr_pred, "prediction": {"lower": curr_lower, "upper": curr_upper} if curr_pred else None}
+                        except Exception:
+                            # fallback to USD assumption
+                            idr_per_unit = usd_map[d]
+                            idr_value = price * idr_per_unit if price else None
+                            conversion_meta = {"rate": idr_per_unit, "source_symbol": "USDIDR=X", "note": "assumed USD (fallback)"}
                     else:
                         idr_per_unit = usd_map[d]
                         idr_value = price * idr_per_unit
