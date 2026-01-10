@@ -65,75 +65,22 @@
     </style>
 </head>
 
-<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display overflow-hidden">
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display overflow-auto">
     <div class="flex h-screen w-full">
-        <!-- SideNavBar -->
-        <aside
-            class="w-64 h-full hidden lg:flex flex-col justify-between border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111722] p-4 z-20">
-            <div class="flex flex-col gap-8">
-                <div class="flex items-center gap-3 px-2">
-                    <div class="bg-center bg-no-repeat bg-cover rounded-xl size-10 shadow-lg shadow-blue-500/20"
-                        data-alt="Abstract blue digital finance logo"
-                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDSMlbIAGA4g36Pkg02rkokurEMrIvtGaJk0yQS0MWsSJtpsPV9j_74pApY1h_yP5FUZRZORPM6l8-qgb1HMFn9JmLzyQ2vAoqRC5x1QrEcFSMJWsqvflu2U1RyK6cwKEFrUQU0f7UZoqKM2RvSd9zRsMCOF9dCsh08Eurw4br1nQAIUxbzkPrkfj8-Nv1366iteRJXArdTFON3-u4bm3g0I1cCQDjIoKciUM9tszbwnvTm7gwzzMzxDb3G4BWjW-sXDlnHZGzk_vTW");'>
-                    </div>
-                    <h1 class="text-xl font-bold tracking-tight">AI Finance</h1>
-                </div>
-                <nav class="flex flex-col gap-1">
-                    <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary text-white shadow-md shadow-blue-600/20 transition-all hover:bg-blue-600"
-                        href="#">
-                        <span class="material-symbols-outlined text-[20px]">dashboard</span>
-                        <span class="text-sm font-medium">Dashboard</span>
-                    </a>
-                    <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                        href="#">
-                        <span class="material-symbols-outlined text-[20px]">account_balance_wallet</span>
-                        <span class="text-sm font-medium">Wallet</span>
-                    </a>
-                    <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                        href="#">
-                        <span class="material-symbols-outlined text-[20px]">analytics</span>
-                        <span class="text-sm font-medium">Analytics</span>
-                    </a>
-                    <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                        href="#">
-                        <span class="material-symbols-outlined text-[20px]">settings</span>
-                        <span class="text-sm font-medium">Settings</span>
-                    </a>
-                </nav>
-            </div>
-            <div class="flex flex-col gap-4">
-                <div
-                    class="bg-gradient-to-br from-indigo-900 to-slate-900 rounded-xl p-4 relative overflow-hidden group cursor-pointer border border-slate-800">
-                    <div class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity">
-                    </div>
-                    <div class="relative z-10 flex flex-col gap-2">
-                        <span class="material-symbols-outlined text-yellow-400">workspace_premium</span>
-                        <p class="text-xs text-slate-300">Upgrade to Pro</p>
-                        <p class="text-sm font-bold text-white">Unlock AI Insights</p>
-                    </div>
-                </div>
-                <button
-                    class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-500 dark:text-slate-400 hover:text-red-500 dark:hover:text-red-400 transition-colors w-full">
-                    <span class="material-symbols-outlined text-[20px]">logout</span>
-                    <span class="text-sm font-medium">Logout</span>
-                </button>
-            </div>
-        </aside>
+        <!-- SideNavBar removed -->
         <!-- Main Content Area -->
         <main class="flex-1 h-full overflow-y-auto bg-slate-50 dark:bg-[#101622] relative">
-            <!-- Mobile Header -->
+            <!-- Header (responsive) -->
             <div
-                class="lg:hidden flex items-center justify-between p-4 bg-white dark:bg-[#111722] border-b border-slate-200 dark:border-slate-800 sticky top-0 z-30">
+                class="flex items-center justify-center p-4 bg-white dark:bg-[#111722] border-b border-slate-200 dark:border-slate-800 sticky top-0 z-30">
                 <div class="flex items-center gap-2">
                     <div class="bg-center bg-no-repeat bg-cover rounded-lg size-8"
                         data-alt="Abstract blue digital finance logo"
                         style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCcJZ8la18r2otMJQU-j1RXDDjSThvwrV4su1lVs9RlSH9kPbd6cpsLQW_KB2gm3k-tTXr8cJnvfU0hMawhNDNjp-k2vXT7B5ZgazojIRH1rLk2ZUvfrb_A7mgNCWvDbMeXnX5BkCXklGGeul6Dp_TsyzToMEK_M9f5izz21XT3FURtv_OJKWrD9JKN9-j-k-_ZeNERw9TeqaNsGzP-bH_g2sszRRFbtNEVUhjTL0MTGiNv7QlM0ja7V6TtaGKImgZ8kzQ_w3ld4qtR");'>
                     </div>
-                    <h1 class="text-lg font-bold text-slate-900 dark:text-white">AI Finance</h1>
+                    <h1 class="text-lg font-bold text-slate-900 dark:text-white text-center">AI Finance</h1>
                 </div>
-                <button class="text-slate-500">
-                    <span class="material-symbols-outlined">menu</span>
-                </button>
+                <!-- menu removed -->
             </div>
             <div class="max-w-7xl mx-auto p-4 lg:p-8 flex flex-col gap-8">
                 <!-- Page Heading & Actions -->
@@ -150,12 +97,7 @@
                                 class="pl-4 pr-4 py-2 rounded-lg bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 text-slate-900 dark:text-white w-full md:w-64 transition-shadow"
                                 type="date" />
                         </div>
-                        <button
-                            class="flex items-center justify-center size-10 rounded-lg bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors text-slate-500 dark:text-white relative">
-                            <span class="material-symbols-outlined">notifications</span>
-                            <span
-                                class="absolute top-2 right-2 size-2 bg-red-500 rounded-full border border-[#1e293b]"></span>
-                        </button>
+                        <!-- notifications button removed -->
                     </div>
                 </div>
                 <!-- Prediction Alert -->
