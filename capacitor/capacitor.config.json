@@ -1,0 +1,11 @@
+{
+  "appId": "id.onyet.app.aifinance_demo1",
+  "appName": "AI Finance",
+  "webDir": "dist",
+  "plugins": {
+    "SplashScreen": {
+      "launchAutoHide": true,
+      "launchShowDuration": 1000
+    }
+  }
+}

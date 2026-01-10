@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">AI Finance</string>
+    <string name="title_activity_main">AI Finance</string>
+    <string name="package_name">id.onyet.app.aifinance_demo1</string>
+    <string name="custom_url_scheme">id.onyet.app.aifinance_demo1</string>
+</resources>

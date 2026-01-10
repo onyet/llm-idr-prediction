@@ -625,7 +625,7 @@
                         if (!q) { renderTrendingStocks(); return; }
                         try {
                             stocksList.innerHTML = '<div class="text-sm text-slate-500 p-2">Searching...</div>';
-                            const res = await fetch('/exchange/idr/market/search?query=' + encodeURIComponent(q));
+                            const res = await fetch(API_BASE + '/exchange/idr/market/search?query=' + encodeURIComponent(q));
                             if (!res.ok) throw new Error('Search failed');
                             const j = await res.json();
                             const results = j.results || j.items || j.exchanges || [];
@@ -760,7 +760,7 @@
                         }
                         try {
                             forecastStocksList.innerHTML = '<div class="text-sm text-slate-500 p-2">Searching...</div>';
-                            const res = await fetch('/exchange/idr/market/search?query=' + encodeURIComponent(q));
+                            const res = await fetch(API_BASE + '/exchange/idr/market/search?query=' + encodeURIComponent(q));
                             if (!res.ok) throw new Error('Search failed');
                             const j = await res.json();
                             const results = j.results || j.items || j.exchanges || [];
@@ -834,8 +834,8 @@
                     }
 
                     const [cRes, sRes] = await Promise.all([
-                        fetch('/exchange/idr/currencies'),
-                        fetch('/exchange/idr/get_trend?count=15')
+                        fetch(API_BASE + '/exchange/idr/currencies'),
+                        fetch(API_BASE + '/exchange/idr/get_trend?count=15')
                     ]);
 
                     const cJson = await cRes.json();
@@ -908,7 +908,7 @@
 
                 // fallback: validate by fetching exchange list
                 try {
-                    const res = await fetch('/exchange/idr/exchange' + (datePicker && datePicker.value ? '?date=' + datePicker.value : ''));
+                    const res = await fetch(API_BASE + '/exchange/idr/exchange' + (datePicker && datePicker.value ? '?date=' + datePicker.value : ''));
                     const data = await res.json();
                     const items = data.exchanges || data.results || [];
                     const found = items.find(i => i.symbol === s);
@@ -1035,12 +1035,12 @@
                     } catch (exErr) { console.warn('Failed to preload exchange list for forecast modal', exErr); }
 
                     const [cRes, sRes] = await Promise.all([
-                        fetch('/exchange/idr/currencies'),
-                        fetch('/exchange/idr/get_trend?count=15')
+                        fetch(API_BASE + '/exchange/idr/currencies'),
+                        fetch(API_BASE + '/exchange/idr/get_trend?count=15')
                     ]);
                     const cJson = await cRes.json();
                     const sJson = await sRes.json();
-                    const cur = cJson.currencies || [];
+                    const cur = cJson.currencies || []; 
                     const st = sJson.results || [];
 
                     // render currencies

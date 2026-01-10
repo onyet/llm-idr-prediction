@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>AI Finance Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                        "card-dark": "#1e293b",
+                        "card-light": "#ffffff",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "body": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.5rem", "lg": "0.75rem", "xl": "1rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <link rel="icon" href="./assets/icon/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="./css/app.css" />
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display overflow-auto">
+    <div class="flex h-screen w-full">
+        <!-- SideNavBar removed -->
+        <!-- Main Content Area -->
+        <main class="flex-1 h-full overflow-y-auto bg-slate-50 dark:bg-[#101622] relative">
+            <!-- Header (responsive) -->
+            <div
+                class="flex items-center justify-center p-4 bg-white dark:bg-[#111722] border-b border-slate-200 dark:border-slate-800 sticky top-0 z-30">
+                <div class="flex items-center gap-2">
+                    <div class="bg-center bg-no-repeat bg-cover rounded-lg size-8"
+                        data-alt="Abstract blue digital finance logo"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCcJZ8la18r2otMJQU-j1RXDDjSThvwrV4su1lVs9RlSH9kPbd6cpsLQW_KB2gm3k-tTXr8cJnvfU0hMawhNDNjp-k2vXT7B5ZgazojIRH1rLk2ZUvfrb_A7mgNCWvDbMeXnX5BkCXklGGeul6Dp_TsyzToMEK_M9f5izz21XT3FURtv_OJKWrD9JKN9-j-k-_ZeNERw9TeqaNsGzP-bH_g2sszRRFbtNEVUhjTL0MTGiNv7QlM0ja7V6TtaGKImgZ8kzQ_w3ld4qtR");'>
+                    </div>
+                    <h1 class="text-lg font-bold text-slate-900 dark:text-white text-center">AI Finance</h1>
+                </div>
+                <!-- menu removed -->
+            </div>
+            <div class="max-w-7xl mx-auto p-4 lg:p-8 flex flex-col gap-8">
+                <!-- Page Heading & Actions -->
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                    <div class="flex flex-col gap-1">
+                        <h2 class="text-3xl font-black tracking-tight text-slate-900 dark:text-white">Market Overview
+                        </h2>
+                        <p class="text-slate-500 dark:text-slate-400">Real-time exchange rates and market data</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="relative">
+                            <label for="date-picker" class="sr-only">Date</label>
+                            <input id="date-picker"
+                                class="pl-4 pr-4 py-2 rounded-lg bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 text-slate-900 dark:text-white w-full md:w-64 transition-shadow"
+                                type="date" />
+                        </div>
+                        <!-- notifications button removed -->
+                    </div>
+                </div>
+                <!-- Prediction Alert -->
+                <div id="prediction-alert" class="hidden"></div>
+                <!-- Stats / Market Tickers -->
+                <template id="card-skeleton">
+                    <div
+                        class="flex flex-col gap-4 p-5 rounded-xl bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700/50 shadow-sm">
+                        <div class="flex justify-between items-start">
+                            <div class="flex flex-col">
+                                <span
+                                    class="text-xs font-semibold text-slate-400 uppercase tracking-wider animate-pulse">Loading</span>
+                                <span
+                                    class="text-2xl font-bold bg-slate-200 dark:bg-slate-700 h-6 w-24 rounded mt-1 block"></span>
+                            </div>
+                            <div class="bg-slate-200 dark:bg-slate-700 h-6 w-12 rounded"></div>
+                        </div>
+                        <div class="h-10 w-full bg-slate-100 dark:bg-slate-800 rounded-md mt-2"></div>
+                    </div>
+                </template>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="market-grid">
+                    <!-- Add Button -->
+                    <button id="add-market-button"
+                        class="flex flex-col items-center justify-center gap-2 p-5 rounded-xl border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-primary/50 hover:bg-primary/5 transition-all group min-h-[140px]">
+                        <div
+                            class="size-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <span
+                                class="material-symbols-outlined text-slate-500 dark:text-slate-400 group-hover:text-primary">add</span>
+                        </div>
+                        <span
+                            class="text-sm font-semibold text-slate-500 dark:text-slate-400 group-hover:text-primary">Add
+                            Market</span>
+                    </button>
+                </div>
+
+                <!-- Market Forecast AI heading -->
+                <div class="mt-6">
+                    <h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Market Forecast AI</h2>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">AI-driven forecasts and actionable
+                        insights for your selected markets.</p>
+                </div>
+
+                <!-- AI Forecast Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                    <!-- Left: Input Form -->
+                    <div class="lg:col-span-4 flex flex-col gap-6">
+                        <div
+                            class="bg-white dark:bg-[#1e293b] rounded-xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm h-full">
+                            <div class="flex items-center gap-2 mb-6">
+                                <span class="material-symbols-outlined text-primary">auto_awesome</span>
+                                <h3 class="text-lg font-bold text-slate-900 dark:text-white">AI Value Forecast</h3>
+                            </div>
+                            <form class="flex flex-col gap-5">
+                                <div class="flex flex-col gap-2">
+                                    <label
+                                        class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Investment
+                                        Amount (IDR)</label>
+                                    <div class="relative">
+                                        <span
+                                            class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-medium">Rp</span>
+                                        <input id="ai-amount"
+                                            class="w-full bg-slate-50 dark:bg-[#111722] border border-slate-200 dark:border-slate-700 rounded-lg py-3 pl-10 pr-4 text-slate-900 dark:text-white font-bold text-lg focus:outline-none focus:border-primary transition-colors"
+                                            type="number" value="100000" />
+                                    </div>
+                                </div>
+                                <div class="flex gap-2">
+                                    <div class="flex-1 flex flex-col gap-2">
+                                        <label
+                                            class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Start
+                                            Date</label>
+                                        <input id="ai-start-date" type="date"
+                                            class="w-full pl-3 pr-3 py-2 rounded-lg bg-slate-50 dark:bg-[#111722] border border-slate-200 dark:border-slate-700 text-sm focus:outline-none" />
+                                    </div>
+                                    <div class="flex-1 flex flex-col gap-2">
+                                        <label
+                                            class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">End
+                                            Date</label>
+                                        <input id="ai-end-date" type="date"
+                                            class="w-full pl-3 pr-3 py-2 rounded-lg bg-slate-50 dark:bg-[#111722] border border-slate-200 dark:border-slate-700 text-sm focus:outline-none" />
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label
+                                        class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Forecast
+                                        Period</label>
+                                    <div class="grid grid-cols-3 gap-2">
+                                        <button id="btn-period-1w"
+                                            class="py-2 px-3 rounded-lg border border-primary bg-primary/10 text-primary font-medium text-sm transition-all text-center"
+                                            type="button">1 Week</button>
+                                        <button id="btn-period-1m"
+                                            class="py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 font-medium text-sm transition-all text-center"
+                                            type="button">1 Month</button>
+                                        <button id="btn-period-3m"
+                                            class="py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 font-medium text-sm transition-all text-center"
+                                            type="button">3 Months</button>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Markets to Forecast</label>
+                                    <button id="select-forecast-markets" class="w-full py-2 px-3 rounded-lg bg-white dark:bg-[#0b1220] border border-slate-200 dark:border-slate-700 text-sm hover:bg-slate-50 dark:hover:bg-[#071829]">Select Markets</button>
+                                    <div id="forecast-selected" class="flex flex-wrap gap-2 mt-2"></div>
+                                    <div class="text-xs text-slate-400 mt-1">Catatan: <strong>USD, SAR, dan GOLD</strong> akan otomatis ikut di forecast.</div>
+                                </div>
+                                <button id="run-ai-btn"
+                                    class="mt-4 bg-primary hover:bg-blue-600 text-white font-bold py-3.5 px-4 rounded-lg shadow-lg shadow-blue-600/30 transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+                                    type="button">
+                                    <span class="material-symbols-outlined">psychology</span>
+                                    Run AI Prediction
+                                </button>
+                                <p id="ai-loading-note" class="text-xs text-slate-400 mt-2">ini mungkin akan memakan banyak waktu</p>
+                                <p id="ai-error" class="text-sm text-red-600 dark:text-red-400 mt-2 hidden"></p>
+                                <div id="ai-results" class="mt-4"></div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- Right: Visualization -->
+                    <div class="lg:col-span-8 flex flex-col gap-6">
+                        <div
+                            class="bg-white dark:bg-[#1e293b] rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm p-6 relative overflow-hidden h-full min-h-[400px]">
+                            <!-- Header of chart -->
+                            <div class="flex flex-wrap items-center justify-between mb-8 gap-4">
+
+                                <div
+                                    class="flex items-center gap-2 bg-slate-50 dark:bg-[#111722] px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700">
+                                    <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                                    <span
+                                        class="text-xs font-medium text-slate-600 dark:text-slate-300">Historical</span>
+                                    <span class="w-px h-3 bg-slate-300 dark:bg-slate-600 mx-1"></span>
+                                    <span
+                                        class="w-2 h-2 rounded-full bg-indigo-400 border border-dashed border-white"></span>
+                                    <span class="text-xs font-medium text-slate-600 dark:text-slate-300">AI
+                                        Forecast</span>
+                                </div>
+                                <div id="chart-series-legend" class="flex items-center gap-3 ml-4 flex-wrap"></div>
+                            </div>
+                            <!-- Chart Area -->
+                            <div id="forecast-chart" class="relative w-full h-64 lg:h-80">
+                                <!-- placeholder for dynamic chart -->
+                                <div id="forecast-chart-inner" class="w-full h-full"></div>
+                                <!-- Tooltip placeholder -->
+                                <div id="forecast-tooltip" class="hidden absolute top-[50px] right-[5%] bg-slate-900 text-white text-xs py-1.5 px-3 rounded shadow-xl border border-slate-700 transform -translate-x-1/2"></div>
+                            </div>
+                            <!-- X Axis Labels (dynamic) -->
+                            <div class="flex justify-between mt-4 text-xs font-medium text-slate-400">
+                                <span id="chart-label-start"></span>
+                                <span id="chart-label-1"></span>
+                                <span id="chart-label-2"></span>
+                                <span id="chart-label-3"></span>
+                                <span id="chart-label-end"></span>
+                            </div>
+                        </div>
+                        <!-- AI Insights (populated from forecast results) -->
+                        <div id="ai-insights" class="grid grid-cols-1 gap-4 w-full"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <!-- Add Market Modal -->
+    <div id="add-market-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/50" data-modal-backdrop></div>
+        <div
+            class="relative max-w-lg w-full mx-4 max-h-[90vh] overflow-auto bg-white dark:bg-[#0b1220] rounded-xl p-6 border border-slate-200 dark:border-slate-700 shadow-xl">
+            <div class="flex items-start justify-between gap-4">
+                <div>
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white">Pilih Market</h3>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Pilih dari kategori di bawah atau
+                        masukkan simbol secara manual.</p>
+                </div>
+                <button id="modal-close" class="text-slate-500 hover:text-slate-800 dark:hover:text-white">✕</button>
+            </div>
+            <!-- Tabs -->
+            <div class="mt-4">
+                <div class="flex gap-2 rounded-lg bg-slate-100 dark:bg-[#07101a] p-1">
+                    <button id="tab-currencies"
+                        class="flex-1 text-sm py-2 rounded-lg bg-white dark:bg-[#0b1220] font-medium">Mata Uang</button>
+                    <button id="tab-stocks"
+                        class="flex-1 text-sm py-2 rounded-lg text-slate-600 dark:text-slate-400">Saham</button>
+                </div>
+
+                <div id="tab-content" class="mt-3">
+                    <div id="currencies-list" class="grid gap-2 max-h-64 overflow-auto hidden"></div>
+
+                    <div id="stocks-search-wrapper" class="mb-2 hidden">
+                        <label for="stocks-search" class="sr-only">Search stocks</label>
+                        <input id="stocks-search" type="search" placeholder="Search stocks by symbol or name"
+                            class="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-[#07101a] border border-slate-200 dark:border-slate-700 text-sm focus:outline-none" />
+                    </div>
+
+                    <div id="stocks-list" class="grid gap-2 max-h-64 overflow-auto hidden"></div>
+                </div>
+                <p id="modal-error" class="text-sm text-red-600 dark:text-red-400 mt-2 hidden"></p>
+
+
+
+            </div>
+            <div class="mt-6 flex justify-end gap-2">
+                <button id="modal-cancel"
+                    class="px-4 py-2 rounded-lg bg-slate-100 dark:bg-[#0b1220] border border-slate-200 dark:border-slate-700 text-sm">Cancel</button>
+                <button id="modal-add" class="px-4 py-2 rounded-lg bg-primary text-white font-bold">Add Market</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Forecast Markets Modal (separate localStorage key: forecast_markets) -->
+    <div id="forecast-market-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/50" data-forecast-backdrop></div>
+        <div
+            class="relative max-w-lg w-full mx-4 max-h-[90vh] overflow-auto bg-white dark:bg-[#0b1220] rounded-xl p-6 border border-slate-200 dark:border-slate-700 shadow-xl">
+            <div class="flex items-start justify-between gap-4">
+                <div>
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white">Pilih Forecast Market</h3>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Pilih dari kategori di bawah untuk menyusun daftar market yang akan digunakan pada forecast.</p>
+                </div>
+                <button id="forecast-modal-close" class="text-slate-500 hover:text-slate-800 dark:hover:text-white">✕</button>
+            </div>
+            <!-- Tabs -->
+            <div class="mt-4">
+                <div class="flex gap-2 rounded-lg bg-slate-100 dark:bg-[#07101a] p-1">
+                    <button id="forecast-tab-currencies" class="flex-1 text-sm py-2 rounded-lg bg-white dark:bg-[#0b1220] font-medium">Mata Uang</button>
+                    <button id="forecast-tab-stocks" class="flex-1 text-sm py-2 rounded-lg text-slate-600 dark:text-slate-400">Saham</button>
+                </div>
+
+                <div id="forecast-tab-content" class="mt-3">
+                    <div id="forecast-currencies-list" class="grid gap-2 max-h-64 overflow-auto hidden"></div>
+
+                    <div id="forecast-stocks-search-wrapper" class="mb-2 hidden">
+                        <label for="forecast-stocks-search" class="sr-only">Search stocks</label>
+                        <input id="forecast-stocks-search" type="search" placeholder="Search stocks by symbol or name"
+                            class="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-[#07101a] border border-slate-200 dark:border-slate-700 text-sm focus:outline-none" />
+                    </div>
+
+                    <div id="forecast-stocks-list" class="grid gap-2 max-h-64 overflow-auto hidden"></div>
+                </div>
+                <p id="forecast-modal-error" class="text-sm text-red-600 dark:text-red-400 mt-2 hidden"></p>
+
+
+
+            </div>
+            <div class="mt-6 flex justify-end gap-2">
+                <button id="forecast-modal-cancel" class="px-4 py-2 rounded-lg bg-slate-100 dark:bg-[#0b1220] border border-slate-200 dark:border-slate-700 text-sm">Cancel</button>
+                <button id="forecast-modal-add" class="px-4 py-2 rounded-lg bg-primary text-white font-bold">Add Markets</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module" src="./js/app.js"></script>
+</body>
+
+</html>
