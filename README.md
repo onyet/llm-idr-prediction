@@ -6,10 +6,19 @@ A small FastAPI starter project for simple currency forecasting endpoints that u
 
 ## Screenshots 🖼️
 
-| Mobile (portrait) | HDMI / PC |
-| --- | --- |
-| ![Mobile 1](screenshot/mobile-1.png)<br>![Mobile 2](screenshot/mobile-2.png)<br>![Mobile 3](screenshot/mobile-3.png) | ![HDMI / PC](screenshot/hdmi-1.png) |
-| ![Mobile 4](screenshot/mobile-4.png)<br>![Mobile 5](screenshot/mobile-5.png) |  |
+### Mobile (portrait) — gallery (3 columns)
+
+| Mobile 1 | Mobile 2 | Mobile 3 |
+| --- | --- | --- |
+| ![Mobile 1](screenshot/mobile-1.png) | ![Mobile 2](screenshot/mobile-2.png) | ![Mobile 3](screenshot/mobile-3.png) |
+
+| Mobile 4 | Mobile 5 |  |
+| --- | --- | --- |
+| ![Mobile 4](screenshot/mobile-4.png) | ![Mobile 5](screenshot/mobile-5.png) |  |
+
+### HDMI / PC
+
+![HDMI / PC](screenshot/hdmi-1.png)
 
 Files are in the `screenshot/` folder and can be replaced or extended as needed.
 
@@ -116,26 +125,6 @@ Quick steps to build/run the Android app:
 - `npx cap open android`  # opens Android Studio
 
 See `capacitor/README.md` for more details.
-
-### Screenshots 🖼️
-
-The `screenshot/` folder includes sample images of the app and desktop view. Embedded previews:
-
-![Mobile — Home](screenshot/mobile-1.png)
-
-![Mobile — Screen 2](screenshot/mobile-2.png)
-
-![Mobile — Screen 3](screenshot/mobile-3.png)
-
-![Mobile — Screen 4](screenshot/mobile-4.png)
-
-![Mobile — Screen 5](screenshot/mobile-5.png)
-
-**HDMI / PC view:**
-
-![HDMI / PC](screenshot/hdmi-1.png)
-
-Files are included in the repository at `screenshot/` and can be replaced or extended as needed.
 
 ---
 
