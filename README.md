@@ -4,6 +4,17 @@ A small FastAPI starter project for simple currency forecasting endpoints that u
 
 ---
 
+## Screenshots 🖼️
+
+| Mobile (portrait) | HDMI / PC |
+| --- | --- |
+| ![Mobile 1](screenshot/mobile-1.png)<br>![Mobile 2](screenshot/mobile-2.png)<br>![Mobile 3](screenshot/mobile-3.png) | ![HDMI / PC](screenshot/hdmi-1.png) |
+| ![Mobile 4](screenshot/mobile-4.png)<br>![Mobile 5](screenshot/mobile-5.png) |  |
+
+Files are in the `screenshot/` folder and can be replaced or extended as needed.
+
+---
+
 ## Quick start 🔧
 
 1. Create a virtual env and install dependencies:
