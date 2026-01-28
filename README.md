@@ -92,6 +92,42 @@ The `/tradingview/list-code` endpoint returns a list of available tickers includ
 
 ---
 
+## Mobile (Android) 📱
+
+This repository also includes a **Capacitor-based** mobile app located in the `capacitor/` folder. The app provides a simple web UI (built with Vite) that can be packaged for Android using Capacitor.
+
+Quick steps to build/run the Android app:
+
+- `cd capacitor`
+- `npm install`
+- `npm run build`
+- `npx cap sync android`
+- `npx cap open android`  # opens Android Studio
+
+See `capacitor/README.md` for more details.
+
+### Screenshots 🖼️
+
+The `screenshot/` folder includes sample images of the app and desktop view. Embedded previews:
+
+![Mobile — Home](screenshot/mobile-1.png)
+
+![Mobile — Screen 2](screenshot/mobile-2.png)
+
+![Mobile — Screen 3](screenshot/mobile-3.png)
+
+![Mobile — Screen 4](screenshot/mobile-4.png)
+
+![Mobile — Screen 5](screenshot/mobile-5.png)
+
+**HDMI / PC view:**
+
+![HDMI / PC](screenshot/hdmi-1.png)
+
+Files are included in the repository at `screenshot/` and can be replaced or extended as needed.
+
+---
+
 ## Implementation notes ⚠️
 
 - Model: uses `prophet` (FB Prophet) and `pandas` to train on the `data/*.json` files. Models and data are cached in-memory for faster responses.
